@@ -1237,3 +1237,108 @@ export const DeleteProductionPacketParams = zod.object({
   projectId: zod.coerce.number(),
   id: zod.coerce.number(),
 });
+
+/**
+ * @summary List distribution entries for a project
+ */
+export const ListDistributionEntriesParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const ListDistributionEntriesResponseItem = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  type: zod
+    .string()
+    .describe(
+      "festival | distributor | platform | sales-agent | broadcaster | other",
+    ),
+  name: zod.string(),
+  status: zod
+    .string()
+    .describe(
+      "considering | submitted | screened | accepted | rejected | deal-made | withdrawn",
+    ),
+  submissionDate: zod.string().nullish(),
+  responseDate: zod.string().nullish(),
+  response: zod.string().nullish(),
+  notes: zod.string().nullish(),
+  url: zod.string().nullish(),
+  fee: zod.number().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+export const ListDistributionEntriesResponse = zod.array(
+  ListDistributionEntriesResponseItem,
+);
+
+/**
+ * @summary Add a distribution entry
+ */
+export const CreateDistributionEntryParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const CreateDistributionEntryBody = zod.object({
+  type: zod.string(),
+  name: zod.string(),
+  status: zod.string().optional(),
+  submissionDate: zod.string().nullish(),
+  responseDate: zod.string().nullish(),
+  response: zod.string().nullish(),
+  notes: zod.string().nullish(),
+  url: zod.string().nullish(),
+  fee: zod.number().nullish(),
+});
+
+/**
+ * @summary Update a distribution entry
+ */
+export const UpdateDistributionEntryParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});
+
+export const UpdateDistributionEntryBody = zod.object({
+  type: zod.string().optional(),
+  name: zod.string().optional(),
+  status: zod.string().optional(),
+  submissionDate: zod.string().nullish(),
+  responseDate: zod.string().nullish(),
+  response: zod.string().nullish(),
+  notes: zod.string().nullish(),
+  url: zod.string().nullish(),
+  fee: zod.number().nullish(),
+});
+
+export const UpdateDistributionEntryResponse = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  type: zod
+    .string()
+    .describe(
+      "festival | distributor | platform | sales-agent | broadcaster | other",
+    ),
+  name: zod.string(),
+  status: zod
+    .string()
+    .describe(
+      "considering | submitted | screened | accepted | rejected | deal-made | withdrawn",
+    ),
+  submissionDate: zod.string().nullish(),
+  responseDate: zod.string().nullish(),
+  response: zod.string().nullish(),
+  notes: zod.string().nullish(),
+  url: zod.string().nullish(),
+  fee: zod.number().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete a distribution entry
+ */
+export const DeleteDistributionEntryParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});

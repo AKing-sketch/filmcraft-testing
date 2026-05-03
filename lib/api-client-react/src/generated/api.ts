@@ -29,6 +29,7 @@ import type {
   CreateCastingCallBody,
   CreateCharacterBody,
   CreateCrewMemberBody,
+  CreateDistributionEntryBody,
   CreateLightingDiagramBody,
   CreateMindMapNodeBody,
   CreateProductionPacketBody,
@@ -36,6 +37,7 @@ import type {
   CreateSceneBody,
   CreateShotBody,
   CrewMember,
+  DistributionEntry,
   HealthStatus,
   LightingDiagram,
   MindMapNode,
@@ -51,6 +53,7 @@ import type {
   UpdateCastingCallBody,
   UpdateCharacterBody,
   UpdateCrewMemberBody,
+  UpdateDistributionEntryBody,
   UpdateLightingDiagramBody,
   UpdateMindMapNodeBody,
   UpdateProjectBody,
@@ -4962,4 +4965,393 @@ export const useDeleteProductionPacket = <
   TContext
 > => {
   return useMutation(getDeleteProductionPacketMutationOptions(options));
+};
+
+/**
+ * @summary List distribution entries for a project
+ */
+export const getListDistributionEntriesUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/distribution`;
+};
+
+export const listDistributionEntries = async (
+  projectId: number,
+  options?: RequestInit,
+): Promise<DistributionEntry[]> => {
+  return customFetch<DistributionEntry[]>(
+    getListDistributionEntriesUrl(projectId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getListDistributionEntriesQueryKey = (projectId: number) => {
+  return [`/api/projects/${projectId}/distribution`] as const;
+};
+
+export const getListDistributionEntriesQueryOptions = <
+  TData = Awaited<ReturnType<typeof listDistributionEntries>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listDistributionEntries>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListDistributionEntriesQueryKey(projectId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listDistributionEntries>>
+  > = ({ signal }) =>
+    listDistributionEntries(projectId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!projectId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof listDistributionEntries>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListDistributionEntriesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listDistributionEntries>>
+>;
+export type ListDistributionEntriesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List distribution entries for a project
+ */
+
+export function useListDistributionEntries<
+  TData = Awaited<ReturnType<typeof listDistributionEntries>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listDistributionEntries>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListDistributionEntriesQueryOptions(
+    projectId,
+    options,
+  );
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Add a distribution entry
+ */
+export const getCreateDistributionEntryUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/distribution`;
+};
+
+export const createDistributionEntry = async (
+  projectId: number,
+  createDistributionEntryBody: CreateDistributionEntryBody,
+  options?: RequestInit,
+): Promise<DistributionEntry> => {
+  return customFetch<DistributionEntry>(
+    getCreateDistributionEntryUrl(projectId),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(createDistributionEntryBody),
+    },
+  );
+};
+
+export const getCreateDistributionEntryMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createDistributionEntry>>,
+    TError,
+    { projectId: number; data: BodyType<CreateDistributionEntryBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createDistributionEntry>>,
+  TError,
+  { projectId: number; data: BodyType<CreateDistributionEntryBody> },
+  TContext
+> => {
+  const mutationKey = ["createDistributionEntry"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createDistributionEntry>>,
+    { projectId: number; data: BodyType<CreateDistributionEntryBody> }
+  > = (props) => {
+    const { projectId, data } = props ?? {};
+
+    return createDistributionEntry(projectId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateDistributionEntryMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createDistributionEntry>>
+>;
+export type CreateDistributionEntryMutationBody =
+  BodyType<CreateDistributionEntryBody>;
+export type CreateDistributionEntryMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Add a distribution entry
+ */
+export const useCreateDistributionEntry = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createDistributionEntry>>,
+    TError,
+    { projectId: number; data: BodyType<CreateDistributionEntryBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createDistributionEntry>>,
+  TError,
+  { projectId: number; data: BodyType<CreateDistributionEntryBody> },
+  TContext
+> => {
+  return useMutation(getCreateDistributionEntryMutationOptions(options));
+};
+
+/**
+ * @summary Update a distribution entry
+ */
+export const getUpdateDistributionEntryUrl = (
+  projectId: number,
+  id: number,
+) => {
+  return `/api/projects/${projectId}/distribution/${id}`;
+};
+
+export const updateDistributionEntry = async (
+  projectId: number,
+  id: number,
+  updateDistributionEntryBody: UpdateDistributionEntryBody,
+  options?: RequestInit,
+): Promise<DistributionEntry> => {
+  return customFetch<DistributionEntry>(
+    getUpdateDistributionEntryUrl(projectId, id),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(updateDistributionEntryBody),
+    },
+  );
+};
+
+export const getUpdateDistributionEntryMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateDistributionEntry>>,
+    TError,
+    {
+      projectId: number;
+      id: number;
+      data: BodyType<UpdateDistributionEntryBody>;
+    },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateDistributionEntry>>,
+  TError,
+  {
+    projectId: number;
+    id: number;
+    data: BodyType<UpdateDistributionEntryBody>;
+  },
+  TContext
+> => {
+  const mutationKey = ["updateDistributionEntry"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateDistributionEntry>>,
+    {
+      projectId: number;
+      id: number;
+      data: BodyType<UpdateDistributionEntryBody>;
+    }
+  > = (props) => {
+    const { projectId, id, data } = props ?? {};
+
+    return updateDistributionEntry(projectId, id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateDistributionEntryMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateDistributionEntry>>
+>;
+export type UpdateDistributionEntryMutationBody =
+  BodyType<UpdateDistributionEntryBody>;
+export type UpdateDistributionEntryMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update a distribution entry
+ */
+export const useUpdateDistributionEntry = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateDistributionEntry>>,
+    TError,
+    {
+      projectId: number;
+      id: number;
+      data: BodyType<UpdateDistributionEntryBody>;
+    },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateDistributionEntry>>,
+  TError,
+  {
+    projectId: number;
+    id: number;
+    data: BodyType<UpdateDistributionEntryBody>;
+  },
+  TContext
+> => {
+  return useMutation(getUpdateDistributionEntryMutationOptions(options));
+};
+
+/**
+ * @summary Delete a distribution entry
+ */
+export const getDeleteDistributionEntryUrl = (
+  projectId: number,
+  id: number,
+) => {
+  return `/api/projects/${projectId}/distribution/${id}`;
+};
+
+export const deleteDistributionEntry = async (
+  projectId: number,
+  id: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeleteDistributionEntryUrl(projectId, id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteDistributionEntryMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteDistributionEntry>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteDistributionEntry>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  const mutationKey = ["deleteDistributionEntry"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteDistributionEntry>>,
+    { projectId: number; id: number }
+  > = (props) => {
+    const { projectId, id } = props ?? {};
+
+    return deleteDistributionEntry(projectId, id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteDistributionEntryMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteDistributionEntry>>
+>;
+
+export type DeleteDistributionEntryMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Delete a distribution entry
+ */
+export const useDeleteDistributionEntry = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteDistributionEntry>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteDistributionEntry>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  return useMutation(getDeleteDistributionEntryMutationOptions(options));
 };

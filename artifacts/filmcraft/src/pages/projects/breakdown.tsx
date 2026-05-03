@@ -197,7 +197,7 @@ export default function ScriptBreakdown() {
                   </td>
                   <td className="px-4 py-3 text-right font-mono text-muted-foreground">{scene.pages}</td>
                   <td className="px-4 py-3 text-right">
-                    <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100 text-destructive hover:bg-destructive hover:text-white" onClick={() => handleDelete(scene.id)}>
+                    <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive hover:bg-destructive hover:text-white" onClick={() => handleDelete(scene.id)}>
                       <Trash2 className="w-3 h-3" />
                     </Button>
                   </td>

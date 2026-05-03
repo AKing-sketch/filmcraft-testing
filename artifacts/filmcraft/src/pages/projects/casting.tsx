@@ -129,7 +129,7 @@ function CastingCallsTab({ projectId }: { projectId: number }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {calls?.map(call => (
           <div key={call.id} className="bg-card border border-border rounded-xl p-5 group relative">
-            <Button variant="ghost" size="icon" className="absolute top-4 right-4 h-8 w-8 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => handleDelete(call.id)}>
+            <Button variant="ghost" size="icon" className="absolute top-4 right-4 h-8 w-8 text-destructive" onClick={() => handleDelete(call.id)}>
               <Trash2 className="w-4 h-4" />
             </Button>
             <div className="flex items-center gap-2 mb-3">
@@ -247,7 +247,7 @@ function CastListTab({ projectId }: { projectId: number }) {
                 <td className="px-4 py-3 text-muted-foreground">{member.contact}</td>
                 <td className="px-4 py-3">{member.rate ? `$${member.rate}` : '-'}</td>
                 <td className="px-4 py-3 text-right">
-                  <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => handleDelete(member.id)}>
+                  <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => handleDelete(member.id)}>
                     <Trash2 className="w-3 h-3" />
                   </Button>
                 </td>

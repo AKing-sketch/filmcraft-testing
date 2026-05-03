@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useRoute, useLocation } from "wouter";
 import {
   Film, LayoutDashboard, FileText, Users, UsersRound,
-  Video, Wallet, Lightbulb, FileArchive, Settings,
+  Video, Wallet, Lightbulb, FileArchive, Settings, Globe,
   Menu, X, ChevronLeft
 } from "lucide-react";
 import { useGetProject } from "@workspace/api-client-react";
@@ -18,6 +18,7 @@ const PROJECT_NAV = [
   { segment: "/lighting", label: "Lighting", icon: Lightbulb },
   { segment: "/budget", label: "Budget", icon: Wallet },
   { segment: "/packets", label: "Packets", icon: FileArchive },
+  { segment: "/distribution", label: "Distribution", icon: Globe },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {

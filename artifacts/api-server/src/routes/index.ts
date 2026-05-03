@@ -11,6 +11,7 @@ import shotsRouter from "./shots";
 import budgetRouter from "./budget";
 import lightingRouter from "./lighting";
 import packetsRouter from "./packets";
+import distributionRouter from "./distribution";
 
 const router: IRouter = Router();
 
@@ -28,5 +29,6 @@ router.use("/projects/:projectId/shots", shotsRouter);
 router.use("/projects/:projectId/budget", budgetRouter);
 router.use("/projects/:projectId/lighting", lightingRouter);
 router.use("/projects/:projectId/packets", packetsRouter);
+router.use("/projects/:projectId/distribution", distributionRouter);
 
 export default router;

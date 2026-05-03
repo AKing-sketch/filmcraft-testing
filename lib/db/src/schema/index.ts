@@ -9,3 +9,4 @@ export * from "./shots";
 export * from "./budget";
 export * from "./lighting";
 export * from "./packets";
+export * from "./distribution";

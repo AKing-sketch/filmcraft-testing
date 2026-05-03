@@ -486,3 +486,45 @@ export interface CreateProductionPacketBody {
   packetType: string;
   content?: string | null;
 }
+
+export interface DistributionEntry {
+  id: number;
+  projectId: number;
+  /** festival | distributor | platform | sales-agent | broadcaster | other */
+  type: string;
+  name: string;
+  /** considering | submitted | screened | accepted | rejected | deal-made | withdrawn */
+  status: string;
+  submissionDate?: string | null;
+  responseDate?: string | null;
+  response?: string | null;
+  notes?: string | null;
+  url?: string | null;
+  fee?: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateDistributionEntryBody {
+  type: string;
+  name: string;
+  status?: string;
+  submissionDate?: string | null;
+  responseDate?: string | null;
+  response?: string | null;
+  notes?: string | null;
+  url?: string | null;
+  fee?: number | null;
+}
+
+export interface UpdateDistributionEntryBody {
+  type?: string;
+  name?: string;
+  status?: string;
+  submissionDate?: string | null;
+  responseDate?: string | null;
+  response?: string | null;
+  notes?: string | null;
+  url?: string | null;
+  fee?: number | null;
+}

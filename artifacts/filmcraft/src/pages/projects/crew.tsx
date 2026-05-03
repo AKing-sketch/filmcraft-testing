@@ -137,7 +137,7 @@ export default function CrewList() {
                         <td className="px-4 py-3 text-muted-foreground w-1/4">{member.contact}</td>
                         <td className="px-4 py-3 w-32">{member.rate ? `$${member.rate}/day` : '-'}</td>
                         <td className="px-4 py-3 text-right">
-                          <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => handleDelete(member.id)}>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => handleDelete(member.id)}>
                             <Trash2 className="w-3 h-3" />
                           </Button>
                         </td>

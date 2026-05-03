@@ -127,7 +127,7 @@ export default function CharactersBible() {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="absolute top-4 right-4 h-8 w-8 opacity-0 group-hover:opacity-100 text-destructive bg-background/80 hover:bg-destructive hover:text-white"
+                className="absolute top-4 right-4 h-8 w-8 text-destructive bg-background/80 hover:bg-destructive hover:text-white"
                 onClick={() => handleDelete(char.id)}
               >
                 <Trash2 className="w-4 h-4" />

@@ -1280,6 +1280,99 @@ paths:
         "204":
           description: Deleted
 
+  # ─── DISTRIBUTION ────────────────────────────────────────────────────────────
+  /projects/{projectId}/distribution:
+    get:
+      operationId: listDistributionEntries
+      tags: [distribution]
+      summary: List distribution entries for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Distribution entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DistributionEntry"
+    post:
+      operationId: createDistributionEntry
+      tags: [distribution]
+      summary: Add a distribution entry
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDistributionEntryBody"
+      responses:
+        "201":
+          description: Created distribution entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DistributionEntry"
+
+  /projects/{projectId}/distribution/{id}:
+    patch:
+      operationId: updateDistributionEntry
+      tags: [distribution]
+      summary: Update a distribution entry
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDistributionEntryBody"
+      responses:
+        "200":
+          description: Updated distribution entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DistributionEntry"
+    delete:
+      operationId: deleteDistributionEntry
+      tags: [distribution]
+      summary: Delete a distribution entry
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
 components:
   schemas:
     HealthStatus:
@@ -2553,3 +2646,109 @@ components:
       required:
         - name
         - packetType
+
+    # ── DISTRIBUTION ──────────────────────────────────────────────────────────
+    DistributionEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        type:
+          type: string
+          description: "festival | distributor | platform | sales-agent | broadcaster | other"
+        name:
+          type: string
+        status:
+          type: string
+          description: "considering | submitted | screened | accepted | rejected | deal-made | withdrawn"
+        submissionDate:
+          type: string
+          nullable: true
+        responseDate:
+          type: string
+          nullable: true
+        response:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        fee:
+          type: number
+          nullable: true
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - type
+        - name
+        - status
+        - createdAt
+        - updatedAt
+
+    CreateDistributionEntryBody:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        submissionDate:
+          type: string
+          nullable: true
+        responseDate:
+          type: string
+          nullable: true
+        response:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        fee:
+          type: number
+          nullable: true
+      required:
+        - name
+        - type
+
+    UpdateDistributionEntryBody:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        submissionDate:
+          type: string
+          nullable: true
+        responseDate:
+          type: string
+          nullable: true
+        response:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        fee:
+          type: number
+          nullable: true

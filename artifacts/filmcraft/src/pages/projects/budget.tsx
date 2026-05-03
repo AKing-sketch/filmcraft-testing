@@ -171,7 +171,7 @@ export default function BudgetTracker() {
                         <td className="px-4 py-3 text-right font-mono w-32 text-muted-foreground">{formatCurrency(item.estimatedAmount)}</td>
                         <td className="px-4 py-3 text-right font-mono w-32">{item.actualAmount ? formatCurrency(item.actualAmount) : '-'}</td>
                         <td className="px-4 py-3 w-16 text-right">
-                          <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => handleDelete(item.id)}>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => handleDelete(item.id)}>
                             <Trash2 className="w-3 h-3" />
                           </Button>
                         </td>
