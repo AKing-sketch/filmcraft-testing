@@ -10,12 +10,14 @@ export const shotsTable = pgTable("shots", {
   description: text("description"),
   shotType: text("shot_type"),
   cameraMovement: text("camera_movement"),
+  cameraBody: text("camera_body"),
   lens: text("lens"),
   duration: text("duration"),
   audioNotes: text("audio_notes"),
   lightingNotes: text("lighting_notes"),
   status: text("status").default("planned"),
   notes: text("notes"),
+  referenceImage: text("reference_image"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

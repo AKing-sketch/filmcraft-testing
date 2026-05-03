@@ -2569,6 +2569,10 @@ components:
           type: string
           nullable: true
           description: "static | pan | tilt | dolly | crane | handheld | steadicam | zoom"
+        cameraBody:
+          type: string
+          nullable: true
+          description: "Camera model (e.g. ARRI Alexa 35)"
         lens:
           type: string
           nullable: true
@@ -2588,6 +2592,10 @@ components:
         notes:
           type: string
           nullable: true
+        referenceImage:
+          type: string
+          nullable: true
+          description: "Data URL of reference/storyboard image"
         createdAt:
           type: string
       required:
@@ -2613,6 +2621,9 @@ components:
         cameraMovement:
           type: string
           nullable: true
+        cameraBody:
+          type: string
+          nullable: true
         lens:
           type: string
           nullable: true
@@ -2629,6 +2640,9 @@ components:
           type: string
           nullable: true
         notes:
+          type: string
+          nullable: true
+        referenceImage:
           type: string
           nullable: true
       required:
@@ -2651,6 +2665,9 @@ components:
         cameraMovement:
           type: string
           nullable: true
+        cameraBody:
+          type: string
+          nullable: true
         lens:
           type: string
           nullable: true
@@ -2667,6 +2684,9 @@ components:
           type: string
           nullable: true
         notes:
+          type: string
+          nullable: true
+        referenceImage:
           type: string
           nullable: true
 

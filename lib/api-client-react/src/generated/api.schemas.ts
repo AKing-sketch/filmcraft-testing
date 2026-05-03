@@ -362,6 +362,8 @@ export interface Shot {
   shotType?: string | null;
   /** static | pan | tilt | dolly | crane | handheld | steadicam | zoom */
   cameraMovement?: string | null;
+  /** Camera model (e.g. ARRI Alexa 35) */
+  cameraBody?: string | null;
   lens?: string | null;
   duration?: string | null;
   audioNotes?: string | null;
@@ -369,6 +371,8 @@ export interface Shot {
   /** planned | shot | approved | cut */
   status?: string | null;
   notes?: string | null;
+  /** Data URL of reference/storyboard image */
+  referenceImage?: string | null;
   createdAt: string;
 }
 
@@ -378,12 +382,14 @@ export interface CreateShotBody {
   description?: string | null;
   shotType?: string | null;
   cameraMovement?: string | null;
+  cameraBody?: string | null;
   lens?: string | null;
   duration?: string | null;
   audioNotes?: string | null;
   lightingNotes?: string | null;
   status?: string | null;
   notes?: string | null;
+  referenceImage?: string | null;
 }
 
 export interface UpdateShotBody {
@@ -392,12 +398,14 @@ export interface UpdateShotBody {
   description?: string | null;
   shotType?: string | null;
   cameraMovement?: string | null;
+  cameraBody?: string | null;
   lens?: string | null;
   duration?: string | null;
   audioNotes?: string | null;
   lightingNotes?: string | null;
   status?: string | null;
   notes?: string | null;
+  referenceImage?: string | null;
 }
 
 export interface BudgetItem {

@@ -877,12 +877,20 @@ export const ListShotsResponseItem = zod.object({
     .describe(
       "static | pan | tilt | dolly | crane | handheld | steadicam | zoom",
     ),
+  cameraBody: zod
+    .string()
+    .nullish()
+    .describe("Camera model (e.g. ARRI Alexa 35)"),
   lens: zod.string().nullish(),
   duration: zod.string().nullish(),
   audioNotes: zod.string().nullish(),
   lightingNotes: zod.string().nullish(),
   status: zod.string().nullish().describe("planned | shot | approved | cut"),
   notes: zod.string().nullish(),
+  referenceImage: zod
+    .string()
+    .nullish()
+    .describe("Data URL of reference\/storyboard image"),
   createdAt: zod.string(),
 });
 export const ListShotsResponse = zod.array(ListShotsResponseItem);
@@ -900,12 +908,14 @@ export const CreateShotBody = zod.object({
   description: zod.string().nullish(),
   shotType: zod.string().nullish(),
   cameraMovement: zod.string().nullish(),
+  cameraBody: zod.string().nullish(),
   lens: zod.string().nullish(),
   duration: zod.string().nullish(),
   audioNotes: zod.string().nullish(),
   lightingNotes: zod.string().nullish(),
   status: zod.string().nullish(),
   notes: zod.string().nullish(),
+  referenceImage: zod.string().nullish(),
 });
 
 /**
@@ -922,12 +932,14 @@ export const UpdateShotBody = zod.object({
   description: zod.string().nullish(),
   shotType: zod.string().nullish(),
   cameraMovement: zod.string().nullish(),
+  cameraBody: zod.string().nullish(),
   lens: zod.string().nullish(),
   duration: zod.string().nullish(),
   audioNotes: zod.string().nullish(),
   lightingNotes: zod.string().nullish(),
   status: zod.string().nullish(),
   notes: zod.string().nullish(),
+  referenceImage: zod.string().nullish(),
 });
 
 export const UpdateShotResponse = zod.object({
@@ -946,12 +958,20 @@ export const UpdateShotResponse = zod.object({
     .describe(
       "static | pan | tilt | dolly | crane | handheld | steadicam | zoom",
     ),
+  cameraBody: zod
+    .string()
+    .nullish()
+    .describe("Camera model (e.g. ARRI Alexa 35)"),
   lens: zod.string().nullish(),
   duration: zod.string().nullish(),
   audioNotes: zod.string().nullish(),
   lightingNotes: zod.string().nullish(),
   status: zod.string().nullish().describe("planned | shot | approved | cut"),
   notes: zod.string().nullish(),
+  referenceImage: zod
+    .string()
+    .nullish()
+    .describe("Data URL of reference\/storyboard image"),
   createdAt: zod.string(),
 });
 
