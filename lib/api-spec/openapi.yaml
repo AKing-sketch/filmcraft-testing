@@ -3,20 +3,46 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: FilmCraft - Full filmmaking production suite API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: projects
+    description: Film projects
+  - name: characters
+    description: Character bibles
+  - name: beats
+    description: Beat sheets and story beats
+  - name: mindmap
+    description: Mind map nodes
+  - name: scenes
+    description: Script scenes and breakdown
+  - name: casting
+    description: Casting calls
+  - name: cast
+    description: Cast members
+  - name: crew
+    description: Crew members
+  - name: shots
+    description: Shot lists
+  - name: budget
+    description: Budget items
+  - name: lighting
+    description: Lighting diagrams
+  - name: packets
+    description: Production packets
+  - name: dashboard
+    description: Dashboard aggregates
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +50,1236 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ─── PROJECTS ───────────────────────────────────────────────────────────────
+  /projects:
+    get:
+      operationId: listProjects
+      tags: [projects]
+      summary: List all projects
+      responses:
+        "200":
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+    post:
+      operationId: createProject
+      tags: [projects]
+      summary: Create a new project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProjectBody"
+      responses:
+        "201":
+          description: Created project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+  /projects/{id}:
+    get:
+      operationId: getProject
+      tags: [projects]
+      summary: Get a project by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+    patch:
+      operationId: updateProject
+      tags: [projects]
+      summary: Update a project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProjectBody"
+      responses:
+        "200":
+          description: Updated project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+    delete:
+      operationId: deleteProject
+      tags: [projects]
+      summary: Delete a project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── DASHBOARD ──────────────────────────────────────────────────────────────
+  /projects/{id}/dashboard:
+    get:
+      operationId: getProjectDashboard
+      tags: [dashboard]
+      summary: Project dashboard summary (stats, progress, recent activity)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectDashboard"
+
+  # ─── CHARACTERS ─────────────────────────────────────────────────────────────
+  /projects/{projectId}/characters:
+    get:
+      operationId: listCharacters
+      tags: [characters]
+      summary: List characters for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of characters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Character"
+    post:
+      operationId: createCharacter
+      tags: [characters]
+      summary: Create a character
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCharacterBody"
+      responses:
+        "201":
+          description: Created character
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Character"
+
+  /projects/{projectId}/characters/{id}:
+    get:
+      operationId: getCharacter
+      tags: [characters]
+      summary: Get a character
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Character
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Character"
+    patch:
+      operationId: updateCharacter
+      tags: [characters]
+      summary: Update a character
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCharacterBody"
+      responses:
+        "200":
+          description: Updated character
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Character"
+    delete:
+      operationId: deleteCharacter
+      tags: [characters]
+      summary: Delete a character
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── BEAT SHEETS ────────────────────────────────────────────────────────────
+  /projects/{projectId}/beats:
+    get:
+      operationId: listBeats
+      tags: [beats]
+      summary: List story beats for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of beats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Beat"
+    post:
+      operationId: createBeat
+      tags: [beats]
+      summary: Create a beat
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBeatBody"
+      responses:
+        "201":
+          description: Created beat
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Beat"
+
+  /projects/{projectId}/beats/{id}:
+    patch:
+      operationId: updateBeat
+      tags: [beats]
+      summary: Update a beat
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBeatBody"
+      responses:
+        "200":
+          description: Updated beat
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Beat"
+    delete:
+      operationId: deleteBeat
+      tags: [beats]
+      summary: Delete a beat
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── MIND MAP ────────────────────────────────────────────────────────────────
+  /projects/{projectId}/mindmap:
+    get:
+      operationId: getMindMap
+      tags: [mindmap]
+      summary: Get mind map nodes for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Mind map nodes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MindMapNode"
+    post:
+      operationId: createMindMapNode
+      tags: [mindmap]
+      summary: Create a mind map node
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateMindMapNodeBody"
+      responses:
+        "201":
+          description: Created node
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MindMapNode"
+
+  /projects/{projectId}/mindmap/{id}:
+    patch:
+      operationId: updateMindMapNode
+      tags: [mindmap]
+      summary: Update a mind map node
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMindMapNodeBody"
+      responses:
+        "200":
+          description: Updated node
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MindMapNode"
+    delete:
+      operationId: deleteMindMapNode
+      tags: [mindmap]
+      summary: Delete a mind map node
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── SCENES ──────────────────────────────────────────────────────────────────
+  /projects/{projectId}/scenes:
+    get:
+      operationId: listScenes
+      tags: [scenes]
+      summary: List scenes / script breakdown for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of scenes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Scene"
+    post:
+      operationId: createScene
+      tags: [scenes]
+      summary: Create a scene
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSceneBody"
+      responses:
+        "201":
+          description: Created scene
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Scene"
+
+  /projects/{projectId}/scenes/{id}:
+    get:
+      operationId: getScene
+      tags: [scenes]
+      summary: Get a scene
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Scene
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Scene"
+    patch:
+      operationId: updateScene
+      tags: [scenes]
+      summary: Update a scene
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSceneBody"
+      responses:
+        "200":
+          description: Updated scene
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Scene"
+    delete:
+      operationId: deleteScene
+      tags: [scenes]
+      summary: Delete a scene
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /projects/{projectId}/scenes/breakdown:
+    get:
+      operationId: getScriptBreakdown
+      tags: [scenes]
+      summary: Aggregate script breakdown stats (interior/exterior split, time-of-day, cast count per scene)
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Breakdown summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptBreakdownSummary"
+
+  # ─── CASTING ─────────────────────────────────────────────────────────────────
+  /projects/{projectId}/casting:
+    get:
+      operationId: listCastingCalls
+      tags: [casting]
+      summary: List casting calls for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Casting calls
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CastingCall"
+    post:
+      operationId: createCastingCall
+      tags: [casting]
+      summary: Create a casting call
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCastingCallBody"
+      responses:
+        "201":
+          description: Created casting call
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CastingCall"
+
+  /projects/{projectId}/casting/{id}:
+    patch:
+      operationId: updateCastingCall
+      tags: [casting]
+      summary: Update a casting call
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCastingCallBody"
+      responses:
+        "200":
+          description: Updated casting call
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CastingCall"
+    delete:
+      operationId: deleteCastingCall
+      tags: [casting]
+      summary: Delete a casting call
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── CAST MEMBERS ────────────────────────────────────────────────────────────
+  /projects/{projectId}/cast:
+    get:
+      operationId: listCastMembers
+      tags: [cast]
+      summary: List cast members for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Cast members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CastMember"
+    post:
+      operationId: createCastMember
+      tags: [cast]
+      summary: Add a cast member
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCastMemberBody"
+      responses:
+        "201":
+          description: Created cast member
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CastMember"
+
+  /projects/{projectId}/cast/{id}:
+    patch:
+      operationId: updateCastMember
+      tags: [cast]
+      summary: Update a cast member
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCastMemberBody"
+      responses:
+        "200":
+          description: Updated cast member
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CastMember"
+    delete:
+      operationId: deleteCastMember
+      tags: [cast]
+      summary: Delete a cast member
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── CREW ────────────────────────────────────────────────────────────────────
+  /projects/{projectId}/crew:
+    get:
+      operationId: listCrewMembers
+      tags: [crew]
+      summary: List crew members for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Crew members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CrewMember"
+    post:
+      operationId: createCrewMember
+      tags: [crew]
+      summary: Add a crew member
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCrewMemberBody"
+      responses:
+        "201":
+          description: Created crew member
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CrewMember"
+
+  /projects/{projectId}/crew/{id}:
+    patch:
+      operationId: updateCrewMember
+      tags: [crew]
+      summary: Update a crew member
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCrewMemberBody"
+      responses:
+        "200":
+          description: Updated crew member
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CrewMember"
+    delete:
+      operationId: deleteCrewMember
+      tags: [crew]
+      summary: Delete a crew member
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── SHOT LIST ───────────────────────────────────────────────────────────────
+  /projects/{projectId}/shots:
+    get:
+      operationId: listShots
+      tags: [shots]
+      summary: List shots for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Shot list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Shot"
+    post:
+      operationId: createShot
+      tags: [shots]
+      summary: Create a shot
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateShotBody"
+      responses:
+        "201":
+          description: Created shot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shot"
+
+  /projects/{projectId}/shots/{id}:
+    patch:
+      operationId: updateShot
+      tags: [shots]
+      summary: Update a shot
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateShotBody"
+      responses:
+        "200":
+          description: Updated shot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shot"
+    delete:
+      operationId: deleteShot
+      tags: [shots]
+      summary: Delete a shot
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── BUDGET ──────────────────────────────────────────────────────────────────
+  /projects/{projectId}/budget:
+    get:
+      operationId: listBudgetItems
+      tags: [budget]
+      summary: List budget items for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Budget items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BudgetItem"
+    post:
+      operationId: createBudgetItem
+      tags: [budget]
+      summary: Create a budget item
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBudgetItemBody"
+      responses:
+        "201":
+          description: Created budget item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetItem"
+
+  /projects/{projectId}/budget/{id}:
+    patch:
+      operationId: updateBudgetItem
+      tags: [budget]
+      summary: Update a budget item
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBudgetItemBody"
+      responses:
+        "200":
+          description: Updated budget item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetItem"
+    delete:
+      operationId: deleteBudgetItem
+      tags: [budget]
+      summary: Delete a budget item
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /projects/{projectId}/budget/summary:
+    get:
+      operationId: getBudgetSummary
+      tags: [budget]
+      summary: Budget summary — totals by category, spent vs allocated
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Budget summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetSummary"
+
+  # ─── LIGHTING DIAGRAMS ────────────────────────────────────────────────────────
+  /projects/{projectId}/lighting:
+    get:
+      operationId: listLightingDiagrams
+      tags: [lighting]
+      summary: List lighting diagrams for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lighting diagrams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LightingDiagram"
+    post:
+      operationId: createLightingDiagram
+      tags: [lighting]
+      summary: Create a lighting diagram
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLightingDiagramBody"
+      responses:
+        "201":
+          description: Created lighting diagram
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LightingDiagram"
+
+  /projects/{projectId}/lighting/{id}:
+    get:
+      operationId: getLightingDiagram
+      tags: [lighting]
+      summary: Get a lighting diagram with all elements
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lighting diagram
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LightingDiagram"
+    patch:
+      operationId: updateLightingDiagram
+      tags: [lighting]
+      summary: Update a lighting diagram (including its elements JSON)
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLightingDiagramBody"
+      responses:
+        "200":
+          description: Updated lighting diagram
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LightingDiagram"
+    delete:
+      operationId: deleteLightingDiagram
+      tags: [lighting]
+      summary: Delete a lighting diagram
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── PRODUCTION PACKETS ───────────────────────────────────────────────────────
+  /projects/{projectId}/packets:
+    get:
+      operationId: listProductionPackets
+      tags: [packets]
+      summary: List production packets for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Production packets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductionPacket"
+    post:
+      operationId: createProductionPacket
+      tags: [packets]
+      summary: Create / generate a production packet
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProductionPacketBody"
+      responses:
+        "201":
+          description: Created production packet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductionPacket"
+
+  /projects/{projectId}/packets/{id}:
+    get:
+      operationId: getProductionPacket
+      tags: [packets]
+      summary: Get a production packet
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Production packet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductionPacket"
+    delete:
+      operationId: deleteProductionPacket
+      tags: [packets]
+      summary: Delete a production packet
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +1290,1266 @@ components:
       required:
         - status
 
+    # ── PROJECT ──────────────────────────────────────────────────────────────
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        logline:
+          type: string
+          nullable: true
+        genre:
+          type: string
+          nullable: true
+        format:
+          type: string
+          nullable: true
+          description: "feature | short | series | documentary"
+        status:
+          type: string
+          nullable: true
+          description: "development | pre-production | production | post-production | distribution"
+        director:
+          type: string
+          nullable: true
+        producer:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          nullable: true
+        endDate:
+          type: string
+          nullable: true
+        totalBudget:
+          type: number
+          nullable: true
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - title
+        - createdAt
+        - updatedAt
+
+    CreateProjectBody:
+      type: object
+      properties:
+        title:
+          type: string
+        logline:
+          type: string
+          nullable: true
+        genre:
+          type: string
+          nullable: true
+        format:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        director:
+          type: string
+          nullable: true
+        producer:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          nullable: true
+        endDate:
+          type: string
+          nullable: true
+        totalBudget:
+          type: number
+          nullable: true
+      required:
+        - title
+
+    UpdateProjectBody:
+      type: object
+      properties:
+        title:
+          type: string
+        logline:
+          type: string
+          nullable: true
+        genre:
+          type: string
+          nullable: true
+        format:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        director:
+          type: string
+          nullable: true
+        producer:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          nullable: true
+        endDate:
+          type: string
+          nullable: true
+        totalBudget:
+          type: number
+          nullable: true
+
+    ProjectDashboard:
+      type: object
+      properties:
+        projectId:
+          type: integer
+        sceneCount:
+          type: integer
+        characterCount:
+          type: integer
+        castCount:
+          type: integer
+        crewCount:
+          type: integer
+        shotCount:
+          type: integer
+        budgetTotal:
+          type: number
+        budgetAllocated:
+          type: number
+        beatCount:
+          type: integer
+        lightingDiagramCount:
+          type: integer
+        recentActivity:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActivityItem"
+      required:
+        - projectId
+        - sceneCount
+        - characterCount
+        - castCount
+        - crewCount
+        - shotCount
+        - budgetTotal
+        - budgetAllocated
+        - beatCount
+        - lightingDiagramCount
+        - recentActivity
+
+    ActivityItem:
+      type: object
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+        timestamp:
+          type: string
+      required:
+        - type
+        - description
+        - timestamp
+
+    # ── CHARACTER ─────────────────────────────────────────────────────────────
+    Character:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+        role:
+          type: string
+          nullable: true
+          description: "protagonist | antagonist | supporting | minor"
+        age:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        backstory:
+          type: string
+          nullable: true
+        motivation:
+          type: string
+          nullable: true
+        arc:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - name
+        - createdAt
+
+    CreateCharacterBody:
+      type: object
+      properties:
+        name:
+          type: string
+        role:
+          type: string
+          nullable: true
+        age:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        backstory:
+          type: string
+          nullable: true
+        motivation:
+          type: string
+          nullable: true
+        arc:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - name
+
+    UpdateCharacterBody:
+      type: object
+      properties:
+        name:
+          type: string
+        role:
+          type: string
+          nullable: true
+        age:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        backstory:
+          type: string
+          nullable: true
+        motivation:
+          type: string
+          nullable: true
+        arc:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    # ── BEAT ─────────────────────────────────────────────────────────────────
+    Beat:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        beatType:
+          type: string
+          nullable: true
+          description: "opening-image | theme | catalyst | debate | break-into-two | b-story | fun-and-games | midpoint | bad-guys-close-in | all-is-lost | dark-night | break-into-three | finale | final-image | custom"
+        orderIndex:
+          type: integer
+        pageTarget:
+          type: integer
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - title
+        - orderIndex
+        - createdAt
+
+    CreateBeatBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        beatType:
+          type: string
+          nullable: true
+        orderIndex:
+          type: integer
+        pageTarget:
+          type: integer
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - title
+        - orderIndex
+
+    UpdateBeatBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        beatType:
+          type: string
+          nullable: true
+        orderIndex:
+          type: integer
+        pageTarget:
+          type: integer
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    # ── MIND MAP NODE ─────────────────────────────────────────────────────────
+    MindMapNode:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        label:
+          type: string
+        nodeType:
+          type: string
+          nullable: true
+          description: "root | theme | character | location | conflict | idea"
+        parentId:
+          type: integer
+          nullable: true
+        positionX:
+          type: number
+          nullable: true
+        positionY:
+          type: number
+          nullable: true
+        color:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - label
+        - createdAt
+
+    CreateMindMapNodeBody:
+      type: object
+      properties:
+        label:
+          type: string
+        nodeType:
+          type: string
+          nullable: true
+        parentId:
+          type: integer
+          nullable: true
+        positionX:
+          type: number
+          nullable: true
+        positionY:
+          type: number
+          nullable: true
+        color:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - label
+
+    UpdateMindMapNodeBody:
+      type: object
+      properties:
+        label:
+          type: string
+        nodeType:
+          type: string
+          nullable: true
+        parentId:
+          type: integer
+          nullable: true
+        positionX:
+          type: number
+          nullable: true
+        positionY:
+          type: number
+          nullable: true
+        color:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    # ── SCENE ─────────────────────────────────────────────────────────────────
+    Scene:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        sceneNumber:
+          type: integer
+        heading:
+          type: string
+        intExt:
+          type: string
+          nullable: true
+          description: "INT | EXT | INT/EXT"
+        location:
+          type: string
+          nullable: true
+        timeOfDay:
+          type: string
+          nullable: true
+          description: "DAY | NIGHT | DAWN | DUSK | CONTINUOUS"
+        synopsis:
+          type: string
+          nullable: true
+        pages:
+          type: number
+          nullable: true
+        characters:
+          type: array
+          items:
+            type: string
+          nullable: true
+        props:
+          type: array
+          items:
+            type: string
+          nullable: true
+        costumes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        makeupFx:
+          type: array
+          items:
+            type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - sceneNumber
+        - heading
+        - createdAt
+
+    CreateSceneBody:
+      type: object
+      properties:
+        sceneNumber:
+          type: integer
+        heading:
+          type: string
+        intExt:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        timeOfDay:
+          type: string
+          nullable: true
+        synopsis:
+          type: string
+          nullable: true
+        pages:
+          type: number
+          nullable: true
+        characters:
+          type: array
+          items:
+            type: string
+          nullable: true
+        props:
+          type: array
+          items:
+            type: string
+          nullable: true
+        costumes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        makeupFx:
+          type: array
+          items:
+            type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - sceneNumber
+        - heading
+
+    UpdateSceneBody:
+      type: object
+      properties:
+        sceneNumber:
+          type: integer
+        heading:
+          type: string
+        intExt:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        timeOfDay:
+          type: string
+          nullable: true
+        synopsis:
+          type: string
+          nullable: true
+        pages:
+          type: number
+          nullable: true
+        characters:
+          type: array
+          items:
+            type: string
+          nullable: true
+        props:
+          type: array
+          items:
+            type: string
+          nullable: true
+        costumes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        makeupFx:
+          type: array
+          items:
+            type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    ScriptBreakdownSummary:
+      type: object
+      properties:
+        totalScenes:
+          type: integer
+        totalPages:
+          type: number
+        intCount:
+          type: integer
+        extCount:
+          type: integer
+        dayCount:
+          type: integer
+        nightCount:
+          type: integer
+        uniqueLocations:
+          type: array
+          items:
+            type: string
+        uniqueCharacters:
+          type: array
+          items:
+            type: string
+        scenesByLocation:
+          type: array
+          items:
+            $ref: "#/components/schemas/LocationCount"
+      required:
+        - totalScenes
+        - totalPages
+        - intCount
+        - extCount
+        - dayCount
+        - nightCount
+        - uniqueLocations
+        - uniqueCharacters
+        - scenesByLocation
+
+    LocationCount:
+      type: object
+      properties:
+        location:
+          type: string
+        count:
+          type: integer
+      required:
+        - location
+        - count
+
+    # ── CASTING CALL ──────────────────────────────────────────────────────────
+    CastingCall:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        characterName:
+          type: string
+        role:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        ageRange:
+          type: string
+          nullable: true
+        skills:
+          type: array
+          items:
+            type: string
+          nullable: true
+        auditionDate:
+          type: string
+          nullable: true
+        auditionLocation:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+          description: "open | in-review | cast | closed"
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - characterName
+        - createdAt
+
+    CreateCastingCallBody:
+      type: object
+      properties:
+        characterName:
+          type: string
+        role:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        ageRange:
+          type: string
+          nullable: true
+        skills:
+          type: array
+          items:
+            type: string
+          nullable: true
+        auditionDate:
+          type: string
+          nullable: true
+        auditionLocation:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - characterName
+
+    UpdateCastingCallBody:
+      type: object
+      properties:
+        characterName:
+          type: string
+        role:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        ageRange:
+          type: string
+          nullable: true
+        skills:
+          type: array
+          items:
+            type: string
+          nullable: true
+        auditionDate:
+          type: string
+          nullable: true
+        auditionLocation:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    # ── CAST MEMBER ───────────────────────────────────────────────────────────
+    CastMember:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        actorName:
+          type: string
+        characterName:
+          type: string
+          nullable: true
+        role:
+          type: string
+          nullable: true
+        contact:
+          type: string
+          nullable: true
+        agent:
+          type: string
+          nullable: true
+        rate:
+          type: number
+          nullable: true
+        availability:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - actorName
+        - createdAt
+
+    CreateCastMemberBody:
+      type: object
+      properties:
+        actorName:
+          type: string
+        characterName:
+          type: string
+          nullable: true
+        role:
+          type: string
+          nullable: true
+        contact:
+          type: string
+          nullable: true
+        agent:
+          type: string
+          nullable: true
+        rate:
+          type: number
+          nullable: true
+        availability:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - actorName
+
+    UpdateCastMemberBody:
+      type: object
+      properties:
+        actorName:
+          type: string
+        characterName:
+          type: string
+          nullable: true
+        role:
+          type: string
+          nullable: true
+        contact:
+          type: string
+          nullable: true
+        agent:
+          type: string
+          nullable: true
+        rate:
+          type: number
+          nullable: true
+        availability:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    # ── CREW MEMBER ───────────────────────────────────────────────────────────
+    CrewMember:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+        department:
+          type: string
+          nullable: true
+          description: "direction | camera | lighting | sound | art | wardrobe | makeup | production | post"
+        title:
+          type: string
+          nullable: true
+        contact:
+          type: string
+          nullable: true
+        rate:
+          type: number
+          nullable: true
+        availability:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - name
+        - createdAt
+
+    CreateCrewMemberBody:
+      type: object
+      properties:
+        name:
+          type: string
+        department:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        contact:
+          type: string
+          nullable: true
+        rate:
+          type: number
+          nullable: true
+        availability:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - name
+
+    UpdateCrewMemberBody:
+      type: object
+      properties:
+        name:
+          type: string
+        department:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        contact:
+          type: string
+          nullable: true
+        rate:
+          type: number
+          nullable: true
+        availability:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    # ── SHOT ──────────────────────────────────────────────────────────────────
+    Shot:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        sceneId:
+          type: integer
+          nullable: true
+        shotNumber:
+          type: string
+        description:
+          type: string
+          nullable: true
+        shotType:
+          type: string
+          nullable: true
+          description: "ECU | CU | MCU | MS | WS | EWS | OTS | POV | AERIAL | INSERT"
+        cameraMovement:
+          type: string
+          nullable: true
+          description: "static | pan | tilt | dolly | crane | handheld | steadicam | zoom"
+        lens:
+          type: string
+          nullable: true
+        duration:
+          type: string
+          nullable: true
+        audioNotes:
+          type: string
+          nullable: true
+        lightingNotes:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+          description: "planned | shot | approved | cut"
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - shotNumber
+        - createdAt
+
+    CreateShotBody:
+      type: object
+      properties:
+        sceneId:
+          type: integer
+          nullable: true
+        shotNumber:
+          type: string
+        description:
+          type: string
+          nullable: true
+        shotType:
+          type: string
+          nullable: true
+        cameraMovement:
+          type: string
+          nullable: true
+        lens:
+          type: string
+          nullable: true
+        duration:
+          type: string
+          nullable: true
+        audioNotes:
+          type: string
+          nullable: true
+        lightingNotes:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - shotNumber
+
+    UpdateShotBody:
+      type: object
+      properties:
+        sceneId:
+          type: integer
+          nullable: true
+        shotNumber:
+          type: string
+        description:
+          type: string
+          nullable: true
+        shotType:
+          type: string
+          nullable: true
+        cameraMovement:
+          type: string
+          nullable: true
+        lens:
+          type: string
+          nullable: true
+        duration:
+          type: string
+          nullable: true
+        audioNotes:
+          type: string
+          nullable: true
+        lightingNotes:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    # ── BUDGET ITEM ──────────────────────────────────────────────────────────
+    BudgetItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        category:
+          type: string
+          description: "above-the-line | below-the-line | post-production | marketing | contingency | other"
+        subcategory:
+          type: string
+          nullable: true
+        description:
+          type: string
+        estimatedAmount:
+          type: number
+        actualAmount:
+          type: number
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - category
+        - description
+        - estimatedAmount
+        - createdAt
+
+    CreateBudgetItemBody:
+      type: object
+      properties:
+        category:
+          type: string
+        subcategory:
+          type: string
+          nullable: true
+        description:
+          type: string
+        estimatedAmount:
+          type: number
+        actualAmount:
+          type: number
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - category
+        - description
+        - estimatedAmount
+
+    UpdateBudgetItemBody:
+      type: object
+      properties:
+        category:
+          type: string
+        subcategory:
+          type: string
+          nullable: true
+        description:
+          type: string
+        estimatedAmount:
+          type: number
+        actualAmount:
+          type: number
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    BudgetSummary:
+      type: object
+      properties:
+        totalEstimated:
+          type: number
+        totalActual:
+          type: number
+        byCategory:
+          type: array
+          items:
+            $ref: "#/components/schemas/BudgetCategoryTotal"
+        percentSpent:
+          type: number
+      required:
+        - totalEstimated
+        - totalActual
+        - byCategory
+        - percentSpent
+
+    BudgetCategoryTotal:
+      type: object
+      properties:
+        category:
+          type: string
+        estimated:
+          type: number
+        actual:
+          type: number
+      required:
+        - category
+        - estimated
+        - actual
+
+    # ── LIGHTING DIAGRAM ──────────────────────────────────────────────────────
+    LightingDiagram:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+        sceneId:
+          type: integer
+          nullable: true
+        canvasData:
+          type: string
+          nullable: true
+          description: "JSON blob storing all diagram elements (lights, cameras, subjects, walls, furniture)"
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - name
+        - createdAt
+        - updatedAt
+
+    CreateLightingDiagramBody:
+      type: object
+      properties:
+        name:
+          type: string
+        sceneId:
+          type: integer
+          nullable: true
+        canvasData:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - name
+
+    UpdateLightingDiagramBody:
+      type: object
+      properties:
+        name:
+          type: string
+        sceneId:
+          type: integer
+          nullable: true
+        canvasData:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    # ── PRODUCTION PACKET ─────────────────────────────────────────────────────
+    ProductionPacket:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+        packetType:
+          type: string
+          description: "full | call-sheet | script-breakdown | shot-list | crew-list | cast-list | budget"
+        content:
+          type: string
+          nullable: true
+          description: "Serialized packet content (HTML or JSON)"
+        createdAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - name
+        - packetType
+        - createdAt
+
+    CreateProductionPacketBody:
+      type: object
+      properties:
+        name:
+          type: string
+        packetType:
+          type: string
+        content:
+          type: string
+          nullable: true
+      required:
+        - name
+        - packetType

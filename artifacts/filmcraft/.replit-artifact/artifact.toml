@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "FilmCraft"
+version = "1.0.0"
+id = "artifacts/filmcraft"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23894
+
+[services.development]
+run = "pnpm --filter @workspace/filmcraft run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/filmcraft", "run", "build" ]
+publicDir = "artifacts/filmcraft/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23894"
+BASE_PATH = "/"
