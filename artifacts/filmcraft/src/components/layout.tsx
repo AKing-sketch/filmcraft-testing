@@ -128,13 +128,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* ── Main content ─────────────────────────────────────────────── */}
       <main className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Mobile top bar */}
-        <header className="md:hidden flex items-center gap-3 h-12 px-4 border-b border-border bg-sidebar flex-shrink-0">
+        <header className="md:hidden flex items-center gap-3 h-14 px-3 border-b border-border bg-sidebar flex-shrink-0">
           <button
-            className="p-1 -ml-1 rounded text-sidebar-foreground/70 hover:text-sidebar-foreground"
-            onClick={() => setSidebarOpen(true)}
+            type="button"
+            className="flex items-center justify-center w-11 h-11 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent active:bg-sidebar-accent transition-colors flex-shrink-0"
+            onClick={(e) => { e.stopPropagation(); setSidebarOpen(true); }}
             aria-label="Open menu"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-6 h-6" />
           </button>
           <Link href="/" className="flex items-center gap-2 font-bold text-primary">
             <Film className="w-4 h-4" />
