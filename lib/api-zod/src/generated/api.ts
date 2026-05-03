@@ -1239,6 +1239,248 @@ export const DeleteProductionPacketParams = zod.object({
 });
 
 /**
+ * @summary List post-production milestones
+ */
+export const ListPostMilestonesParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const ListPostMilestonesResponseItem = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  title: zod.string(),
+  category: zod.string().describe("edit|vfx|color|sound|music|delivery|other"),
+  status: zod.string().describe("pending|in-progress|complete|blocked"),
+  dueDate: zod.string().nullish(),
+  completedDate: zod.string().nullish(),
+  notes: zod.string().nullish(),
+  orderIndex: zod.number(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+export const ListPostMilestonesResponse = zod.array(
+  ListPostMilestonesResponseItem,
+);
+
+/**
+ * @summary Create a post-production milestone
+ */
+export const CreatePostMilestoneParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const CreatePostMilestoneBody = zod.object({
+  title: zod.string(),
+  category: zod.string().optional(),
+  status: zod.string().optional(),
+  dueDate: zod.string().nullish(),
+  completedDate: zod.string().nullish(),
+  notes: zod.string().nullish(),
+  orderIndex: zod.number().optional(),
+});
+
+/**
+ * @summary Update a post-production milestone
+ */
+export const UpdatePostMilestoneParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});
+
+export const UpdatePostMilestoneBody = zod.object({
+  title: zod.string().optional(),
+  category: zod.string().optional(),
+  status: zod.string().optional(),
+  dueDate: zod.string().nullish(),
+  completedDate: zod.string().nullish(),
+  notes: zod.string().nullish(),
+  orderIndex: zod.number().optional(),
+});
+
+export const UpdatePostMilestoneResponse = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  title: zod.string(),
+  category: zod.string().describe("edit|vfx|color|sound|music|delivery|other"),
+  status: zod.string().describe("pending|in-progress|complete|blocked"),
+  dueDate: zod.string().nullish(),
+  completedDate: zod.string().nullish(),
+  notes: zod.string().nullish(),
+  orderIndex: zod.number(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete a post-production milestone
+ */
+export const DeletePostMilestoneParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});
+
+/**
+ * @summary List deliverables
+ */
+export const ListDeliverablesParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const ListDeliverablesResponseItem = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  name: zod.string(),
+  format: zod.string().nullish(),
+  specs: zod.string().nullish(),
+  recipient: zod.string().nullish(),
+  dueDate: zod.string().nullish(),
+  status: zod.string().describe("pending|in-progress|delivered|approved"),
+  notes: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+export const ListDeliverablesResponse = zod.array(ListDeliverablesResponseItem);
+
+/**
+ * @summary Create a deliverable
+ */
+export const CreateDeliverableParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const CreateDeliverableBody = zod.object({
+  name: zod.string(),
+  format: zod.string().nullish(),
+  specs: zod.string().nullish(),
+  recipient: zod.string().nullish(),
+  dueDate: zod.string().nullish(),
+  status: zod.string().optional(),
+  notes: zod.string().nullish(),
+});
+
+/**
+ * @summary Update a deliverable
+ */
+export const UpdateDeliverableParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});
+
+export const UpdateDeliverableBody = zod.object({
+  name: zod.string().optional(),
+  format: zod.string().nullish(),
+  specs: zod.string().nullish(),
+  recipient: zod.string().nullish(),
+  dueDate: zod.string().nullish(),
+  status: zod.string().optional(),
+  notes: zod.string().nullish(),
+});
+
+export const UpdateDeliverableResponse = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  name: zod.string(),
+  format: zod.string().nullish(),
+  specs: zod.string().nullish(),
+  recipient: zod.string().nullish(),
+  dueDate: zod.string().nullish(),
+  status: zod.string().describe("pending|in-progress|delivered|approved"),
+  notes: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete a deliverable
+ */
+export const DeleteDeliverableParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});
+
+/**
+ * @summary Get the distribution strategy / press kit for a project
+ */
+export const GetDistributionStrategyParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const GetDistributionStrategyResponse = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  tagline: zod.string().nullish(),
+  shortSynopsis: zod.string().nullish(),
+  longSynopsis: zod.string().nullish(),
+  directorStatement: zod.string().nullish(),
+  directorBio: zod.string().nullish(),
+  producerBio: zod.string().nullish(),
+  runtimeMinutes: zod.number().nullish(),
+  aspectRatio: zod.string().nullish(),
+  soundFormat: zod.string().nullish(),
+  language: zod.string().nullish(),
+  countryOfOrigin: zod.string().nullish(),
+  subtitles: zod.string().nullish(),
+  targetAudience: zod.string().nullish(),
+  festivalStrategy: zod.string().nullish(),
+  releaseStrategy: zod.string().nullish(),
+  socialLinks: zod.string().nullish(),
+  pressContact: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Create or update the distribution strategy / press kit
+ */
+export const UpsertDistributionStrategyParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const UpsertDistributionStrategyBody = zod.object({
+  tagline: zod.string().nullish(),
+  shortSynopsis: zod.string().nullish(),
+  longSynopsis: zod.string().nullish(),
+  directorStatement: zod.string().nullish(),
+  directorBio: zod.string().nullish(),
+  producerBio: zod.string().nullish(),
+  runtimeMinutes: zod.number().nullish(),
+  aspectRatio: zod.string().nullish(),
+  soundFormat: zod.string().nullish(),
+  language: zod.string().nullish(),
+  countryOfOrigin: zod.string().nullish(),
+  subtitles: zod.string().nullish(),
+  targetAudience: zod.string().nullish(),
+  festivalStrategy: zod.string().nullish(),
+  releaseStrategy: zod.string().nullish(),
+  socialLinks: zod.string().nullish(),
+  pressContact: zod.string().nullish(),
+});
+
+export const UpsertDistributionStrategyResponse = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  tagline: zod.string().nullish(),
+  shortSynopsis: zod.string().nullish(),
+  longSynopsis: zod.string().nullish(),
+  directorStatement: zod.string().nullish(),
+  directorBio: zod.string().nullish(),
+  producerBio: zod.string().nullish(),
+  runtimeMinutes: zod.number().nullish(),
+  aspectRatio: zod.string().nullish(),
+  soundFormat: zod.string().nullish(),
+  language: zod.string().nullish(),
+  countryOfOrigin: zod.string().nullish(),
+  subtitles: zod.string().nullish(),
+  targetAudience: zod.string().nullish(),
+  festivalStrategy: zod.string().nullish(),
+  releaseStrategy: zod.string().nullish(),
+  socialLinks: zod.string().nullish(),
+  pressContact: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
  * @summary List distribution entries for a project
  */
 export const ListDistributionEntriesParams = zod.object({

@@ -487,6 +487,121 @@ export interface CreateProductionPacketBody {
   content?: string | null;
 }
 
+export interface PostMilestone {
+  id: number;
+  projectId: number;
+  title: string;
+  /** edit|vfx|color|sound|music|delivery|other */
+  category: string;
+  /** pending|in-progress|complete|blocked */
+  status: string;
+  dueDate?: string | null;
+  completedDate?: string | null;
+  notes?: string | null;
+  orderIndex: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreatePostMilestoneBody {
+  title: string;
+  category?: string;
+  status?: string;
+  dueDate?: string | null;
+  completedDate?: string | null;
+  notes?: string | null;
+  orderIndex?: number;
+}
+
+export interface UpdatePostMilestoneBody {
+  title?: string;
+  category?: string;
+  status?: string;
+  dueDate?: string | null;
+  completedDate?: string | null;
+  notes?: string | null;
+  orderIndex?: number;
+}
+
+export interface Deliverable {
+  id: number;
+  projectId: number;
+  name: string;
+  format?: string | null;
+  specs?: string | null;
+  recipient?: string | null;
+  dueDate?: string | null;
+  /** pending|in-progress|delivered|approved */
+  status: string;
+  notes?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateDeliverableBody {
+  name: string;
+  format?: string | null;
+  specs?: string | null;
+  recipient?: string | null;
+  dueDate?: string | null;
+  status?: string;
+  notes?: string | null;
+}
+
+export interface UpdateDeliverableBody {
+  name?: string;
+  format?: string | null;
+  specs?: string | null;
+  recipient?: string | null;
+  dueDate?: string | null;
+  status?: string;
+  notes?: string | null;
+}
+
+export interface DistributionStrategy {
+  id: number;
+  projectId: number;
+  tagline?: string | null;
+  shortSynopsis?: string | null;
+  longSynopsis?: string | null;
+  directorStatement?: string | null;
+  directorBio?: string | null;
+  producerBio?: string | null;
+  runtimeMinutes?: number | null;
+  aspectRatio?: string | null;
+  soundFormat?: string | null;
+  language?: string | null;
+  countryOfOrigin?: string | null;
+  subtitles?: string | null;
+  targetAudience?: string | null;
+  festivalStrategy?: string | null;
+  releaseStrategy?: string | null;
+  socialLinks?: string | null;
+  pressContact?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpsertDistributionStrategyBody {
+  tagline?: string | null;
+  shortSynopsis?: string | null;
+  longSynopsis?: string | null;
+  directorStatement?: string | null;
+  directorBio?: string | null;
+  producerBio?: string | null;
+  runtimeMinutes?: number | null;
+  aspectRatio?: string | null;
+  soundFormat?: string | null;
+  language?: string | null;
+  countryOfOrigin?: string | null;
+  subtitles?: string | null;
+  targetAudience?: string | null;
+  festivalStrategy?: string | null;
+  releaseStrategy?: string | null;
+  socialLinks?: string | null;
+  pressContact?: string | null;
+}
+
 export interface DistributionEntry {
   id: number;
   projectId: number;

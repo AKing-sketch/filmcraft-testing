@@ -29,18 +29,23 @@ import type {
   CreateCastingCallBody,
   CreateCharacterBody,
   CreateCrewMemberBody,
+  CreateDeliverableBody,
   CreateDistributionEntryBody,
   CreateLightingDiagramBody,
   CreateMindMapNodeBody,
+  CreatePostMilestoneBody,
   CreateProductionPacketBody,
   CreateProjectBody,
   CreateSceneBody,
   CreateShotBody,
   CrewMember,
+  Deliverable,
   DistributionEntry,
+  DistributionStrategy,
   HealthStatus,
   LightingDiagram,
   MindMapNode,
+  PostMilestone,
   ProductionPacket,
   Project,
   ProjectDashboard,
@@ -53,12 +58,15 @@ import type {
   UpdateCastingCallBody,
   UpdateCharacterBody,
   UpdateCrewMemberBody,
+  UpdateDeliverableBody,
   UpdateDistributionEntryBody,
   UpdateLightingDiagramBody,
   UpdateMindMapNodeBody,
+  UpdatePostMilestoneBody,
   UpdateProjectBody,
   UpdateSceneBody,
   UpdateShotBody,
+  UpsertDistributionStrategyBody,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -4965,6 +4973,890 @@ export const useDeleteProductionPacket = <
   TContext
 > => {
   return useMutation(getDeleteProductionPacketMutationOptions(options));
+};
+
+/**
+ * @summary List post-production milestones
+ */
+export const getListPostMilestonesUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/post-milestones`;
+};
+
+export const listPostMilestones = async (
+  projectId: number,
+  options?: RequestInit,
+): Promise<PostMilestone[]> => {
+  return customFetch<PostMilestone[]>(getListPostMilestonesUrl(projectId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListPostMilestonesQueryKey = (projectId: number) => {
+  return [`/api/projects/${projectId}/post-milestones`] as const;
+};
+
+export const getListPostMilestonesQueryOptions = <
+  TData = Awaited<ReturnType<typeof listPostMilestones>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listPostMilestones>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListPostMilestonesQueryKey(projectId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listPostMilestones>>
+  > = ({ signal }) =>
+    listPostMilestones(projectId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!projectId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof listPostMilestones>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListPostMilestonesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listPostMilestones>>
+>;
+export type ListPostMilestonesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List post-production milestones
+ */
+
+export function useListPostMilestones<
+  TData = Awaited<ReturnType<typeof listPostMilestones>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listPostMilestones>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListPostMilestonesQueryOptions(projectId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create a post-production milestone
+ */
+export const getCreatePostMilestoneUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/post-milestones`;
+};
+
+export const createPostMilestone = async (
+  projectId: number,
+  createPostMilestoneBody: CreatePostMilestoneBody,
+  options?: RequestInit,
+): Promise<PostMilestone> => {
+  return customFetch<PostMilestone>(getCreatePostMilestoneUrl(projectId), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createPostMilestoneBody),
+  });
+};
+
+export const getCreatePostMilestoneMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createPostMilestone>>,
+    TError,
+    { projectId: number; data: BodyType<CreatePostMilestoneBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createPostMilestone>>,
+  TError,
+  { projectId: number; data: BodyType<CreatePostMilestoneBody> },
+  TContext
+> => {
+  const mutationKey = ["createPostMilestone"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createPostMilestone>>,
+    { projectId: number; data: BodyType<CreatePostMilestoneBody> }
+  > = (props) => {
+    const { projectId, data } = props ?? {};
+
+    return createPostMilestone(projectId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreatePostMilestoneMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createPostMilestone>>
+>;
+export type CreatePostMilestoneMutationBody = BodyType<CreatePostMilestoneBody>;
+export type CreatePostMilestoneMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create a post-production milestone
+ */
+export const useCreatePostMilestone = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createPostMilestone>>,
+    TError,
+    { projectId: number; data: BodyType<CreatePostMilestoneBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createPostMilestone>>,
+  TError,
+  { projectId: number; data: BodyType<CreatePostMilestoneBody> },
+  TContext
+> => {
+  return useMutation(getCreatePostMilestoneMutationOptions(options));
+};
+
+/**
+ * @summary Update a post-production milestone
+ */
+export const getUpdatePostMilestoneUrl = (projectId: number, id: number) => {
+  return `/api/projects/${projectId}/post-milestones/${id}`;
+};
+
+export const updatePostMilestone = async (
+  projectId: number,
+  id: number,
+  updatePostMilestoneBody: UpdatePostMilestoneBody,
+  options?: RequestInit,
+): Promise<PostMilestone> => {
+  return customFetch<PostMilestone>(getUpdatePostMilestoneUrl(projectId, id), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(updatePostMilestoneBody),
+  });
+};
+
+export const getUpdatePostMilestoneMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updatePostMilestone>>,
+    TError,
+    { projectId: number; id: number; data: BodyType<UpdatePostMilestoneBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updatePostMilestone>>,
+  TError,
+  { projectId: number; id: number; data: BodyType<UpdatePostMilestoneBody> },
+  TContext
+> => {
+  const mutationKey = ["updatePostMilestone"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updatePostMilestone>>,
+    { projectId: number; id: number; data: BodyType<UpdatePostMilestoneBody> }
+  > = (props) => {
+    const { projectId, id, data } = props ?? {};
+
+    return updatePostMilestone(projectId, id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdatePostMilestoneMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updatePostMilestone>>
+>;
+export type UpdatePostMilestoneMutationBody = BodyType<UpdatePostMilestoneBody>;
+export type UpdatePostMilestoneMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update a post-production milestone
+ */
+export const useUpdatePostMilestone = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updatePostMilestone>>,
+    TError,
+    { projectId: number; id: number; data: BodyType<UpdatePostMilestoneBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updatePostMilestone>>,
+  TError,
+  { projectId: number; id: number; data: BodyType<UpdatePostMilestoneBody> },
+  TContext
+> => {
+  return useMutation(getUpdatePostMilestoneMutationOptions(options));
+};
+
+/**
+ * @summary Delete a post-production milestone
+ */
+export const getDeletePostMilestoneUrl = (projectId: number, id: number) => {
+  return `/api/projects/${projectId}/post-milestones/${id}`;
+};
+
+export const deletePostMilestone = async (
+  projectId: number,
+  id: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeletePostMilestoneUrl(projectId, id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeletePostMilestoneMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deletePostMilestone>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deletePostMilestone>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  const mutationKey = ["deletePostMilestone"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deletePostMilestone>>,
+    { projectId: number; id: number }
+  > = (props) => {
+    const { projectId, id } = props ?? {};
+
+    return deletePostMilestone(projectId, id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeletePostMilestoneMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deletePostMilestone>>
+>;
+
+export type DeletePostMilestoneMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Delete a post-production milestone
+ */
+export const useDeletePostMilestone = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deletePostMilestone>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deletePostMilestone>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  return useMutation(getDeletePostMilestoneMutationOptions(options));
+};
+
+/**
+ * @summary List deliverables
+ */
+export const getListDeliverablesUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/deliverables`;
+};
+
+export const listDeliverables = async (
+  projectId: number,
+  options?: RequestInit,
+): Promise<Deliverable[]> => {
+  return customFetch<Deliverable[]>(getListDeliverablesUrl(projectId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListDeliverablesQueryKey = (projectId: number) => {
+  return [`/api/projects/${projectId}/deliverables`] as const;
+};
+
+export const getListDeliverablesQueryOptions = <
+  TData = Awaited<ReturnType<typeof listDeliverables>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listDeliverables>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListDeliverablesQueryKey(projectId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listDeliverables>>
+  > = ({ signal }) =>
+    listDeliverables(projectId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!projectId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof listDeliverables>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListDeliverablesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listDeliverables>>
+>;
+export type ListDeliverablesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List deliverables
+ */
+
+export function useListDeliverables<
+  TData = Awaited<ReturnType<typeof listDeliverables>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listDeliverables>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListDeliverablesQueryOptions(projectId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create a deliverable
+ */
+export const getCreateDeliverableUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/deliverables`;
+};
+
+export const createDeliverable = async (
+  projectId: number,
+  createDeliverableBody: CreateDeliverableBody,
+  options?: RequestInit,
+): Promise<Deliverable> => {
+  return customFetch<Deliverable>(getCreateDeliverableUrl(projectId), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createDeliverableBody),
+  });
+};
+
+export const getCreateDeliverableMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createDeliverable>>,
+    TError,
+    { projectId: number; data: BodyType<CreateDeliverableBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createDeliverable>>,
+  TError,
+  { projectId: number; data: BodyType<CreateDeliverableBody> },
+  TContext
+> => {
+  const mutationKey = ["createDeliverable"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createDeliverable>>,
+    { projectId: number; data: BodyType<CreateDeliverableBody> }
+  > = (props) => {
+    const { projectId, data } = props ?? {};
+
+    return createDeliverable(projectId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateDeliverableMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createDeliverable>>
+>;
+export type CreateDeliverableMutationBody = BodyType<CreateDeliverableBody>;
+export type CreateDeliverableMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create a deliverable
+ */
+export const useCreateDeliverable = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createDeliverable>>,
+    TError,
+    { projectId: number; data: BodyType<CreateDeliverableBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createDeliverable>>,
+  TError,
+  { projectId: number; data: BodyType<CreateDeliverableBody> },
+  TContext
+> => {
+  return useMutation(getCreateDeliverableMutationOptions(options));
+};
+
+/**
+ * @summary Update a deliverable
+ */
+export const getUpdateDeliverableUrl = (projectId: number, id: number) => {
+  return `/api/projects/${projectId}/deliverables/${id}`;
+};
+
+export const updateDeliverable = async (
+  projectId: number,
+  id: number,
+  updateDeliverableBody: UpdateDeliverableBody,
+  options?: RequestInit,
+): Promise<Deliverable> => {
+  return customFetch<Deliverable>(getUpdateDeliverableUrl(projectId, id), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(updateDeliverableBody),
+  });
+};
+
+export const getUpdateDeliverableMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateDeliverable>>,
+    TError,
+    { projectId: number; id: number; data: BodyType<UpdateDeliverableBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateDeliverable>>,
+  TError,
+  { projectId: number; id: number; data: BodyType<UpdateDeliverableBody> },
+  TContext
+> => {
+  const mutationKey = ["updateDeliverable"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateDeliverable>>,
+    { projectId: number; id: number; data: BodyType<UpdateDeliverableBody> }
+  > = (props) => {
+    const { projectId, id, data } = props ?? {};
+
+    return updateDeliverable(projectId, id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateDeliverableMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateDeliverable>>
+>;
+export type UpdateDeliverableMutationBody = BodyType<UpdateDeliverableBody>;
+export type UpdateDeliverableMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update a deliverable
+ */
+export const useUpdateDeliverable = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateDeliverable>>,
+    TError,
+    { projectId: number; id: number; data: BodyType<UpdateDeliverableBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateDeliverable>>,
+  TError,
+  { projectId: number; id: number; data: BodyType<UpdateDeliverableBody> },
+  TContext
+> => {
+  return useMutation(getUpdateDeliverableMutationOptions(options));
+};
+
+/**
+ * @summary Delete a deliverable
+ */
+export const getDeleteDeliverableUrl = (projectId: number, id: number) => {
+  return `/api/projects/${projectId}/deliverables/${id}`;
+};
+
+export const deleteDeliverable = async (
+  projectId: number,
+  id: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeleteDeliverableUrl(projectId, id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteDeliverableMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteDeliverable>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteDeliverable>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  const mutationKey = ["deleteDeliverable"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteDeliverable>>,
+    { projectId: number; id: number }
+  > = (props) => {
+    const { projectId, id } = props ?? {};
+
+    return deleteDeliverable(projectId, id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteDeliverableMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteDeliverable>>
+>;
+
+export type DeleteDeliverableMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Delete a deliverable
+ */
+export const useDeleteDeliverable = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteDeliverable>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteDeliverable>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  return useMutation(getDeleteDeliverableMutationOptions(options));
+};
+
+/**
+ * @summary Get the distribution strategy / press kit for a project
+ */
+export const getGetDistributionStrategyUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/distribution-strategy`;
+};
+
+export const getDistributionStrategy = async (
+  projectId: number,
+  options?: RequestInit,
+): Promise<DistributionStrategy> => {
+  return customFetch<DistributionStrategy>(
+    getGetDistributionStrategyUrl(projectId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getGetDistributionStrategyQueryKey = (projectId: number) => {
+  return [`/api/projects/${projectId}/distribution-strategy`] as const;
+};
+
+export const getGetDistributionStrategyQueryOptions = <
+  TData = Awaited<ReturnType<typeof getDistributionStrategy>>,
+  TError = ErrorType<void>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getDistributionStrategy>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetDistributionStrategyQueryKey(projectId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getDistributionStrategy>>
+  > = ({ signal }) =>
+    getDistributionStrategy(projectId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!projectId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getDistributionStrategy>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetDistributionStrategyQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getDistributionStrategy>>
+>;
+export type GetDistributionStrategyQueryError = ErrorType<void>;
+
+/**
+ * @summary Get the distribution strategy / press kit for a project
+ */
+
+export function useGetDistributionStrategy<
+  TData = Awaited<ReturnType<typeof getDistributionStrategy>>,
+  TError = ErrorType<void>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getDistributionStrategy>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetDistributionStrategyQueryOptions(
+    projectId,
+    options,
+  );
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create or update the distribution strategy / press kit
+ */
+export const getUpsertDistributionStrategyUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/distribution-strategy`;
+};
+
+export const upsertDistributionStrategy = async (
+  projectId: number,
+  upsertDistributionStrategyBody: UpsertDistributionStrategyBody,
+  options?: RequestInit,
+): Promise<DistributionStrategy> => {
+  return customFetch<DistributionStrategy>(
+    getUpsertDistributionStrategyUrl(projectId),
+    {
+      ...options,
+      method: "PUT",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(upsertDistributionStrategyBody),
+    },
+  );
+};
+
+export const getUpsertDistributionStrategyMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof upsertDistributionStrategy>>,
+    TError,
+    { projectId: number; data: BodyType<UpsertDistributionStrategyBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof upsertDistributionStrategy>>,
+  TError,
+  { projectId: number; data: BodyType<UpsertDistributionStrategyBody> },
+  TContext
+> => {
+  const mutationKey = ["upsertDistributionStrategy"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof upsertDistributionStrategy>>,
+    { projectId: number; data: BodyType<UpsertDistributionStrategyBody> }
+  > = (props) => {
+    const { projectId, data } = props ?? {};
+
+    return upsertDistributionStrategy(projectId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpsertDistributionStrategyMutationResult = NonNullable<
+  Awaited<ReturnType<typeof upsertDistributionStrategy>>
+>;
+export type UpsertDistributionStrategyMutationBody =
+  BodyType<UpsertDistributionStrategyBody>;
+export type UpsertDistributionStrategyMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create or update the distribution strategy / press kit
+ */
+export const useUpsertDistributionStrategy = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof upsertDistributionStrategy>>,
+    TError,
+    { projectId: number; data: BodyType<UpsertDistributionStrategyBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof upsertDistributionStrategy>>,
+  TError,
+  { projectId: number; data: BodyType<UpsertDistributionStrategyBody> },
+  TContext
+> => {
+  return useMutation(getUpsertDistributionStrategyMutationOptions(options));
 };
 
 /**

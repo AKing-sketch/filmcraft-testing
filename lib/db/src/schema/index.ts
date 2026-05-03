@@ -10,3 +10,5 @@ export * from "./budget";
 export * from "./lighting";
 export * from "./packets";
 export * from "./distribution";
+export * from "./post_production";
+export * from "./distribution_strategy";

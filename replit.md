@@ -32,6 +32,8 @@ A full-stack filmmaking production suite for directors, producers, and cinematog
 - **Budget** — Line items by category with estimated vs actual, summary view
 - **Lighting Planner** — Interactive drag-and-drop canvas for bird's-eye lighting diagrams
 - **Production Packets** — Generate exportable production packet templates
+- **Post-Production** — Pipeline milestones (Editorial/VFX/Color/Sound/Music/Delivery) with progress bar + click-to-advance status, Deliverables tracker with format/specs/recipient/due date
+- **Distribution** — Submissions tracker (festivals, distributors, platforms, broadcasters, sales agents) with status workflow + Press Kit / Strategy template (tagline, synopses, director statement, technical specs, bios, festival/release strategy, press contact)
 
 ## Key Commands
 
@@ -63,5 +65,8 @@ A full-stack filmmaking production suite for directors, producers, and cinematog
 - `budget.ts` — Budget line items
 - `lighting.ts` — Lighting diagrams (canvas JSON)
 - `packets.ts` — Production packets
+- `post_production.ts` — Post-production milestones + deliverables
+- `distribution.ts` — Distribution entries (festival/distributor/platform/broadcaster/sales-agent)
+- `distribution_strategy.ts` — Press kit / distribution strategy (one record per project)
 
 See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details.

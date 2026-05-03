@@ -36,6 +36,10 @@ tags:
     description: Production packets
   - name: dashboard
     description: Dashboard aggregates
+  - name: post-production
+    description: Post-production milestones and deliverables
+  - name: distribution
+    description: Distribution entries and strategy
 
 paths:
   /healthz:
@@ -1279,6 +1283,237 @@ paths:
       responses:
         "204":
           description: Deleted
+
+  # ─── POST-PRODUCTION MILESTONES ──────────────────────────────────────────────
+  /projects/{projectId}/post-milestones:
+    get:
+      operationId: listPostMilestones
+      tags: [post-production]
+      summary: List post-production milestones
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Post milestones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PostMilestone"
+    post:
+      operationId: createPostMilestone
+      tags: [post-production]
+      summary: Create a post-production milestone
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePostMilestoneBody"
+      responses:
+        "201":
+          description: Created milestone
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostMilestone"
+
+  /projects/{projectId}/post-milestones/{id}:
+    patch:
+      operationId: updatePostMilestone
+      tags: [post-production]
+      summary: Update a post-production milestone
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePostMilestoneBody"
+      responses:
+        "200":
+          description: Updated milestone
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostMilestone"
+    delete:
+      operationId: deletePostMilestone
+      tags: [post-production]
+      summary: Delete a post-production milestone
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── DELIVERABLES ─────────────────────────────────────────────────────────────
+  /projects/{projectId}/deliverables:
+    get:
+      operationId: listDeliverables
+      tags: [post-production]
+      summary: List deliverables
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deliverables
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Deliverable"
+    post:
+      operationId: createDeliverable
+      tags: [post-production]
+      summary: Create a deliverable
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDeliverableBody"
+      responses:
+        "201":
+          description: Created deliverable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deliverable"
+
+  /projects/{projectId}/deliverables/{id}:
+    patch:
+      operationId: updateDeliverable
+      tags: [post-production]
+      summary: Update a deliverable
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDeliverableBody"
+      responses:
+        "200":
+          description: Updated deliverable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deliverable"
+    delete:
+      operationId: deleteDeliverable
+      tags: [post-production]
+      summary: Delete a deliverable
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── DISTRIBUTION STRATEGY ───────────────────────────────────────────────────
+  /projects/{projectId}/distribution-strategy:
+    get:
+      operationId: getDistributionStrategy
+      tags: [distribution]
+      summary: Get the distribution strategy / press kit for a project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Distribution strategy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DistributionStrategy"
+        "404":
+          description: Not found
+    put:
+      operationId: upsertDistributionStrategy
+      tags: [distribution]
+      summary: Create or update the distribution strategy / press kit
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpsertDistributionStrategyBody"
+      responses:
+        "200":
+          description: Upserted distribution strategy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DistributionStrategy"
 
   # ─── DISTRIBUTION ────────────────────────────────────────────────────────────
   /projects/{projectId}/distribution:
@@ -2646,6 +2881,302 @@ components:
       required:
         - name
         - packetType
+
+    # ── POST-PRODUCTION ───────────────────────────────────────────────────────
+    PostMilestone:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+          description: "edit|vfx|color|sound|music|delivery|other"
+        status:
+          type: string
+          description: "pending|in-progress|complete|blocked"
+        dueDate:
+          type: string
+          nullable: true
+        completedDate:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        orderIndex:
+          type: integer
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - title
+        - category
+        - status
+        - orderIndex
+        - createdAt
+        - updatedAt
+
+    CreatePostMilestoneBody:
+      type: object
+      properties:
+        title:
+          type: string
+        category:
+          type: string
+        status:
+          type: string
+        dueDate:
+          type: string
+          nullable: true
+        completedDate:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        orderIndex:
+          type: integer
+      required:
+        - title
+
+    UpdatePostMilestoneBody:
+      type: object
+      properties:
+        title:
+          type: string
+        category:
+          type: string
+        status:
+          type: string
+        dueDate:
+          type: string
+          nullable: true
+        completedDate:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        orderIndex:
+          type: integer
+
+    Deliverable:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+        format:
+          type: string
+          nullable: true
+        specs:
+          type: string
+          nullable: true
+        recipient:
+          type: string
+          nullable: true
+        dueDate:
+          type: string
+          nullable: true
+        status:
+          type: string
+          description: "pending|in-progress|delivered|approved"
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - name
+        - status
+        - createdAt
+        - updatedAt
+
+    CreateDeliverableBody:
+      type: object
+      properties:
+        name:
+          type: string
+        format:
+          type: string
+          nullable: true
+        specs:
+          type: string
+          nullable: true
+        recipient:
+          type: string
+          nullable: true
+        dueDate:
+          type: string
+          nullable: true
+        status:
+          type: string
+        notes:
+          type: string
+          nullable: true
+      required:
+        - name
+
+    UpdateDeliverableBody:
+      type: object
+      properties:
+        name:
+          type: string
+        format:
+          type: string
+          nullable: true
+        specs:
+          type: string
+          nullable: true
+        recipient:
+          type: string
+          nullable: true
+        dueDate:
+          type: string
+          nullable: true
+        status:
+          type: string
+        notes:
+          type: string
+          nullable: true
+
+    # ── DISTRIBUTION STRATEGY ─────────────────────────────────────────────────
+    DistributionStrategy:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        tagline:
+          type: string
+          nullable: true
+        shortSynopsis:
+          type: string
+          nullable: true
+        longSynopsis:
+          type: string
+          nullable: true
+        directorStatement:
+          type: string
+          nullable: true
+        directorBio:
+          type: string
+          nullable: true
+        producerBio:
+          type: string
+          nullable: true
+        runtimeMinutes:
+          type: integer
+          nullable: true
+        aspectRatio:
+          type: string
+          nullable: true
+        soundFormat:
+          type: string
+          nullable: true
+        language:
+          type: string
+          nullable: true
+        countryOfOrigin:
+          type: string
+          nullable: true
+        subtitles:
+          type: string
+          nullable: true
+        targetAudience:
+          type: string
+          nullable: true
+        festivalStrategy:
+          type: string
+          nullable: true
+        releaseStrategy:
+          type: string
+          nullable: true
+        socialLinks:
+          type: string
+          nullable: true
+        pressContact:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - createdAt
+        - updatedAt
+
+    UpsertDistributionStrategyBody:
+      type: object
+      properties:
+        tagline:
+          type: string
+          nullable: true
+        shortSynopsis:
+          type: string
+          nullable: true
+        longSynopsis:
+          type: string
+          nullable: true
+        directorStatement:
+          type: string
+          nullable: true
+        directorBio:
+          type: string
+          nullable: true
+        producerBio:
+          type: string
+          nullable: true
+        runtimeMinutes:
+          type: integer
+          nullable: true
+        aspectRatio:
+          type: string
+          nullable: true
+        soundFormat:
+          type: string
+          nullable: true
+        language:
+          type: string
+          nullable: true
+        countryOfOrigin:
+          type: string
+          nullable: true
+        subtitles:
+          type: string
+          nullable: true
+        targetAudience:
+          type: string
+          nullable: true
+        festivalStrategy:
+          type: string
+          nullable: true
+        releaseStrategy:
+          type: string
+          nullable: true
+        socialLinks:
+          type: string
+          nullable: true
+        pressContact:
+          type: string
+          nullable: true
 
     # ── DISTRIBUTION ──────────────────────────────────────────────────────────
     DistributionEntry:
