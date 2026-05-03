@@ -10,6 +10,10 @@ import {
   shotsTable,
   budgetItemsTable,
   lightingDiagramsTable,
+  productionPacketsTable,
+  postMilestonesTable,
+  deliverablesTable,
+  distributionEntriesTable,
 } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
 import {
@@ -112,6 +116,10 @@ router.get("/:id/dashboard", async (req, res) => {
       scenes,
       beats,
       lightingDiagrams,
+      packets,
+      postMilestones,
+      deliverables,
+      distributionEntries,
     ] = await Promise.all([
       db.select().from(charactersTable).where(eq(charactersTable.projectId, id)),
       db.select().from(castMembersTable).where(eq(castMembersTable.projectId, id)),
@@ -121,6 +129,10 @@ router.get("/:id/dashboard", async (req, res) => {
       db.select().from(scenesTable).where(eq(scenesTable.projectId, id)),
       db.select().from(beatsTable).where(eq(beatsTable.projectId, id)),
       db.select().from(lightingDiagramsTable).where(eq(lightingDiagramsTable.projectId, id)),
+      db.select().from(productionPacketsTable).where(eq(productionPacketsTable.projectId, id)),
+      db.select().from(postMilestonesTable).where(eq(postMilestonesTable.projectId, id)),
+      db.select().from(deliverablesTable).where(eq(deliverablesTable.projectId, id)),
+      db.select().from(distributionEntriesTable).where(eq(distributionEntriesTable.projectId, id)),
     ]);
 
     const budgetTotal = budgetItems.reduce((sum, item) => sum + (item.estimatedAmount ?? 0), 0);
@@ -157,6 +169,12 @@ router.get("/:id/dashboard", async (req, res) => {
       budgetAllocated,
       beatCount: beats.length,
       lightingDiagramCount: lightingDiagrams.length,
+      packetCount: packets.length,
+      postMilestoneCount: postMilestones.length,
+      postMilestoneCompleteCount: postMilestones.filter(m => m.status === "complete").length,
+      deliverableCount: deliverables.length,
+      distributionCount: distributionEntries.length,
+      distributionAcceptedCount: distributionEntries.filter(e => ["accepted","deal-made"].includes(e.status ?? "")).length,
       recentActivity,
     });
   } catch (err) {

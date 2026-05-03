@@ -1756,6 +1756,18 @@ components:
           type: integer
         lightingDiagramCount:
           type: integer
+        packetCount:
+          type: integer
+        postMilestoneCount:
+          type: integer
+        postMilestoneCompleteCount:
+          type: integer
+        deliverableCount:
+          type: integer
+        distributionCount:
+          type: integer
+        distributionAcceptedCount:
+          type: integer
         recentActivity:
           type: array
           items:
@@ -1771,6 +1783,12 @@ components:
         - budgetAllocated
         - beatCount
         - lightingDiagramCount
+        - packetCount
+        - postMilestoneCount
+        - postMilestoneCompleteCount
+        - deliverableCount
+        - distributionCount
+        - distributionAcceptedCount
         - recentActivity
 
     ActivityItem:

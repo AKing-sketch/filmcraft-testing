@@ -158,6 +158,12 @@ export const GetProjectDashboardResponse = zod.object({
   budgetAllocated: zod.number(),
   beatCount: zod.number(),
   lightingDiagramCount: zod.number(),
+  packetCount: zod.number(),
+  postMilestoneCount: zod.number(),
+  postMilestoneCompleteCount: zod.number(),
+  deliverableCount: zod.number(),
+  distributionCount: zod.number(),
+  distributionAcceptedCount: zod.number(),
   recentActivity: zod.array(
     zod.object({
       type: zod.string(),

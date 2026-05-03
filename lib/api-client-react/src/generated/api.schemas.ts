@@ -70,6 +70,12 @@ export interface ProjectDashboard {
   budgetAllocated: number;
   beatCount: number;
   lightingDiagramCount: number;
+  packetCount: number;
+  postMilestoneCount: number;
+  postMilestoneCompleteCount: number;
+  deliverableCount: number;
+  distributionCount: number;
+  distributionAcceptedCount: number;
   recentActivity: ActivityItem[];
 }
 
