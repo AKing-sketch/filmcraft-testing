@@ -1,7 +1,35 @@
 import { useListProjects } from "@workspace/api-client-react";
 import { Link } from "wouter";
-import { Plus, Film, Calendar, Clapperboard } from "lucide-react";
-import { format } from "date-fns";
+import {
+  Plus, Film, Clapperboard, Lightbulb, Video, Globe, Package
+} from "lucide-react";
+
+const PHASES = [
+  {
+    label: "Development",
+    segment: "development",
+    icon: Lightbulb,
+    color: "text-violet-400 bg-violet-500/10 border-violet-500/30",
+  },
+  {
+    label: "Production",
+    segment: "shots",
+    icon: Video,
+    color: "text-amber-400 bg-amber-500/10 border-amber-500/30",
+  },
+  {
+    label: "Post-Production",
+    segment: "post-production",
+    icon: Clapperboard,
+    color: "text-sky-400 bg-sky-500/10 border-sky-500/30",
+  },
+  {
+    label: "Distribution",
+    segment: "distribution",
+    icon: Globe,
+    color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
+  },
+];
 
 export default function ProjectsList() {
   const { data: projects, isLoading } = useListProjects();
@@ -13,16 +41,19 @@ export default function ProjectsList() {
           <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
           <p className="text-muted-foreground mt-1">Manage your film productions</p>
         </div>
-        <Link href="/projects/new" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 gap-2">
+        <Link
+          href="/projects/new"
+          className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 gap-2 transition-colors"
+        >
           <Plus className="w-4 h-4" />
           New Project
         </Link>
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="h-48 rounded-xl bg-card border border-border animate-pulse"></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[1, 2].map((i) => (
+            <div key={i} className="h-64 rounded-xl bg-card border border-border animate-pulse" />
           ))}
         </div>
       ) : projects?.length === 0 ? (
@@ -31,56 +62,84 @@ export default function ProjectsList() {
             <Clapperboard className="w-8 h-8 text-primary" />
           </div>
           <h2 className="text-xl font-semibold mb-2">No projects yet</h2>
-          <p className="text-muted-foreground max-w-md mb-6">Create your first project to start organizing your script, breakdown, casting, and budget.</p>
-          <Link href="/projects/new" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 gap-2">
+          <p className="text-muted-foreground max-w-md mb-6">
+            Create your first project to start organizing your script, breakdown,
+            casting, and budget.
+          </p>
+          <Link
+            href="/projects/new"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 gap-2 transition-colors"
+          >
             <Plus className="w-4 h-4" />
             New Project
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects?.map(project => (
-            <Link key={project.id} href={`/projects/${project.id}`}>
-              <div className="group relative flex flex-col h-full bg-card rounded-xl border border-card-border p-6 hover:border-primary/50 transition-all hover:shadow-md cursor-pointer overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -z-10 group-hover:bg-primary/10 transition-colors"></div>
-                
-                <div className="flex items-start justify-between mb-4">
-                  <div className="p-2 bg-primary/10 text-primary rounded-lg">
-                    <Film className="w-5 h-5" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {projects?.map((project) => (
+            <div
+              key={project.id}
+              className="bg-card rounded-xl border border-border overflow-hidden hover:border-primary/40 transition-all hover:shadow-md group"
+            >
+              {/* ── Project header — tapping goes to dashboard ── */}
+              <Link href={`/projects/${project.id}`}>
+                <div className="p-5 cursor-pointer">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="p-2 bg-primary/10 text-primary rounded-lg group-hover:scale-105 transition-transform">
+                      <Film className="w-5 h-5" />
+                    </div>
+                    <span className="px-2.5 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full border border-border capitalize">
+                      {project.status || "development"}
+                    </span>
                   </div>
-                  <span className="px-2.5 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full border border-border">
-                    {project.status || 'Development'}
-                  </span>
+
+                  <h3 className="text-xl font-semibold mb-1 group-hover:text-primary transition-colors line-clamp-1">
+                    {project.title}
+                  </h3>
+
+                  {project.logline && (
+                    <p className="text-muted-foreground text-sm line-clamp-2 mb-1">
+                      {project.logline}
+                    </p>
+                  )}
+
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {project.format && (
+                      <span className="text-xs text-muted-foreground capitalize flex items-center gap-1">
+                        <Package className="w-3 h-3" />
+                        {project.format}
+                      </span>
+                    )}
+                    {project.genre && (
+                      <span className="text-xs text-muted-foreground">
+                        • {project.genre}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                
-                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-1">{project.title}</h3>
-                
-                <p className="text-muted-foreground text-sm flex-1 line-clamp-2 mb-6">
-                  {project.logline || 'No logline provided.'}
-                </p>
-                
-                <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-border">
-                  {project.format && (
-                    <span className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Clapperboard className="w-3 h-3" />
-                      <span className="capitalize">{project.format}</span>
-                    </span>
-                  )}
-                  {project.genre && (
-                    <span className="text-xs text-muted-foreground flex items-center gap-1">
-                      <span className="w-1 h-1 rounded-full bg-muted-foreground/50"></span>
-                      <span>{project.genre}</span>
-                    </span>
-                  )}
-                  {project.startDate && (
-                    <span className="text-xs text-muted-foreground flex items-center gap-1 ml-auto">
-                      <Calendar className="w-3 h-3" />
-                      <span>{format(new Date(project.startDate), 'MMM d, yyyy')}</span>
-                    </span>
-                  )}
-                </div>
+              </Link>
+
+              {/* ── Phase quick-access strip ── */}
+              <div className="border-t border-border grid grid-cols-4">
+                {PHASES.map(({ label, segment, icon: Icon, color }) => (
+                  <Link
+                    key={segment}
+                    href={`/projects/${project.id}/${segment}`}
+                  >
+                    <div
+                      className={`flex flex-col items-center justify-center gap-1.5 py-3 px-1 text-center hover:bg-accent/40 transition-colors cursor-pointer border-r border-border last:border-r-0`}
+                    >
+                      <div className={`p-1.5 rounded-md border ${color}`}>
+                        <Icon className="w-3.5 h-3.5" />
+                      </div>
+                      <span className="text-[10px] font-medium text-muted-foreground leading-tight">
+                        {label}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       )}
