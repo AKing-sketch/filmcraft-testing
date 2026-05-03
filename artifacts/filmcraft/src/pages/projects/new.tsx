@@ -52,7 +52,7 @@ export default function NewProject() {
   };
 
   return (
-    <div className="p-8 max-w-3xl mx-auto">
+    <div className="p-4 md:p-8 max-w-3xl mx-auto">
       <Link href="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6 gap-2 transition-colors">
         <ArrowLeft className="w-4 h-4" />
         Back to Projects

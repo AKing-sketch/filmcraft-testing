@@ -57,10 +57,10 @@ export default function ShotList() {
   if (isLoading) return <div className="p-8 flex justify-center"><div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full"></div></div>;
 
   return (
-    <div className="p-8 max-w-7xl mx-auto h-full flex flex-col">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto h-full flex flex-col">
+      <div className="flex flex-wrap items-start justify-between gap-3 mb-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Shot List</h1>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Shot List</h1>
           <p className="text-muted-foreground mt-1">Plan and track your camera setups.</p>
         </div>
         <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>

@@ -36,7 +36,7 @@ export default function ProjectDashboard() {
   ];
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 bg-card p-6 rounded-xl border border-card-border shadow-sm relative overflow-hidden">
         <div className="absolute right-0 top-0 w-64 h-64 bg-primary/5 rounded-bl-full -z-10 blur-3xl"></div>
@@ -47,7 +47,7 @@ export default function ProjectDashboard() {
             </span>
             {project.format && <span className="text-sm text-muted-foreground capitalize">{project.format}</span>}
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-foreground">{project.title}</h1>
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-foreground">{project.title}</h1>
           {project.logline && <p className="text-muted-foreground max-w-3xl text-lg italic border-l-2 border-primary/50 pl-4 py-1">"{project.logline}"</p>}
         </div>
         <div className="flex flex-col text-sm text-muted-foreground gap-1 bg-background/50 p-3 rounded-lg border border-border">

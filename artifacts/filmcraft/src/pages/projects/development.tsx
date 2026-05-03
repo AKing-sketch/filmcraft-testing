@@ -19,10 +19,10 @@ export default function DevelopmentWorkspace() {
   const projectId = parseInt(id || "0", 10);
 
   return (
-    <div className="p-8 max-w-6xl mx-auto h-full flex flex-col">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto h-full flex flex-col">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Development Workspace</h1>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Development Workspace</h1>
           <p className="text-muted-foreground mt-1">Structure your narrative and ideas.</p>
         </div>
       </div>

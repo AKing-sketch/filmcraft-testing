@@ -19,9 +19,9 @@ export default function CastingHub() {
   const projectId = parseInt(id || "0", 10);
 
   return (
-    <div className="p-8 max-w-6xl mx-auto h-full flex flex-col">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto h-full flex flex-col">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">Casting</h1>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Casting</h1>
         <p className="text-muted-foreground mt-1">Manage casting calls and finalize your cast list.</p>
       </div>
 
