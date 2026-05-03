@@ -162,22 +162,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 function MobileBottomNav({ projectId }: { projectId: number }) {
-  // Show a subset of the most-used tabs in the bottom bar
-  const PRIMARY_TABS = [
-    { segment: "", label: "Hub", icon: LayoutDashboard },
-    { segment: "/development", label: "Dev", icon: Lightbulb },
-    { segment: "/breakdown", label: "Scenes", icon: FileText },
-    { segment: "/shots", label: "Shots", icon: Video },
-    { segment: "/budget", label: "Budget", icon: Wallet },
+  const ALL_TABS = [
+    { segment: "",               label: "Hub",    icon: LayoutDashboard },
+    { segment: "/development",   label: "Dev",    icon: Lightbulb },
+    { segment: "/shots",         label: "Shots",  icon: Video },
+    { segment: "/budget",        label: "Budget", icon: Wallet },
+    { segment: "/post-production", label: "Post", icon: Clapperboard },
+    { segment: "/distribution",  label: "Distrib", icon: Globe },
   ];
 
   return (
-    <nav className="md:hidden flex border-t border-border bg-sidebar flex-shrink-0 safe-bottom">
-      {PRIMARY_TABS.map(({ segment, label, icon: Icon }) => (
+    <nav className="md:hidden flex overflow-x-auto border-t border-border bg-sidebar flex-shrink-0 safe-bottom scrollbar-none">
+      {ALL_TABS.map(({ segment, label, icon: Icon }) => (
         <BottomTab
-          key={segment}
+          key={segment || "hub"}
           href={`/projects/${projectId}${segment}`}
-          icon={<Icon className="w-5 h-5" />}
+          icon={<Icon className="w-4 h-4" />}
           label={label}
         />
       ))}
