@@ -48,7 +48,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           className="flex items-center gap-2 font-bold text-lg text-primary hover:text-primary/80 transition-colors"
         >
           <Film className="w-5 h-5" />
-          <span>FilmCraft</span>
+          <span>Studio di Gratia</span>
         </Link>
         {/* Mobile close button */}
         <button
@@ -141,7 +141,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </button>
           <Link href="/" className="flex items-center gap-2 font-bold text-primary">
             <Film className="w-4 h-4" />
-            <span className="text-sm">FilmCraft</span>
+            <span className="text-sm">Studio di Gratia</span>
           </Link>
           {project && (
             <>

@@ -1,8 +1,8 @@
-# FilmCraft
+# Studio di Gratia — FilmCraft
 
 ## Overview
 
-A full-stack filmmaking production suite for directors, producers, and cinematographers. Covers the entire production lifecycle from development through distribution.
+Studio di Gratia's full-stack filmmaking production suite for directors, producers, and cinematographers. Covers the entire production lifecycle from development through distribution.
 
 ## Stack
 
