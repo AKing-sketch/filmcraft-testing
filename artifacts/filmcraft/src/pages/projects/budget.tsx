@@ -59,7 +59,7 @@ export default function BudgetTracker() {
     }
   };
 
-  const formatCurrency = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
+  const formatCurrency = (val: number) => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(val);
 
   // Group items
   const groupedItems = items?.reduce((acc, item) => {
@@ -99,11 +99,11 @@ export default function BudgetTracker() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Estimated Amount ($)</label>
+                  <label className="text-sm font-medium">Estimated Amount (€)</label>
                   <Input type="number" step="0.01" value={newItem.estimatedAmount} onChange={e => setNewItem({...newItem, estimatedAmount: e.target.value})} required />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Actual Amount ($)</label>
+                  <label className="text-sm font-medium">Actual Amount (€)</label>
                   <Input type="number" step="0.01" value={newItem.actualAmount} onChange={e => setNewItem({...newItem, actualAmount: e.target.value})} />
                 </div>
               </div>
