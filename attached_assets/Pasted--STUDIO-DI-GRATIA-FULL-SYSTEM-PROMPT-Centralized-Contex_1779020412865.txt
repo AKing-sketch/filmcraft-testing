@@ -1,0 +1,466 @@
+# STUDIO DI GRATIA — FULL SYSTEM PROMPT
+## Centralized Context for Replit / AI Agents / Collaborators
+### Version: May 2026 — Built from confirmed records only
+
+---
+
+## READ THIS FIRST
+
+This document is the single source of truth for the ecosystem.
+
+Three rules before you do anything:
+1. **Do not hard-code speculative hierarchy as final doctrine.** The relationship between entities is still under active strategic clarification.
+2. **Released work comes first.** Do not prioritize infrastructure over public outputs, audience validation, or collaborator onboarding.
+3. **If it is not in this document, ask before assuming.**
+
+---
+
+## ECOSYSTEM MAP
+
+```
+A Pitch Black Joint LLC (umbrella — registered New Mexico)
+│
+├── Studio di Gratia (studio systems + infrastructure layer)
+│   └── FilmCraft (flagship production OS — built + functional)
+│
+├── AK/OS (public-facing identity environment — busolaboyejo.com)
+│
+├── Wazo.work (migration planning platform — live + receiving traffic)
+│
+├── Film Productions
+│   ├── Ghost Theory EP1 — ACTIVE PRIORITY
+│   ├── FearLess — made
+│   ├── Refresh — made
+│   ├── Masterclass Commercial — made
+│   ├── The Generational Curse (16mm) — made
+│   ├── Homelines — active research/development
+│   ├── Glass Canvas — deferred/future
+│   └── Polie Interactive Archive — deferred/future
+│
+└── Academic
+    └── FEUP Master in Multimedia dissertation (Homelines)
+```
+
+**IMPORTANT**: The exact final hierarchy between these entities is still evolving. Do not treat this map as finalized org structure. Use it for orientation only.
+
+---
+
+## CORE PHILOSOPHY
+
+The ecosystem consistently revolves around:
+**migration · memory · dignity · cinematic systems · survival · visibility · infrastructure · authorship · emotional residue · operational clarity**
+
+This pattern is real and recurring across Wazo, Ghost Theory, Homelines, FilmCraft, and AK/OS.
+
+Interfaces, systems, and outputs should feel: **cinematic, tactile, infrastructural, archival, and human.**
+
+Avoid: generic SaaS aesthetics, excessive futurism, clean-tech minimalism, startup optimism palettes, gimmicky AI art energy, vaporware interaction design, over-engineered conceptual interfaces.
+
+The human and cultural axis must remain dominant.
+
+> "Public legitimacy must be earned through completed films, functioning systems, academic rigor, collaborator trust, and measurable audience utility. Infrastructure alone is not proof of impact."
+
+---
+
+## ENTITY 1 — A PITCH BLACK JOINT LLC
+
+**Status: Confirmed. Real. Active.**
+
+- Registered entity in New Mexico
+- Functions as: umbrella creative entity, production/company structure, operational/legal shell
+- Infrastructure container for the ecosystem
+- NOT speculative
+- Exact final ecosystem hierarchy still evolving — do not hard-code
+
+---
+
+## ENTITY 2 — STUDIO DI GRATIA
+
+**Status: Confirmed. Active. Still evolving.**
+
+- Studio systems and infrastructure layer inside A Pitch Black Joint
+- Name references: grace, gratitude, survival, being held up by others during instability
+- Emerged from survival-era creative experimentation and gratitude-centered artistic philosophy
+- Currently evolving toward: studio systems, cinematic infrastructure, production methodology, collaborative workflow architecture
+- Away from: small-shop creative branding
+
+**Design doctrine:**
+- Dark cinematic aesthetic. Slate backgrounds. Amber (`primary`) accent. No light mode.
+- Currency: EUR (€) throughout. Never USD.
+- Studio name appears in: all UI, footers, printed packets, Export document footer — always "Studio di Gratia"
+
+---
+
+## ENTITY 3 — FILMCRAFT
+
+**Status: Confirmed. Built. Functional.**
+
+FilmCraft is a cinematic production operating system. A private, all-in-one workspace for running a film or documentary from first idea through distribution. 15 fully functional modules. One per-project workspace.
+
+**What it is:** Structured record-keeping and planning system — the production bible, lived in daily.
+**What it is not:** Script editor. Video editor. Live multi-user collaboration tool.
+**Current center:** Ghost Theory EP1 "She Looked Back"
+**Status:** Private pre-release. Small tester pool planned. Not yet public.
+**Future:** Potential commercial product. Possible sale. No timeline confirmed.
+
+### Tech Stack
+| Concern | Technology |
+|---|---|
+| Monorepo | pnpm workspaces |
+| Node.js | 24 |
+| TypeScript | 5.9 |
+| Frontend | React + Vite (`artifacts/filmcraft`) |
+| Routing | Wouter |
+| Server state | TanStack React Query |
+| UI | Tailwind CSS + shadcn/ui |
+| API | Express 5 (`artifacts/api-server`) |
+| Database | PostgreSQL + Drizzle ORM |
+| Validation | drizzle-zod (server), Zod v4 (shared) |
+| API contract | OpenAPI 3 (`lib/api-spec/openapi.yaml`) |
+| API codegen | Orval → React Query hooks + Zod schemas |
+| Build | esbuild (CJS bundle for server) |
+
+**Critical constraint:** Server routes must import Zod via `drizzle-zod` schemas (`insertXSchema` from `@workspace/db`), NOT via `import { z } from "zod/v4"` — esbuild cannot resolve the `/v4` subpath.
+
+### Key Commands
+```bash
+pnpm run typecheck
+pnpm run build
+pnpm --filter @workspace/api-spec run codegen
+pnpm --filter @workspace/db run push
+```
+Never run `pnpm dev` at workspace root. Never call service ports directly — use proxy at `localhost:80`.
+
+### Architecture
+```
+artifacts/
+  api-server/src/
+    routes/         — Express route handlers (one file per domain)
+    index.ts        — App bootstrap
+  filmcraft/src/
+    pages/projects/ — All 15 module pages
+    components/
+      layout.tsx    — Sidebar + mobile nav (PROJECT_NAV drives all links)
+      ui/           — shadcn/ui primitives
+    App.tsx         — Wouter route definitions
+
+lib/
+  api-spec/openapi.yaml          — Single source of truth for API contract
+  api-client-react/src/generated/ — Orval-generated hooks (DO NOT edit manually)
+  api-zod/src/generated/          — Orval-generated validators (DO NOT edit manually)
+  db/src/schema/                  — Drizzle table definitions (one file per domain)
+```
+
+### Database Schema Files
+| File | Contents |
+|---|---|
+| `projects.ts` | Film projects (title, logline, genre, format, director, producer, budget, status) |
+| `beats.ts` | Beat sheets — Save the Cat 15-beat structure |
+| `mindmap.ts` | Mind map nodes (position, title, body, edges as JSON) |
+| `characters.ts` | Character bibles (name, age, description, backstory, motivation, arc, notes) |
+| `scenes.ts` | Script scenes — sceneNumber, intExt, location, timeOfDay, pages, synopsis, characters[], props[], costumes[], makeupFx[], notes |
+| `casting.ts` | Casting calls + confirmed cast members |
+| `crew.ts` | Crew members grouped by department |
+| `shots.ts` | Shot list — shotType, cameraMovement, cameraBody, lens, description, status |
+| `budget.ts` | Budget line items — category, estimatedAmount, actualAmount |
+| `lighting.ts` | Lighting diagrams (canvas state saved as JSON) |
+| `packets.ts` | Production packets |
+| `post_production.ts` | Post milestones + deliverables |
+| `distribution.ts` | Distribution submissions |
+| `distribution_strategy.ts` | Press kit / strategy — one record per project |
+| `tools.ts` | Production toolchain |
+
+**Scene array fields:** `characters`, `props`, `costumes`, `makeupFx` stored as `text` in DB, typed as `string[]` in OpenAPI. Always: `Array.isArray(scene.characters) ? scene.characters : []`
+
+### 15 Modules
+1. Projects List
+2. Dashboard (4 phases, stat cards, budget progress, recent activity)
+3. Development (Mind Map + Beat Sheet tabs)
+4. Character Bible
+5. Breakdown (Scene Reader + AD Breakdown Sheet)
+6. Casting (Casting Calls + Confirmed Cast)
+7. Crew (by department)
+8. Shot List
+9. Budget (estimated vs actual, EUR)
+10. Lighting Planner (bird's-eye canvas)
+11. Packets (footer: "Studio di Gratia")
+12. Post-Production (milestones + deliverables)
+13. Distribution (submissions tracker + press kit)
+14. Tools (production toolchain registry)
+15. Export (single print-ready document — footer: "Studio di Gratia — FilmCraft — [date]")
+
+### Navigation Order
+```
+Dashboard → Development → Characters → Breakdown → Casting → Crew →
+Shot List → Lighting → Budget → Packets → Post-Production → Distribution →
+Tools → Export
+```
+
+### Demo Projects
+- **The Last Signal** — feature film example workspace
+- **Hollow Ground** — documentary example workspace
+
+### New Module Checklist
+1. Add `lib/db/src/schema/<domain>.ts`, export from index, run push
+2. Add paths + schemas to `openapi.yaml`
+3. Run codegen
+4. Create route file using `insertXSchema` from `@workspace/db`, wire into `routes/index.ts`
+5. Create page using generated hooks from `@workspace/api-client-react`
+6. Add `<Route>` to `App.tsx`
+7. Add entry to `PROJECT_NAV` in `layout.tsx`
+
+---
+
+## ENTITY 4 — AK/OS
+
+**Status: Confirmed. Built. Deployment pending.**
+
+- OS-style interactive cinematic portfolio
+- Public-facing identity environment
+- URL: busolaboyejo.com (deployment pending)
+- Built with: React, Vite, TypeScript, Tailwind, Framer Motion, Zustand
+- Visual identity: dark cinematic HUD, film operating system, camera-interface aesthetics, archival + cinematic textures
+- NOT: SaaS, productivity software, generic portfolio
+- Functions as: identity environment, cinematic archive, operational interface, public-facing ecosystem map
+
+---
+
+## ENTITY 5 — WAZO.WORK
+
+**Status: Confirmed. Live. Receiving real traffic. User's own project.**
+
+- "Move Abroad Without Guesswork"
+- Migration planning platform — NOT digital nomad culture
+- 47 countries, 512 visa routes, 18 pages
+- Built from 4 real moves including one that fell apart completely
+- Covers: country comparison, visa tracking, real cost planning, document checklists, first 30 days
+- Analytics snapshot: ~362 active users, ~3.9K 28-day sessions, traffic spikes late April/early May 2026
+- Threads currently strongest social discovery driver
+- Positioning: migration intelligence + relocation planning
+
+---
+
+## THE FILMMAKER — ADEBUSOLA KING ADEBOYEJO
+
+**Also goes by:** Busola / busolaboyejo
+
+- Director, cinematographer, writer, researcher
+- Born: Ondo State, Nigeria
+- Based: Porto, Portugal
+- Programs: Master in Multimedia — FEUP (active) / ASU Online (parallel enrollment)
+
+### Confirmed Credentials
+| Credential | Status |
+|---|---|
+| Cinematographers Society of Nigeria (CSN) | Full Member — May 3, 2026 |
+| FEUP Career Ambassador | Active |
+| Porto Femme Film Festival | Jury member (National Competition) + Award Night Presenter |
+| ASU Community Advocates Mentor | Applied 2026-27 |
+| UPTEC Investors Day | Attended May 13, 2026 |
+
+---
+
+## PROJECTS — ACTIVE / DEVELOPMENT / DEFERRED
+
+### ACTIVE
+
+**Ghost Theory EP1 — "She Looked Back"**
+- Form: Short narrative film (EP1 of a series)
+- Role: Director / DP / Writer
+- Location: Porto, Portugal
+- Status: Pre-production complete. Two blockers before shoot.
+- **Blockers:**
+  1. Lighting diagrams — apartment interiors Scenes 6, 9, 12
+  2. Shot list — apartment interiors + Douro riverside not yet planned
+- FilmCraft data seeded: 13 scenes, 31 garden shots, Malik + Inês Valente + The Park, 7 crew, 4 casting entries, €3,605 POC budget, 18 distribution entries, 22 tools, 14 post milestones, 7 deliverables, full press kit
+- **Formal doctrine (non-negotiable):**
+  - Red Komodo 6K vs Sony Hi8 analog footage — this separation IS the film's formal argument
+  - No Medusa references
+  - Inês is not a ghost
+  - No dialogue in EP1
+  - Hi8 defects are intentional
+  - Observational psychological grammar
+
+**Wazo.work** — live, active, growing (see Entity 5)
+
+**AK/OS** — built, deployment pending (see Entity 4)
+
+**FEUP Dissertation — Homelines** — active research/development (see Development section)
+
+**FilmCraft** — active development, pre-release stabilization
+
+---
+
+### DEVELOPMENT
+
+**Homelines**
+- Full title: Homelines: Participatory Media, Interactive Environments, and Cultural Encounter for Black Diaspora Youth
+- Practice-based qualitative dissertation — FEUP Master in Multimedia
+- Research question: How does interaction with participant-generated audiovisual fragments influence how Black diaspora youth perceive and emotionally relate to African cultural environments?
+- Methodology: Qualitative, non-experimental, practice-based case study
+- Three stages: professional media workshop (Ondo State + Lagos) → interactive prototype → diaspora user observation
+- Theoretical anchors: Creswell, Denzin & Lincoln, Latour (ANT), Jenkins (participatory culture)
+- Supervisor: Rosemary Lee — confirmed, met April 24 2026
+- IDFA DocLab submission target: June 16 2026
+- Nigerian network access: AFRIFF, British Council Nigeria, Naija Street Stories, NFI Jos crew, Lagos studio (Frank Adekunle Macaulay)
+- ASU component kept in view throughout
+- Previously: Diaspora Quest — name now locked as Homelines
+- Do NOT mention IDFA or OMEK in early supervisor conversations
+- Do NOT expand scope to multiple countries or full game
+
+**Studio di Gratia systems / collaborator onboarding** — active strategic development
+
+---
+
+### FILMS ALREADY MADE
+
+| Title | Form | Role | Notes |
+|---|---|---|---|
+| Masterclass Commercial | Short commercial | DP | Shot — in post |
+| The Generational Curse | 16mm short | DP | Directed by Jay N. Buchanan. Shot — in post |
+| Refresh | Short film | Writer / Producer | Made — fine-tune only, not full redo |
+| FearLess | 20-min short / POC feature-doc | Co-Director / DP / Story | Made — submitted Stowe Story Labs |
+
+**Planned Release Sequence:**
+```
+1 → Masterclass commercial
+2 → The Generational Curse (16mm)
+3 → Refresh
+4 → FearLess
+5 → Ghost Theory ← STATEMENT FILM
+```
+
+**Refresh — specific notes:**
+- The Alternate Nia device is the strongest element — preserve it
+- Dinner scene is sharp — do not rewrite
+- Elena rebound section is thin
+- Laney ending is emotionally earned but rushed in execution
+- Needs fine-tune only. Festival run is done.
+
+**FearLess — specific notes:**
+- 20-min short / POC for future feature-doc hybrid
+- Jane: queer Nigerian immigrant, corrective rape survivor, martial arts, saves roommate Tanya
+- Non-linear editing mimics PTSD
+- Needs fine-tune only. Not a full redo.
+
+---
+
+### DEFERRED / FUTURE
+
+**Glass Canvas**
+- Wole: Black woman artist, 28, Porto. Painting stolen, submitted under someone else's name.
+- Interactive p5.js. Canvas that resets/resists user input.
+- Arc: Glass state → Canvas state
+- Pitched for MM0068 at FEUP — not selected
+- Will be built independently — NOT NOW
+- Do not represent as active or currently shooting
+
+**Polie Interactive Archive**
+- Future collaborative/interactive archive direction
+- Connected to Homelines, participatory archive systems, future transmedia
+- Exploratory. Not active production priority.
+
+---
+
+## NETWORK — CONFIRMED
+
+| Person / Org | Role | Status |
+|---|---|---|
+| Pedro | Cinematographer/image-maker, Lisbon. Visually aligned. Potential co-DP. | Exploratory — not confirmed collaborator yet |
+| Adam (roommate) | Grammy-nominated musician/producer. Possible sound/music. Ghost Theory discussions. | No final production role locked |
+| Porto Femme | Film festival, Porto | Jury member (National Competition) + Award Night Presenter — confirmed |
+| Rosemary Lee | FEUP dissertation supervisor | Confirmed — met April 24 2026 |
+| Kemo Camara / OMEK | Amsterdam — Culture Moves Europe | Outreach sent April 13 2026 — awaiting response |
+| Reagan Mitchell | UNCSA — Afrofuturism | Responded warmly — supportive |
+| Migration Observatory / Center of African Studies, U.Porto | Homelines research | In conversation |
+| FEUP Talent Unit / João Henrique Almeida | Career Ambassador program | Active |
+| Marie France Louis | FearLess co-director / gaffer | Project complete |
+| DJ friend | Music producer | On the fence — leave door open, don't chase |
+| Nigerian professional network | AFRIFF, British Council Nigeria, Naija Street Stories, NFI Jos, Frank Adekunle Macaulay (Lagos studio) | Access confirmed for Homelines |
+
+---
+
+## CONTENT PIPELINE
+
+### Two Parallel Tracks
+- **Track A — Filmmaker:** Ghost Theory, FearLess, Refresh, Homelines. Human story. Audience + credibility.
+- **Track B — FilmCraft:** Tool. Ghost Theory produced inside FilmCraft = live case study. Tool credibility from real production proof.
+
+### Platforms
+Instagram · Threads · Facebook · YouTube · Substack · TikTok (when collaborator exists — not yet)
+
+### Bandwidth
+2-3 hours/week maximum. One real piece of work → five touchpoints. Never create from scratch per platform.
+
+### Four Pillars
+1. **The Work** — BTS, shots, lighting, locations, releases. 1-2x/week active, 1x/week otherwise.
+2. **The Tool** — FilmCraft modules, real screenshots, tester invitations. 1x/week consistent.
+3. **The Thinking** — essays, director's notes, Homelines updates. 1x/month Substack.
+4. **The Community** — collaborator calls, resource shares, amplification. Organic.
+
+### Collaborator Brief — Ready to Post
+> "I'm looking for someone to help manage a content pipeline for two parallel projects: my filmmaking practice (active productions in Porto) and a film production tool I've built called FilmCraft. The content already exists — I generate it through my work. I need someone who can schedule, post, write short captions, and keep the pipeline moving across Instagram, Threads, YouTube, Facebook, and Substack. Estimated 3-5 hours per week. Film school background preferred. This is a real production environment — you'd be working alongside active film projects."
+
+Post in: multimedia GC · ASU network · film festivals
+
+---
+
+## CURRENT PRIORITIES — MAY 2026
+
+In order:
+1. Finish Ghost Theory EP1 — apartment shot list + lighting diagrams unblock the shoot
+2. Stabilize and grow Wazo.work traction
+3. Deploy AK/OS publicly
+4. Build collaborator ecosystem carefully
+5. Maintain realistic dissertation scope — Homelines
+6. Learn media/IP law seriously
+7. Avoid overbuilding speculative systems
+
+---
+
+## WHAT NOT TO DO
+
+**Codebase:**
+- Do not use USD anywhere in FilmCraft
+- Do not edit Orval-generated files manually
+- Do not run `pnpm dev` at workspace root
+- Do not call service ports directly — use proxy at localhost:80
+- Do not import Zod via `zod/v4` subpath in server routes
+
+**Projects:**
+- Do not treat Glass Canvas as active or currently shooting
+- Do not suggest a full rewrite of Refresh or FearLess — fine-tune only
+- Do not expand Homelines to multiple countries or a full game
+- Do not mention IDFA or OMEK in early supervisor conversations
+- Do not add Medusa references to Ghost Theory
+- Do not give Inês dialogue or ghost framing in Ghost Theory EP1
+- Do not treat Hi8 defects as errors — they are intentional
+
+**Ecosystem:**
+- Do not conflate FilmCraft with Studio di Gratia — FilmCraft is the product, Studio di Gratia is the studio layer
+- Do not treat wazo.work as someone else's project — it belongs to Adebusola
+- Do not treat Polie as a current production priority
+- Do not hard-code the ecosystem hierarchy as finalized doctrine
+- Do not prioritize infrastructure expansion over released work and audience validation
+- Do not drift toward MIT Media Lab / gimmicky AI art / vaporware interaction design framing
+- Do not overstate ideology publicly before the body of work matures
+
+---
+
+## TONE & VOICE
+
+- Never announce. Show.
+- Never explain the work to death. Let it breathe.
+- Never post empty inspiration quotes.
+- Always be specific — real location, real problem, real decision.
+- Work is political without being preachy. Identity is present without being a performance.
+- FilmCraft: useful, direct, no lifestyle branding. Respects other professionals' time.
+- Wazo: migration intelligence. Not digital nomad culture.
+- AK/OS: cinematic, archival, operational. Not startup portfolio.
+
+---
+
+*Single source of truth for Studio di Gratia / A Pitch Black Joint / ABKJ ecosystem.*
+*Built from confirmed records only. Nothing inferred. Nothing added beyond what was confirmed.*
+*Hierarchy is orientation only — not finalized doctrine.*
+*Last updated: May 2026*
