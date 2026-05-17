@@ -4,6 +4,70 @@
 
 Studio di Gratia's full-stack filmmaking production suite for directors, producers, and cinematographers. Covers the entire production lifecycle from initial idea through distribution across 15 fully functional modules, all living inside a single per-project workspace.
 
+FilmCraft is built and functional. Current center of active production: **Ghost Theory EP1 — "She Looked Back"**.
+
+---
+
+## Ecosystem Map
+
+```
+A Pitch Black Joint LLC (umbrella — registered New Mexico)
+│
+├── Studio di Gratia (studio systems + infrastructure layer)
+│   └── FilmCraft (flagship production OS — built + functional)
+│
+├── AK/OS (public-facing identity environment — busolaboyejo.com)
+│
+├── Wazo.work (migration planning platform — live + receiving traffic)
+│
+├── Film Productions
+│   ├── Ghost Theory EP1 — ACTIVE PRIORITY
+│   ├── FearLess — made
+│   ├── Refresh — made
+│   ├── Masterclass Commercial — made
+│   ├── The Generational Curse (16mm) — made
+│   ├── Homelines — active research/development
+│   ├── Glass Canvas — deferred/future
+│   └── Polie Interactive Archive — deferred/future
+│
+└── Academic
+    └── FEUP Master in Multimedia dissertation (Homelines)
+```
+
+**IMPORTANT**: The exact final hierarchy between these entities is still evolving. Do not treat this map as finalized org structure. Use it for orientation only.
+
+---
+
+## The Filmmaker
+
+**Adebusola King Adeboyejo** — also goes by Busola / busolaboyejo
+
+- Director, cinematographer, writer, researcher
+- Born: Ondo State, Nigeria
+- Based: Porto, Portugal
+- Programs: Master in Multimedia — FEUP (active) / ASU Online (parallel enrollment)
+
+| Credential | Status |
+|---|---|
+| Cinematographers Society of Nigeria (CSN) | Full Member — May 3, 2026 |
+| FEUP Career Ambassador | Active |
+| Porto Femme Film Festival | Jury member (National Competition) + Award Night Presenter |
+| ASU Community Advocates Mentor | Applied 2026-27 |
+| UPTEC Investors Day | Attended May 13, 2026 |
+
+---
+
+## Core Philosophy
+
+The ecosystem consistently revolves around:
+**migration · memory · dignity · cinematic systems · survival · visibility · infrastructure · authorship · emotional residue · operational clarity**
+
+Interfaces, systems, and outputs should feel: **cinematic, tactile, infrastructural, archival, and human.**
+
+Avoid: generic SaaS aesthetics, excessive futurism, clean-tech minimalism, startup optimism palettes, gimmicky AI art energy, vaporware interaction design, over-engineered conceptual interfaces.
+
+> "Public legitimacy must be earned through completed films, functioning systems, academic rigor, collaborator trust, and measurable audience utility. Infrastructure alone is not proof of impact."
+
 ---
 
 ## Studio Branding
@@ -11,8 +75,146 @@ Studio di Gratia's full-stack filmmaking production suite for directors, produce
 - **Studio name**: Studio di Gratia
 - **Product name**: FilmCraft
 - **Palette**: Dark cinematic — slate backgrounds, amber (`primary`) accents
-- **Currency**: EUR (€) throughout
+- **Currency**: EUR (€) throughout — never USD
 - The sidebar logo, mobile top bar, printed packets, and Export document footer all display "Studio di Gratia"
+- No light mode. Ever.
+
+---
+
+## Active Projects
+
+### Ghost Theory EP1 — "She Looked Back"
+- Form: Short narrative film (EP1 of a series)
+- Role: Director / DP / Writer
+- Location: Porto, Portugal
+- Status: Pre-production complete. Two blockers before shoot.
+
+**Blockers:**
+1. Lighting diagrams — apartment interiors Scenes 6, 9, 12
+2. Shot list — apartment interiors + Douro riverside not yet planned
+
+**FilmCraft data seeded:** 13 scenes, 31 garden shots, Malik + Inês Valente + The Park, 7 crew, 4 casting entries, €3,605 POC budget, 18 distribution entries, 22 tools, 14 post milestones, 7 deliverables, full press kit
+
+**Formal doctrine (non-negotiable):**
+- Red Komodo 6K vs Sony Hi8 analog footage — this separation IS the film's formal argument
+- No Medusa references
+- Inês is not a ghost
+- No dialogue in EP1
+- Hi8 defects are intentional — do not treat them as errors
+- Observational psychological grammar
+
+### Wazo.work
+- "Move Abroad Without Guesswork" — migration planning platform (NOT digital nomad culture)
+- Live and receiving real traffic
+- 47 countries, 512 visa routes, 18 pages
+- Built from 4 real moves including one that fell apart completely
+- Analytics snapshot: ~362 active users, ~3.9K 28-day sessions, traffic spikes late April/early May 2026
+- Threads currently strongest social discovery driver
+- Belongs to Adebusola — do not treat as someone else's project
+
+### AK/OS
+- OS-style interactive cinematic portfolio at busolaboyejo.com
+- Built with: React, Vite, TypeScript, Tailwind, Framer Motion, Zustand
+- Visual identity: dark cinematic HUD, film operating system, camera-interface aesthetics, archival + cinematic textures
+- NOT: SaaS, productivity software, generic portfolio
+- Status: Built. Deployment pending.
+
+### Homelines (Dissertation)
+- Full title: Homelines: Participatory Media, Interactive Environments, and Cultural Encounter for Black Diaspora Youth
+- Practice-based qualitative dissertation — FEUP Master in Multimedia
+- Supervisor: Rosemary Lee — confirmed, met April 24 2026
+- IDFA DocLab submission target: June 16 2026
+- Status: Active research/development
+
+---
+
+## Films Already Made
+
+| Title | Form | Role | Notes |
+|---|---|---|---|
+| Masterclass Commercial | Short commercial | DP | Shot — in post |
+| The Generational Curse | 16mm short | DP | Directed by Jay N. Buchanan. Shot — in post |
+| Refresh | Short film | Writer / Producer | Made — fine-tune only, not full redo |
+| FearLess | 20-min short / POC feature-doc | Co-Director / DP / Story | Made — submitted Stowe Story Labs |
+
+**Planned Release Sequence:**
+```
+1 → Masterclass commercial
+2 → The Generational Curse (16mm)
+3 → Refresh
+4 → FearLess
+5 → Ghost Theory ← STATEMENT FILM
+```
+
+---
+
+## Deferred / Future Projects
+
+- **Glass Canvas** — NOT active. Not currently shooting. Will be built independently when the time comes.
+- **Polie Interactive Archive** — Exploratory. Not an active production priority.
+
+---
+
+## Current Priorities — May 2026
+
+In order:
+1. Finish Ghost Theory EP1 — apartment shot list + lighting diagrams unblock the shoot
+2. Stabilize and grow Wazo.work traction
+3. Deploy AK/OS publicly
+4. Build collaborator ecosystem carefully
+5. Maintain realistic dissertation scope — Homelines
+6. Learn media/IP law seriously
+7. Avoid overbuilding speculative systems
+
+---
+
+## Demo Projects in FilmCraft
+
+- **The Last Signal** — feature film example workspace
+- **Hollow Ground** — documentary example workspace
+
+---
+
+## What NOT To Do
+
+### Codebase
+- Do not use USD anywhere in FilmCraft
+- Do not edit Orval-generated files manually
+- Do not run `pnpm dev` at workspace root
+- Do not call service ports directly — use proxy at `localhost:80`
+- Do not import Zod via `zod/v4` subpath in server routes
+
+### Ghost Theory
+- Do not add Medusa references
+- Do not give Inês dialogue or ghost framing in EP1
+- Do not treat Hi8 defects as errors — they are intentional
+
+### Projects
+- Do not treat Glass Canvas as active or currently shooting
+- Do not suggest a full rewrite of Refresh or FearLess — fine-tune only
+- Do not expand Homelines to multiple countries or a full game
+- Do not mention IDFA or OMEK in early supervisor conversations
+
+### Ecosystem
+- Do not conflate FilmCraft with Studio di Gratia — FilmCraft is the product, Studio di Gratia is the studio layer
+- Do not treat Wazo.work as someone else's project — it belongs to Adebusola
+- Do not treat Polie as a current production priority
+- Do not hard-code the ecosystem hierarchy as finalized doctrine
+- Do not prioritize infrastructure expansion over released work and audience validation
+- Do not drift toward MIT Media Lab / gimmicky AI art / vaporware interaction design framing
+
+---
+
+## Tone & Voice
+
+- Never announce. Show.
+- Never explain the work to death. Let it breathe.
+- Never post empty inspiration quotes.
+- Always be specific — real location, real problem, real decision.
+- Work is political without being preachy. Identity is present without being a performance.
+- FilmCraft: useful, direct, no lifestyle branding. Respects other professionals' time.
+- Wazo: migration intelligence. Not digital nomad culture.
+- AK/OS: cinematic, archival, operational. Not startup portfolio.
 
 ---
 
@@ -247,3 +449,5 @@ Sticky "Print / Export PDF" button triggers browser print. Footer: "Studio di Gr
 - Studio name is **Studio di Gratia** — use this everywhere in UI, footers, and documentation
 - Currency is **EUR (€)** — never USD
 - Dark cinematic aesthetic — slate backgrounds, amber accent (`primary`), no light mode
+- Do not hallucinate data, features, or project details — only work from confirmed records
+- Released work and audience validation come before infrastructure expansion
