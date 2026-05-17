@@ -40,6 +40,8 @@ tags:
     description: Post-production milestones and deliverables
   - name: distribution
     description: Distribution entries and strategy
+  - name: tools
+    description: Production tools directory
 
 paths:
   /healthz:
@@ -1593,6 +1595,98 @@ paths:
       operationId: deleteDistributionEntry
       tags: [distribution]
       summary: Delete a distribution entry
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /projects/{projectId}/tools:
+    get:
+      tags: [tools]
+      summary: List production tools for a project
+      operationId: listTools
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of tools
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductionTool"
+    post:
+      tags: [tools]
+      summary: Add a production tool
+      operationId: createTool
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateToolBody"
+      responses:
+        "201":
+          description: Created tool
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductionTool"
+
+  /projects/{projectId}/tools/{id}:
+    put:
+      tags: [tools]
+      summary: Update a production tool
+      operationId: updateTool
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateToolBody"
+      responses:
+        "200":
+          description: Updated tool
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductionTool"
+    delete:
+      tags: [tools]
+      summary: Delete a production tool
+      operationId: deleteTool
       parameters:
         - name: projectId
           in: path
@@ -3321,3 +3415,70 @@ components:
         fee:
           type: number
           nullable: true
+
+    ProductionTool:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+        purpose:
+          type: string
+          nullable: true
+        externalLink:
+          type: string
+          nullable: true
+        projectNotes:
+          type: string
+          nullable: true
+        workflowNotes:
+          type: string
+          nullable: true
+        assignedUser:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - name
+        - category
+        - createdAt
+
+    CreateToolBody:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        purpose:
+          type: string
+          nullable: true
+        externalLink:
+          type: string
+          nullable: true
+        projectNotes:
+          type: string
+          nullable: true
+        workflowNotes:
+          type: string
+          nullable: true
+        assignedUser:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+      required:
+        - name
+        - category

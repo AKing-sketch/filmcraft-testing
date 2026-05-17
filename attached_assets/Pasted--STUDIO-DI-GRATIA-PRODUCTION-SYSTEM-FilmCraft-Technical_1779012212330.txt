@@ -1,0 +1,534 @@
+# STUDIO DI GRATIA — PRODUCTION SYSTEM
+## FilmCraft: Technical and Production Reference
+
+**Version:** May 17, 2026  
+**System:** FilmCraft (pnpm monorepo, Replit-hosted)  
+**Projects managed:** Ghost Theory (active POC), Wazo, Homelines, A Pitch Black Joint (forthcoming)
+
+---
+
+## WHAT THIS DOCUMENT IS
+
+A complete reference for how the FilmCraft production management system works — what it tracks, what each module does, how to operate it, and where it sits in the broader Studio di Gratia workflow. This is not a technical handoff for developers. It is the operating manual for the person running the studio.
+
+The corresponding developer handoff is in `HANDOFF.md`.  
+The Ghost Theory project document is in `GHOST_THEORY_PROJECT.md`.
+
+---
+
+## FILMCRAFT — SYSTEM OVERVIEW
+
+FilmCraft is Studio di Gratia's production management system. It covers the full lifecycle of a film or series project — from first idea through distribution — in a single, project-scoped environment.
+
+**What it is:**
+- A web application running in the Replit environment
+- Full-stack: React frontend, Express API, PostgreSQL database
+- Multi-project by design — each project is isolated by ID; the system supports as many projects as needed
+- Accessible from any device (desktop, tablet, mobile) via the Replit preview URL
+
+**What it is not:**
+- A video editing application
+- A streaming platform
+- A file storage solution (it references files stored elsewhere)
+- A replacement for any individual production tool — it is the system that remembers what tools you use and why
+
+**Design:** Dark cinematic aesthetic — slate/amber palette. Minimal. The interface does not call attention to itself.
+
+---
+
+## ACCESSING THE SYSTEM
+
+**Development URL:** Available via the Replit preview pane (FilmCraft artifact)  
+**Production URL:** Deploy via Replit to generate a `.replit.app` domain for permanent access  
+**Multi-device:** Fully responsive — mobile uses a compact tab bar, desktop uses the full sidebar
+
+**Starting point:** The projects list at `/` — all Studio di Gratia projects appear here. Click a project to enter its full workspace.
+
+---
+
+## THE 15 MODULES
+
+Each project in FilmCraft has 15 production modules, accessible from the sidebar. Below is what each module tracks and what it is used for.
+
+---
+
+### 1. DASHBOARD
+**Route:** `/projects/:id`
+
+The project command centre. Pulls live statistics from all other modules and displays them as a single-view summary:
+
+- Project identity (title, format, genre, director, producer, status badge)
+- Budget progress bar (estimated vs actual, % spent)
+- Scene count, shot count, cast count, crew count
+- Recent activity log
+- Milestone progress (post-production pipeline overview)
+
+**Use:** Opening view for any project day. Tells you where everything stands without opening individual modules.
+
+---
+
+### 2. DEVELOPMENT — Mind Map + Beat Sheet
+**Route:** `/projects/:id/development`
+
+Two tabs within one module:
+
+**Mind Map**  
+A drag-and-drop visual canvas for early-stage ideas. Each node is a concept — a character, a location, a thematic element, a formal question. Nodes can be moved freely. This is the thinking surface before any formal structure is imposed.
+
+**Beat Sheet (Save the Cat structure)**  
+The 15-beat narrative structure. Each beat has a name, a description, a page range, and notes. For Ghost Theory, the beat sheet maps the psychological and horror progression across the episode's runtime.
+
+**Use:** Development phase — before scenes are locked. The mind map is for associative thinking; the beat sheet is for structural planning.
+
+---
+
+### 3. CHARACTERS
+**Route:** `/projects/:id/characters`
+
+Full character cards. Each character has:
+- Name, age, description
+- Backstory
+- Motivation
+- Character arc
+- Notes
+
+**Use:** Reference for the director, writer, and any collaborators joining the project. For Ghost Theory: Malik, Inês Valente, The Park. For future projects: each character bible lives here.
+
+---
+
+### 4. SCRIPT — Scene Reader
+**Route:** `/projects/:id/breakdown`
+
+An expandable scene-by-scene reader. Each scene row shows the scene header — number, INT/EXT badge, location, time of day. Clicking expands it to show:
+
+- Synopsis
+- Characters (tagged)
+- Props
+- Costumes / wardrobe
+- Makeup / FX / VFX notes
+- Production notes (full detail — camera notes, performance notes, sound notes, location specifics)
+
+**Use:** Director's reference on set and in prep. The full scene notes are the closest thing to a script document in the system. For Ghost Theory, all 13 scenes of EP1 are fully populated — including camera grammar decisions, key lines, and VFX briefs per scene.
+
+---
+
+### 5. BREAKDOWN — AD Breakdown Sheet
+**Route:** `/projects/:id/breakdown-sheet`
+
+A traditional Assistant Director format — one row per scene in a wide horizontal table. Columns:
+
+- Scene number
+- INT/EXT badge
+- Time of day
+- Page count
+- Location
+- Characters (with colour-coding: MALIK in amber, INÊS in primary)
+- Props
+- Wardrobe
+- Makeup / FX / VFX
+- Synopsis
+
+Horizontally scrollable. Legend at top. This is the scheduling and department-prep surface — the table the AD, costume designer, props master, and makeup department use to plan.
+
+**Use:** Pre-production scheduling. Print or share before any department prep meeting.
+
+---
+
+### 6. CASTING
+**Route:** `/projects/:id/casting`
+
+Two sections:
+
+**Casting Calls**  
+Open casting searches. Each entry has: character name, role description, status (Open / Shortlisted / Testing / Offer Out / Confirmed / In-Development / Location-Scouted), notes, and deadline.
+
+**Confirmed Cast**  
+The confirmed cast list. Each entry has: character, performer name, contact, contracted rate, contract status, availability, and notes.
+
+**Status flow:** Open → Shortlisted → Testing → Offer Out → Confirmed  
+*Special statuses: In-Development (creator-attached roles), Location-Scouted (for locations treated as cast)*
+
+**Use:** Managing the casting process from first search through contract. For Ghost Theory: Malik (In-Development — director-attached), Inês Valente (Open — Porto Femme network), The Park (Location-Scouted — permit pending), Day Players (Open — GDPR forms required).
+
+---
+
+### 7. CREW
+**Route:** `/projects/:id/crew`
+
+Crew directory, grouped by department. Each entry has:
+- Name
+- Department
+- Title / role
+- Contact
+- Day rate
+- Availability
+- Notes (full text — relationship context, framing notes for approaching collaborators, scope of role)
+
+**Departments:** Direction, Camera, Sound, Music, Production, Post-Production, Art, Locations, Legal, and any custom department.
+
+**Use:** Crew roster and relationship management. For Ghost Theory: 7 crew entries ranging from confirmed collaborators (Adam, Pedro) to future-phase crew (Polie — post-series only, explicitly not before).
+
+---
+
+### 8. SHOT LIST
+**Route:** `/projects/:id/shots`
+
+A per-scene shot plan. Each shot has:
+- Shot number (1A, 1B, 2A, etc.)
+- Scene (linked)
+- Description
+- Shot type (Wide, MCU, CU, Insert, OTS, POV, etc.)
+- Camera movement (Static, Handheld, Dolly, Crane, etc.)
+- Camera body (Red Komodo 6K, Sony VideoHi8 CCD-TRV138, iPhone 16 Pro Max, etc.)
+- Lens
+- Duration (estimated)
+- Lighting notes
+- Audio notes
+- Status (Planned / Shot / Approved / Cut)
+- Reference image (URL)
+
+**Use:** Camera department planning and on-set reference. The shot list drives the shoot order and the daily call sheet structure.
+
+For Ghost Theory: 31 shots across all 13 scenes. Visual rhyme pairs are built in: Shot 1A ↔ 12A (same cobblestone composition, afternoon vs blue hour), Shot 2A ↔ 11A (same fountain wide, 4pm vs dusk).
+
+---
+
+### 9. LIGHTING
+**Route:** `/projects/:id/lighting`
+
+An interactive drag-and-drop canvas for bird's-eye lighting diagrams. Place lights, cameras, actors, and set pieces on a 2D plan view. The diagram is saved as JSON per project.
+
+**Use:** Pre-lighting planning — sharing the lighting plan with the gaffer or DP before the shoot. Particularly useful for controlled interior setups (Malik's apartment scenes).
+
+**Ghost Theory status:** Canvas exists — diagram not yet created. Priority: apartment interior setups (Scenes 6, 9, 12) before production.
+
+---
+
+### 10. BUDGET
+**Route:** `/projects/:id/budget`
+
+Line-item budget tracking with a summary view.
+
+**Line items:** Category, description, estimated amount, actual amount, notes. Grouped by category: Above the Line, Below the Line, Camera/Grip, Sound, Location, Post-Production, Marketing, Contingency, and any custom category.
+
+**Summary view:** Total estimated vs total actual, percentage spent, per-category breakdown, progress bar.
+
+**Currency:** EUR throughout for Ghost Theory. No USD.
+
+**Use:** Budget planning and spend tracking through production. Estimated column is set in pre-production; actual column is updated as invoices come in.
+
+For Ghost Theory EP1 POC: €3,605 total. Equipment owned (Red Komodo, lenses, Hi8 camera) is costed at €0 — this is the most important financial fact of the production.
+
+---
+
+### 11. PACKETS
+**Route:** `/projects/:id/packets`
+
+Production packet templates. Each packet is a named document with a text body:
+
+- **Location Release** — for private locations (Malik's apartment)
+- **Talent Release** — for cast members (Inês Valente, day players)
+- **GDPR Consent Form** — for featured or identifiable members of the public in the garden
+- **NDA Template** — for early collaborators before the project is public
+- **Behind the Scenes Release** — for BTS documentation consent
+
+Templates are stored in the system, fillable in any text editor, and printable from the Export page.
+
+**Use:** Pre-production legal preparation. Pull the relevant template, fill in the project and party details, get signatures before any shooting begins.
+
+---
+
+### 12. POST-PRODUCTION
+**Route:** `/projects/:id/post-production`
+
+Two sections:
+
+**Pipeline Milestones**  
+The post-production pipeline as ordered milestone cards. Each milestone has:
+- Phase (Editorial, VFX, Colour, Sound, Music, Delivery)
+- Title
+- Status (Not Started / In Progress / Complete) — click to advance
+- Progress bar
+- Notes (full — technical requirements, creative decisions, warnings)
+
+**Deliverables**  
+Each required output format. Each deliverable has: name, format, specs, recipient, due date, status.
+
+**Use:** Post-production tracking from first day of editing through final delivery. The milestone notes carry the decisions made in pre-production — the ghost of those decisions follows every phase.
+
+For Ghost Theory: 14 milestones, 7 deliverables. The Hi8 and Komodo grades are separate milestones with different creative constraints. The key creative decisions are locked in the milestone notes (Hi8 not colour-corrected, no dialogue, music enters once or not at all).
+
+---
+
+### 13. DISTRIBUTION
+**Route:** `/projects/:id/distribution`
+
+Two sections:
+
+**Submissions Tracker**  
+All festival, platform, broadcaster, and sales agent entries. Each submission has:
+- Type (festival, platform, broadcaster, sales-agent)
+- Name
+- Status (Considering / Target / Submitted / Shortlisted / Selected / Rejected / Withdrawn)
+- Submission deadline, notification date
+- Submission fee (EUR)
+- Notes
+
+Status flow is clickable — advance from Considering through to Selected or Rejected without leaving the page.
+
+**Press Kit / Strategy**  
+One record per project. All fields of the official press kit:
+- Tagline, short synopsis, long synopsis
+- Director's statement
+- Director bio, producer bio
+- Technical specs
+- Target audience
+- Festival strategy (multi-phase)
+- Release strategy
+- Press contact, social links
+
+**Use:** The full distribution workflow — from building the target list through submission tracking through press kit management — in a single module.
+
+For Ghost Theory: 18 distribution entries (13 festivals, 3 platforms, 2 sales agents). Full press kit populated. Festival strategy is 4-phase: world premiere → domestic premiere → international circuit → sales agent approach.
+
+---
+
+### 14. TOOLS
+**Route:** `/projects/:id/tools`
+
+The production toolchain directory. Each tool has:
+- Tool name
+- Category (Camera, Sound, Editing, Color, File Storage, Communication, Scheduling, Locations, Legal, Funding/Submissions)
+- Purpose — what this tool does in the production workflow
+- External link (opens in new tab)
+- Project notes — Ghost Theory-specific usage, settings, context
+- Workflow notes — how this tool connects to the rest of the system
+- Assigned user — who owns or operates this tool
+- Status (Planned / Active / Testing / Archived)
+
+**UI:** Category filter tabs with live counts. Status filter pills. Cards grouped by category with section headers. Hover reveals Edit and Delete. Add/Edit modal. Per-category "Add tool" card.
+
+**Design intent:** FilmCraft is the command centre that remembers what external tools you use, why you use them, who owns them, what settings matter, and where each tool sits in the workflow. It does not replace any tool — it documents the relationship with every tool.
+
+For Ghost Theory: 22 tools across 10 categories. See the full list below.
+
+---
+
+### 15. EXPORT
+**Route:** `/projects/:id/export`
+
+A complete, print-ready production document generated from live database data. Fetches all project modules in parallel and renders them as a single formatted document.
+
+**Contents (in order):**
+1. Project header — title, subtitle, format, genre, director, producer, synopsis
+2. Script Breakdown — all scenes in AD table format
+3. Characters — condensed 2-column cards
+4. Casting — calls table + confirmed cast table
+5. Crew — grouped by department
+6. Shot List — full table
+7. Budget — summary stats + line items by category
+8. Production Tools — cards by category with links and notes
+9. Post-Production — milestone cards + deliverables table
+10. Distribution — strategy block (tagline, synopses, director's statement) + submissions table
+
+**Device behaviour:**
+- **Mobile:** Scene and shot tables collapse to stacked cards; all layout adapts
+- **Desktop:** Full multi-column layout, wide tables
+- **Print / PDF:** White background, black text, A4 margins. Use the "Print / Export PDF" button (top right) or Cmd+P / Ctrl+P. Sticky print bar hides on print. Section page breaks are managed automatically.
+
+**Use:** The single document you send to any collaborator, festival submission portal, or funding body that needs a comprehensive production overview. Also the document you review before any major production meeting.
+
+---
+
+## MULTI-PROJECT OPERATION
+
+FilmCraft supports multiple projects simultaneously. The project list at `/` shows all projects. Each project is fully independent — its own scenes, shots, crew, budget, distribution, tools, and press kit.
+
+**Current projects:**
+
+| Project | ID | Status | Notes |
+|---|---|---|---|
+| Ghost Theory | 5 | Active — Development / POC | EP1 fully populated — all 15 modules seeded |
+| Wazo | TBC | Not yet created in FilmCraft | — |
+| Homelines | TBC | Not yet created in FilmCraft | — |
+| A Pitch Black Joint | TBC | Not yet created in FilmCraft | — |
+
+**Adding a new project:** Use the "New Project" button from the projects list. Set title, format, genre, director, producer, status, and synopsis. The project immediately gets its own workspace — all 15 modules available, all empty, ready to populate.
+
+**What is not shared across projects:** All data is project-scoped. Crew from Ghost Theory do not automatically appear in Wazo. Tools seeded for Ghost Theory are Ghost Theory-specific. Each project is built independently.
+
+**What could be shared (not yet built):** A cross-project crew directory, a shared tool registry, a studio-level budget overview across all projects. These are on the roadmap — see below.
+
+---
+
+## THE PRODUCTION TOOLCHAIN (Ghost Theory EP1)
+
+The full toolchain is documented in FilmCraft under Tools. Summary by category:
+
+### Camera (6 tools)
+| Tool | Status | Role |
+|---|---|---|
+| DSMC2 Wireless Control | Active | Red Komodo 6K wireless camera control, monitoring, LUT preview on set |
+| Artemis Pro | Active | Pre-vis lens selection — simulate Komodo focal lengths at any location before the shoot day |
+| Sun Seeker | Active | Track sun position at Jardim do Passeio Alegre by time of day and date — essential for the 4–5pm fountain backlight window |
+| Cine Tracer | Active | Virtual pre-vis — build the garden environment in 3D to plan shot compositions before location access |
+| iPhone 16 Pro Max | Active | Third register (ProRes LOG, 5x telephoto). Also: scouting documentation, BTS, long-lens garden compositions |
+| Google Pixel (TBC) | Testing | Fourth register under evaluation — computational photography aesthetic, Night Sight. Testing at garden dusk/night |
+
+### Sound (4 tools)
+| Tool | Status | Role |
+|---|---|---|
+| Tentacle Sync | Active | Timecode sync between Komodo and location sound recorder |
+| Voice Memos (iPhone) | Active | Field notes, idea capture, ambient reference recordings on scouting days |
+| DaVinci Fairlight | Active | In-DAW sound design and final mix (integrated with Resolve) |
+| Field Recorder | Active | Primary location sound capture — the sound recordist's rig |
+
+### Editorial / Post (3 tools)
+| Tool | Status | Role |
+|---|---|---|
+| DaVinci Resolve | Active | Primary edit, colour grade, and audio suite |
+| Frame.io | Active | Remote review — share cuts with collaborators for time-stamped feedback |
+| DaVinci Resolve Color | Active | Dedicated colour grade station — Komodo and Hi8 graded separately |
+
+### File / Storage (2 tools)
+| Tool | Status | Role |
+|---|---|---|
+| Google Drive | Active | Project documents, releases, press kit, shared assets |
+| Local RAID / External SSD | Active | All camera media — Komodo RAW, Hi8 capture, ProRes masters. Two-copy minimum |
+
+### Communication + Scheduling (3 tools)
+| Tool | Status | Role |
+|---|---|---|
+| WhatsApp | Active | Primary communication — Pedro, Adam, cast |
+| Google Calendar | Active | Shoot days, production milestones, festival deadlines |
+| FilmCraft (Shot List + Breakdown) | Active | This system — shot order, breakdown, crew reference on set |
+
+### Locations (1 tool)
+| Tool | Status | Role |
+|---|---|---|
+| Google Maps | Active | Garden coordinates, parking, approach routes, permit office location |
+
+### Legal (1 tool)
+| Tool | Status | Role |
+|---|---|---|
+| FilmCraft Packets | Active | Location release, talent release, GDPR consent forms — all in the system |
+
+### Funding / Submissions (2 tools)
+| Tool | Status | Role |
+|---|---|---|
+| FilmFreeway | Active | Festival submissions — submission deadlines, fees, status tracking |
+| ICA Portugal | Active | Portuguese Film Institute — primary domestic funding application target |
+
+---
+
+## DATA ARCHITECTURE
+
+Every module in FilmCraft maps to a database table. All tables use `projectId` as a foreign key — this is what makes multi-project operation possible.
+
+| Module | Table(s) |
+|---|---|
+| Projects | `projects` |
+| Mind Map | `mindmap_nodes` |
+| Beat Sheet | `beats` |
+| Characters | `characters` |
+| Scenes | `scenes` |
+| Casting | `casting_calls`, `cast_members` |
+| Crew | `crew_members` |
+| Shots | `shots` |
+| Budget | `budget_items` |
+| Lighting | `lighting_diagrams` |
+| Packets | `production_packets` |
+| Post-Production | `post_milestones`, `deliverables` |
+| Distribution | `distribution_entries` |
+| Press Kit | `distribution_strategy` |
+| Tools | `production_tools` |
+
+**API:** 50+ REST endpoints, all under `/api/projects/:id/...`. Full endpoint list in `HANDOFF.md`.
+
+**Contract:** All endpoints are defined in `lib/api-spec/openapi.yaml` (the single source of truth). TypeScript types and React Query hooks are generated automatically from this spec via Orval — no manual type-writing required.
+
+---
+
+## SEED SCRIPTS
+
+FilmCraft uses seed scripts to populate a project from scratch. All scripts are in `scripts/src/` and run with:
+
+```
+pnpm --filter @workspace/scripts run <script-name>
+```
+
+| Script | Purpose |
+|---|---|
+| `update-scenes` | Re-seeds all 13 EP1 scenes with full breakdown data |
+| `update-budget` | Re-seeds Ghost Theory budget (€3,605 EUR) |
+| `update-statuses` | Corrects casting/crew statuses |
+| `update-development` | Seeds mind map + beat sheet |
+| `update-crew-and-budget` | Seeds crew and budget together |
+| `seed-legal-packets` | Seeds location/talent/GDPR packet templates |
+| `seed-tools` | Seeds the production toolchain |
+| `seed-shots` | Seeds 31 shots across 13 scenes |
+| `seed-post-production` | Seeds 14 milestones + 7 deliverables |
+| `seed-distribution` | Seeds 18 distribution entries |
+| `seed-presskit` | Seeds the full Ghost Theory press kit |
+| `update-cameras` | Applies camera package corrections across all tables |
+
+**Full re-seed order:** See `HANDOFF.md` — the order matters because some scripts depend on data created by earlier scripts.
+
+---
+
+## WHAT STILL NEEDS TO BE BUILT
+
+### Outstanding for Ghost Theory EP1
+
+| Item | Priority | Notes |
+|---|---|---|
+| Lighting diagram | High — before production | Apartment interior setups (Scenes 6, 9, 12) and garden setups (golden hour, blue hour) |
+| Shot list — apartment + Douro shots | High — before production | 31 garden shots seeded; apartment interiors and riverside (Scene 10) not yet planned |
+| Google Pixel register decision | Pre-production | Testing at garden dusk/night — confirm or defer before shoot day planning |
+
+### Studio di Gratia — Multi-Project Roadmap
+
+Items not yet built that would serve the full four-project studio operation:
+
+| Feature | Description | Priority |
+|---|---|---|
+| **Wazo project setup** | Create Wazo as a project in FilmCraft — populate the 15 modules as the project develops | When Wazo enters active development |
+| **Homelines project setup** | Create Homelines in FilmCraft | When Homelines enters active development |
+| **A Pitch Black Joint setup** | Create in FilmCraft | When that project enters active development |
+| **Cross-project crew directory** | A studio-level crew list showing which collaborators are available across which projects — not tied to any single project | Needed when two+ projects are in active production simultaneously |
+| **Cross-project budget overview** | Studio dashboard showing total committed spend and cash position across all active projects | When multi-project production begins |
+| **Shared tool registry** | Tools that are studio-wide (DaVinci Resolve, Google Drive, FilmFreeway) should not need to be re-seeded per project — a studio-level tool list that projects can inherit from | Medium priority |
+| **PDF export** | The Export page is print-ready via the browser print dialog (Cmd+P / Ctrl+P → Save as PDF). Dedicated server-side PDF generation (e.g. Puppeteer) would enable direct download without a print dialog | Low priority — current browser print method is fully functional |
+| **Interactive archive (Polie)** | Post-series transmedia extension — the archive in the series becomes a real archive the audience can enter. Entirely separate from FilmCraft. | After the full Ghost Theory series exists |
+| **Studio di Gratia dashboard** | A root-level view showing all four projects, their statuses, combined budget position, and upcoming milestones — a single morning check-in for the studio | When 2+ projects are active |
+
+---
+
+## OPERATING NOTES
+
+### Things to do before every shoot day
+1. Open the Export page — print or save as PDF. This is your production document for the day.
+2. Confirm Shot List statuses from the last shoot day — mark shots as "Shot" or "Cut".
+3. Check the Breakdown sheet — confirm which scenes are scheduled and what each department needs.
+4. Pull the relevant Packets — have location release and talent release signed before the camera rolls.
+
+### Things to do after every shoot day
+1. Update Shot List — mark shots as shot/approved/cut based on what actually happened.
+2. Update Budget — enter actual costs for the day (transport, catering, any hire fees).
+3. Update Crew notes if anything changed — new contacts, availability confirmations.
+4. Log any production notes into the relevant Scene notes.
+
+### Things to do before any post-production phase
+1. Open Post-Production — review milestone notes before starting that phase. The decisions are in there.
+2. Check the Hi8 conformation note specifically: **do not colour-correct Hi8 footage**.
+3. Confirm deliverable specs with the first festival you are submitting to — update the deliverables table if specs differ from what is currently logged.
+
+### Things to do before any festival submission
+1. Open Distribution — confirm the submission deadline and fee.
+2. Open the Press Kit — confirm tagline, synopsis, and director's statement are current.
+3. Use the Export page to generate the production document to attach to the submission portal.
+4. Update the submission status in the Distribution module after submitting.
+
+---
+
+*Studio di Gratia production system — FilmCraft — May 17, 2026*

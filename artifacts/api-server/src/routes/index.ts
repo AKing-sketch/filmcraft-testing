@@ -14,6 +14,7 @@ import packetsRouter from "./packets";
 import distributionRouter from "./distribution";
 import distributionStrategyRouter from "./distribution-strategy";
 import { milestonesRouter, deliverablesRouter } from "./post-production";
+import toolsRouter from "./tools";
 
 const router: IRouter = Router();
 
@@ -35,5 +36,6 @@ router.use("/projects/:projectId/distribution", distributionRouter);
 router.use("/projects/:projectId/distribution-strategy", distributionStrategyRouter);
 router.use("/projects/:projectId/post-milestones", milestonesRouter);
 router.use("/projects/:projectId/deliverables", deliverablesRouter);
+router.use("/projects/:projectId/tools", toolsRouter);
 
 export default router;

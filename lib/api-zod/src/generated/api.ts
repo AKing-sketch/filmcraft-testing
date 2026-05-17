@@ -1610,3 +1610,84 @@ export const DeleteDistributionEntryParams = zod.object({
   projectId: zod.coerce.number(),
   id: zod.coerce.number(),
 });
+
+/**
+ * @summary List production tools for a project
+ */
+export const ListToolsParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const ListToolsResponseItem = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  name: zod.string(),
+  category: zod.string(),
+  purpose: zod.string().nullish(),
+  externalLink: zod.string().nullish(),
+  projectNotes: zod.string().nullish(),
+  workflowNotes: zod.string().nullish(),
+  assignedUser: zod.string().nullish(),
+  status: zod.string().nullish(),
+  createdAt: zod.string(),
+});
+export const ListToolsResponse = zod.array(ListToolsResponseItem);
+
+/**
+ * @summary Add a production tool
+ */
+export const CreateToolParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const CreateToolBody = zod.object({
+  name: zod.string(),
+  category: zod.string(),
+  purpose: zod.string().nullish(),
+  externalLink: zod.string().nullish(),
+  projectNotes: zod.string().nullish(),
+  workflowNotes: zod.string().nullish(),
+  assignedUser: zod.string().nullish(),
+  status: zod.string().nullish(),
+});
+
+/**
+ * @summary Update a production tool
+ */
+export const UpdateToolParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});
+
+export const UpdateToolBody = zod.object({
+  name: zod.string(),
+  category: zod.string(),
+  purpose: zod.string().nullish(),
+  externalLink: zod.string().nullish(),
+  projectNotes: zod.string().nullish(),
+  workflowNotes: zod.string().nullish(),
+  assignedUser: zod.string().nullish(),
+  status: zod.string().nullish(),
+});
+
+export const UpdateToolResponse = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  name: zod.string(),
+  category: zod.string(),
+  purpose: zod.string().nullish(),
+  externalLink: zod.string().nullish(),
+  projectNotes: zod.string().nullish(),
+  workflowNotes: zod.string().nullish(),
+  assignedUser: zod.string().nullish(),
+  status: zod.string().nullish(),
+  createdAt: zod.string(),
+});
+
+/**
+ * @summary Delete a production tool
+ */
+export const DeleteToolParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});

@@ -38,6 +38,7 @@ import type {
   CreateProjectBody,
   CreateSceneBody,
   CreateShotBody,
+  CreateToolBody,
   CrewMember,
   Deliverable,
   DistributionEntry,
@@ -47,6 +48,7 @@ import type {
   MindMapNode,
   PostMilestone,
   ProductionPacket,
+  ProductionTool,
   Project,
   ProjectDashboard,
   Scene,
@@ -6246,4 +6248,349 @@ export const useDeleteDistributionEntry = <
   TContext
 > => {
   return useMutation(getDeleteDistributionEntryMutationOptions(options));
+};
+
+/**
+ * @summary List production tools for a project
+ */
+export const getListToolsUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/tools`;
+};
+
+export const listTools = async (
+  projectId: number,
+  options?: RequestInit,
+): Promise<ProductionTool[]> => {
+  return customFetch<ProductionTool[]>(getListToolsUrl(projectId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListToolsQueryKey = (projectId: number) => {
+  return [`/api/projects/${projectId}/tools`] as const;
+};
+
+export const getListToolsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listTools>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listTools>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListToolsQueryKey(projectId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listTools>>> = ({
+    signal,
+  }) => listTools(projectId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!projectId,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof listTools>>, TError, TData> & {
+    queryKey: QueryKey;
+  };
+};
+
+export type ListToolsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listTools>>
+>;
+export type ListToolsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List production tools for a project
+ */
+
+export function useListTools<
+  TData = Awaited<ReturnType<typeof listTools>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listTools>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListToolsQueryOptions(projectId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Add a production tool
+ */
+export const getCreateToolUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/tools`;
+};
+
+export const createTool = async (
+  projectId: number,
+  createToolBody: CreateToolBody,
+  options?: RequestInit,
+): Promise<ProductionTool> => {
+  return customFetch<ProductionTool>(getCreateToolUrl(projectId), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createToolBody),
+  });
+};
+
+export const getCreateToolMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createTool>>,
+    TError,
+    { projectId: number; data: BodyType<CreateToolBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createTool>>,
+  TError,
+  { projectId: number; data: BodyType<CreateToolBody> },
+  TContext
+> => {
+  const mutationKey = ["createTool"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createTool>>,
+    { projectId: number; data: BodyType<CreateToolBody> }
+  > = (props) => {
+    const { projectId, data } = props ?? {};
+
+    return createTool(projectId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateToolMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createTool>>
+>;
+export type CreateToolMutationBody = BodyType<CreateToolBody>;
+export type CreateToolMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Add a production tool
+ */
+export const useCreateTool = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createTool>>,
+    TError,
+    { projectId: number; data: BodyType<CreateToolBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createTool>>,
+  TError,
+  { projectId: number; data: BodyType<CreateToolBody> },
+  TContext
+> => {
+  return useMutation(getCreateToolMutationOptions(options));
+};
+
+/**
+ * @summary Update a production tool
+ */
+export const getUpdateToolUrl = (projectId: number, id: number) => {
+  return `/api/projects/${projectId}/tools/${id}`;
+};
+
+export const updateTool = async (
+  projectId: number,
+  id: number,
+  createToolBody: CreateToolBody,
+  options?: RequestInit,
+): Promise<ProductionTool> => {
+  return customFetch<ProductionTool>(getUpdateToolUrl(projectId, id), {
+    ...options,
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createToolBody),
+  });
+};
+
+export const getUpdateToolMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateTool>>,
+    TError,
+    { projectId: number; id: number; data: BodyType<CreateToolBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateTool>>,
+  TError,
+  { projectId: number; id: number; data: BodyType<CreateToolBody> },
+  TContext
+> => {
+  const mutationKey = ["updateTool"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateTool>>,
+    { projectId: number; id: number; data: BodyType<CreateToolBody> }
+  > = (props) => {
+    const { projectId, id, data } = props ?? {};
+
+    return updateTool(projectId, id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateToolMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateTool>>
+>;
+export type UpdateToolMutationBody = BodyType<CreateToolBody>;
+export type UpdateToolMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update a production tool
+ */
+export const useUpdateTool = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateTool>>,
+    TError,
+    { projectId: number; id: number; data: BodyType<CreateToolBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateTool>>,
+  TError,
+  { projectId: number; id: number; data: BodyType<CreateToolBody> },
+  TContext
+> => {
+  return useMutation(getUpdateToolMutationOptions(options));
+};
+
+/**
+ * @summary Delete a production tool
+ */
+export const getDeleteToolUrl = (projectId: number, id: number) => {
+  return `/api/projects/${projectId}/tools/${id}`;
+};
+
+export const deleteTool = async (
+  projectId: number,
+  id: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeleteToolUrl(projectId, id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteToolMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteTool>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteTool>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  const mutationKey = ["deleteTool"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteTool>>,
+    { projectId: number; id: number }
+  > = (props) => {
+    const { projectId, id } = props ?? {};
+
+    return deleteTool(projectId, id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteToolMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteTool>>
+>;
+
+export type DeleteToolMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Delete a production tool
+ */
+export const useDeleteTool = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteTool>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteTool>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  return useMutation(getDeleteToolMutationOptions(options));
 };

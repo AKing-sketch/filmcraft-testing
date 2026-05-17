@@ -657,3 +657,28 @@ export interface UpdateDistributionEntryBody {
   url?: string | null;
   fee?: number | null;
 }
+
+export interface ProductionTool {
+  id: number;
+  projectId: number;
+  name: string;
+  category: string;
+  purpose?: string | null;
+  externalLink?: string | null;
+  projectNotes?: string | null;
+  workflowNotes?: string | null;
+  assignedUser?: string | null;
+  status?: string | null;
+  createdAt: string;
+}
+
+export interface CreateToolBody {
+  name: string;
+  category: string;
+  purpose?: string | null;
+  externalLink?: string | null;
+  projectNotes?: string | null;
+  workflowNotes?: string | null;
+  assignedUser?: string | null;
+  status?: string | null;
+}

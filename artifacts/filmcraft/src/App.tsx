@@ -19,6 +19,8 @@ import LightingPlanner from "@/pages/projects/lighting";
 import ProductionPackets from "@/pages/projects/packets";
 import DistributionTracker from "@/pages/projects/distribution";
 import PostProduction from "@/pages/projects/post-production";
+import ProductionTools from "@/pages/projects/tools";
+import ExportPage from "@/pages/projects/export";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +42,8 @@ function Router() {
         <Route path="/projects/:id/packets" component={ProductionPackets} />
         <Route path="/projects/:id/distribution" component={DistributionTracker} />
         <Route path="/projects/:id/post-production" component={PostProduction} />
+        <Route path="/projects/:id/tools" component={ProductionTools} />
+        <Route path="/projects/:id/export" component={ExportPage} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
