@@ -3,7 +3,7 @@ import { createInsertSchema } from "drizzle-zod";
 
 export const workspaceSettingsTable = pgTable("workspace_settings", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull().default("Studio di Gratia"),
+  name: text("name").notNull().default("My Studio"),
   description: text("description"),
   logoUrl: text("logo_url"),
   accentColor: text("accent_color"),

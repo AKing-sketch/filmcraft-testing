@@ -142,7 +142,7 @@ export default function WorkspaceSettings() {
             id="ws-name"
             value={form.name}
             onChange={(e) => set("name", e.target.value)}
-            placeholder="Studio di Gratia"
+            placeholder="My Studio"
             className="bg-background border-border"
           />
           <p className="text-xs text-muted-foreground/60">

@@ -39,7 +39,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   });
 
   const { data: workspace } = useGetWorkspaceSettings();
-  const workspaceName = workspace?.name ?? "Studio di Gratia";
+  const workspaceName = workspace?.name ?? "My Studio";
 
   const sidebarContent = (
     <>

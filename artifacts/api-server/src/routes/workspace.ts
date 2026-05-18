@@ -16,7 +16,7 @@ async function getOrCreate() {
   if (existing) return existing;
   const [created] = await db
     .insert(workspaceSettingsTable)
-    .values({ name: "Studio di Gratia" })
+    .values({ name: "My Studio" })
     .returning();
   return created;
 }

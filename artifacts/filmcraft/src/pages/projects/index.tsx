@@ -42,7 +42,7 @@ const FORMAT_LABELS: Record<string, string> = {
 export default function ProjectsList() {
   const { data: projects, isLoading } = useListProjects();
   const { data: workspace } = useGetWorkspaceSettings();
-  const workspaceName = workspace?.name ?? "Studio di Gratia";
+  const workspaceName = workspace?.name ?? "My Studio";
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto">
