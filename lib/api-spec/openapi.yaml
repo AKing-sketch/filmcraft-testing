@@ -59,6 +59,37 @@ paths:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
 
+  # ─── WORKSPACE ──────────────────────────────────────────────────────────────
+  /workspace:
+    get:
+      operationId: getWorkspaceSettings
+      tags: [workspace]
+      summary: Get workspace settings
+      responses:
+        "200":
+          description: Workspace settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceSettings"
+    put:
+      operationId: updateWorkspaceSettings
+      tags: [workspace]
+      summary: Update workspace settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateWorkspaceSettingsBody"
+      responses:
+        "200":
+          description: Updated workspace settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceSettings"
+
   # ─── PROJECTS ───────────────────────────────────────────────────────────────
   /projects:
     get:
@@ -2067,6 +2098,67 @@ components:
         - title
         - createdAt
         - updatedAt
+
+    WorkspaceSettings:
+      type: object
+      required: [id, name, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        logoUrl:
+          type: string
+          nullable: true
+        accentColor:
+          type: string
+          nullable: true
+        studioType:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        website:
+          type: string
+          nullable: true
+        socialLinks:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    UpdateWorkspaceSettingsBody:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        logoUrl:
+          type: string
+          nullable: true
+        accentColor:
+          type: string
+          nullable: true
+        studioType:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        website:
+          type: string
+          nullable: true
+        socialLinks:
+          type: string
+          nullable: true
 
     CreateProjectBody:
       type: object

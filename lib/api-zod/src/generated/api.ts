@@ -15,6 +15,51 @@ export const HealthCheckResponse = zod.object({
 });
 
 /**
+ * @summary Get workspace settings
+ */
+export const GetWorkspaceSettingsResponse = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  description: zod.string().nullish(),
+  logoUrl: zod.string().nullish(),
+  accentColor: zod.string().nullish(),
+  studioType: zod.string().nullish(),
+  location: zod.string().nullish(),
+  website: zod.string().nullish(),
+  socialLinks: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Update workspace settings
+ */
+export const UpdateWorkspaceSettingsBody = zod.object({
+  name: zod.string().optional(),
+  description: zod.string().nullish(),
+  logoUrl: zod.string().nullish(),
+  accentColor: zod.string().nullish(),
+  studioType: zod.string().nullish(),
+  location: zod.string().nullish(),
+  website: zod.string().nullish(),
+  socialLinks: zod.string().nullish(),
+});
+
+export const UpdateWorkspaceSettingsResponse = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  description: zod.string().nullish(),
+  logoUrl: zod.string().nullish(),
+  accentColor: zod.string().nullish(),
+  studioType: zod.string().nullish(),
+  location: zod.string().nullish(),
+  website: zod.string().nullish(),
+  socialLinks: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
  * @summary List all projects
  */
 export const ListProjectsResponseItem = zod.object({

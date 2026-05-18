@@ -1,5 +1,6 @@
 import { Router, type IRouter } from "express";
 import healthRouter from "./health";
+import workspaceRouter from "./workspace";
 import projectsRouter from "./projects";
 import podsRouter from "./pods";
 import podBoardsRouter from "./pod-boards";
@@ -23,6 +24,7 @@ import toolsRouter from "./tools";
 const router: IRouter = Router();
 
 router.use("/healthz", healthRouter);
+router.use("/workspace", workspaceRouter);
 router.use("/projects", projectsRouter);
 router.use("/pods", podsRouter);
 

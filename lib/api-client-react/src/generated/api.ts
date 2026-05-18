@@ -77,7 +77,9 @@ import type {
   UpdateProjectBody,
   UpdateSceneBody,
   UpdateShotBody,
+  UpdateWorkspaceSettingsBody,
   UpsertDistributionStrategyBody,
+  WorkspaceSettings,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -163,6 +165,168 @@ export function useHealthCheck<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * @summary Get workspace settings
+ */
+export const getGetWorkspaceSettingsUrl = () => {
+  return `/api/workspace`;
+};
+
+export const getWorkspaceSettings = async (
+  options?: RequestInit,
+): Promise<WorkspaceSettings> => {
+  return customFetch<WorkspaceSettings>(getGetWorkspaceSettingsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetWorkspaceSettingsQueryKey = () => {
+  return [`/api/workspace`] as const;
+};
+
+export const getGetWorkspaceSettingsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getWorkspaceSettings>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getWorkspaceSettings>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetWorkspaceSettingsQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getWorkspaceSettings>>
+  > = ({ signal }) => getWorkspaceSettings({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getWorkspaceSettings>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetWorkspaceSettingsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getWorkspaceSettings>>
+>;
+export type GetWorkspaceSettingsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get workspace settings
+ */
+
+export function useGetWorkspaceSettings<
+  TData = Awaited<ReturnType<typeof getWorkspaceSettings>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getWorkspaceSettings>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetWorkspaceSettingsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Update workspace settings
+ */
+export const getUpdateWorkspaceSettingsUrl = () => {
+  return `/api/workspace`;
+};
+
+export const updateWorkspaceSettings = async (
+  updateWorkspaceSettingsBody: UpdateWorkspaceSettingsBody,
+  options?: RequestInit,
+): Promise<WorkspaceSettings> => {
+  return customFetch<WorkspaceSettings>(getUpdateWorkspaceSettingsUrl(), {
+    ...options,
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(updateWorkspaceSettingsBody),
+  });
+};
+
+export const getUpdateWorkspaceSettingsMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateWorkspaceSettings>>,
+    TError,
+    { data: BodyType<UpdateWorkspaceSettingsBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateWorkspaceSettings>>,
+  TError,
+  { data: BodyType<UpdateWorkspaceSettingsBody> },
+  TContext
+> => {
+  const mutationKey = ["updateWorkspaceSettings"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateWorkspaceSettings>>,
+    { data: BodyType<UpdateWorkspaceSettingsBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return updateWorkspaceSettings(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateWorkspaceSettingsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateWorkspaceSettings>>
+>;
+export type UpdateWorkspaceSettingsMutationBody =
+  BodyType<UpdateWorkspaceSettingsBody>;
+export type UpdateWorkspaceSettingsMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update workspace settings
+ */
+export const useUpdateWorkspaceSettings = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateWorkspaceSettings>>,
+    TError,
+    { data: BodyType<UpdateWorkspaceSettingsBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateWorkspaceSettings>>,
+  TError,
+  { data: BodyType<UpdateWorkspaceSettingsBody> },
+  TContext
+> => {
+  return useMutation(getUpdateWorkspaceSettingsMutationOptions(options));
+};
 
 /**
  * @summary List all projects

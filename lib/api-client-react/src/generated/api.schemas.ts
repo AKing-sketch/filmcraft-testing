@@ -29,6 +29,31 @@ export interface Project {
   updatedAt: string;
 }
 
+export interface WorkspaceSettings {
+  id: number;
+  name: string;
+  description?: string | null;
+  logoUrl?: string | null;
+  accentColor?: string | null;
+  studioType?: string | null;
+  location?: string | null;
+  website?: string | null;
+  socialLinks?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpdateWorkspaceSettingsBody {
+  name?: string;
+  description?: string | null;
+  logoUrl?: string | null;
+  accentColor?: string | null;
+  studioType?: string | null;
+  location?: string | null;
+  website?: string | null;
+  socialLinks?: string | null;
+}
+
 export interface CreateProjectBody {
   title: string;
   logline?: string | null;

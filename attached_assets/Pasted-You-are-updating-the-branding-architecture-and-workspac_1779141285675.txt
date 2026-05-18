@@ -1,0 +1,136 @@
+You are updating the branding architecture and workspace identity system for FilmCraft, a cinematic production operating system built by Studio di Gratia.
+
+CORE CHANGE
+
+“FilmCraft” is the platform/product name.
+
+“Studio di Gratia” is NOT the platform name anymore.
+It is now the personal studio/workspace identity of the current user.
+
+Every creator, production company, filmmaker, collective, researcher, or studio using FilmCraft should be able to customize and rename their own workspace/studio environment.
+
+The system architecture should now work like this:
+
+FilmCraft → Workspace/Studio → Project
+
+Examples:
+• FilmCraft → Studio di Gratia → Ghost Theory
+• FilmCraft → Neon Vale Pictures → The Last Signal
+• FilmCraft → AK/OS → Homelines
+
+BRANDING GOAL
+
+The platform should feel like:
+• a professional cinematic operating system
+• infrastructure for filmmakers and creative studios
+• modular and scalable
+• personal and author-driven
+• less like a generic productivity app
+• more like a real production environment
+
+Do NOT over-brand “FilmCraft” across every interface panel.
+FilmCraft should function as the infrastructure layer, while the user’s studio/workspace identity becomes the emotional and visual center of the experience.
+
+UI/UX CHANGES
+
+Update the top navigation hierarchy:
+
+Current:
+Studio di Gratia → StarLife
+
+New:
+FilmCraft → Studio di Gratia → StarLife
+
+Where:
+• FilmCraft = platform
+• Studio di Gratia = current workspace/studio
+• StarLife = project
+
+Add support for customizable workspace/studio names.
+
+Each user should be able to:
+• create a studio/workspace name during onboarding
+• edit it later in settings
+• optionally upload logo/avatar/banner
+• define studio type:
+  • Production Company
+  • Independent Filmmaker
+  • Creative Collective
+  • Research Lab
+  • Interactive Media Studio
+  • Freelancer
+  • Hybrid
+
+WORKSPACE SYSTEM REQUIREMENTS
+
+Add a “Workspace Settings” section with:
+• Studio/workspace name
+• Description
+• Logo/avatar upload
+• Brand accent color
+• Studio type
+• Location
+• Website/social links
+• Team members/collaborators
+• Permission roles later-ready architecture
+
+The UI should feel:
+• cinematic
+• dark and tactile
+• archival
+• production-grade
+• minimalist but emotional
+• inspired by camera operating systems, post-production suites, and boutique film studios
+
+VISUAL DIRECTION
+
+Maintain:
+• dark interface
+• amber highlights
+• monochrome typography
+• cinematic spacing
+• subtle depth/glow
+• modular production cards
+
+Avoid:
+• startup SaaS energy
+• excessive gradients
+• playful productivity aesthetics
+• overly corporate dashboard design
+
+PROJECT CARD CHANGES
+
+Project cards should visually prioritize:
+1. Project title
+2. Studio/workspace identity
+3. Production stage
+4. Medium/type
+5. Description
+6. Pipeline modules
+
+Instead of feeling like generic templates, projects should feel like active productions belonging to real filmmakers.
+
+FUTURE SCALABILITY
+
+Architect the system so future features can support:
+• multi-studio switching
+• collaborator invites
+• cloud sync
+• festival pipelines
+• research archives
+• production grants/funding tracking
+• creator portfolios
+• pitch decks
+• client workspaces
+• educational/research labs
+
+IMPORTANT POSITIONING
+
+The emotional identity belongs to the creator’s studio/workspace.
+The technical identity belongs to FilmCraft.
+
+FilmCraft should feel like the engine.
+The workspace should feel like the filmmaker’s world.
+
+Do not rewrite the entire visual system.
+Refine the hierarchy and branding architecture while preserving the existing cinematic aesthetic and production OS direction already implemented.

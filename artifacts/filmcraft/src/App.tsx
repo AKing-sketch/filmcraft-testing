@@ -28,6 +28,7 @@ import ExportPage from "@/pages/projects/export";
 import PodBoards from "@/pages/pod/boards";
 import PodAssets from "@/pages/pod/assets";
 import PodDeadlines from "@/pages/pod/deadlines";
+import WorkspaceSettings from "@/pages/settings/workspace";
 
 const queryClient = new QueryClient();
 
@@ -132,6 +133,7 @@ function MasterRouter() {
         <Route path="/projects/:id/post-production" component={PostProduction} />
         <Route path="/projects/:id/tools" component={ProductionTools} />
         <Route path="/projects/:id/export" component={ExportPage} />
+        <Route path="/settings/workspace" component={WorkspaceSettings} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

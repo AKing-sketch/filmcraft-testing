@@ -3,9 +3,9 @@ import { Link, useRoute, useLocation } from "wouter";
 import {
   Film, LayoutDashboard, FileText, Users, UsersRound,
   Video, Wallet, Lightbulb, FileArchive, Settings, Globe,
-  Menu, X, ChevronLeft, Clapperboard, Wrench, Download
+  Menu, X, ChevronLeft, Clapperboard, Wrench, Download, SlidersHorizontal
 } from "lucide-react";
-import { useGetProject } from "@workspace/api-client-react";
+import { useGetProject, useGetWorkspaceSettings } from "@workspace/api-client-react";
 
 const PROJECT_NAV = [
   { segment: "", label: "Dashboard", icon: LayoutDashboard },
@@ -25,12 +25,11 @@ const PROJECT_NAV = [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const [isProjectRoute, params] = useRoute("/projects/:id/*?");
+  const [, params] = useRoute("/projects/:id/*?");
   const projectId = params?.id ? parseInt(params.id, 10) : null;
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [location] = useLocation();
 
-  // Close sidebar on route change (mobile navigation)
   useEffect(() => {
     setSidebarOpen(false);
   }, [location]);
@@ -39,20 +38,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
     query: { enabled: !!projectId },
   });
 
+  const { data: workspace } = useGetWorkspaceSettings();
+  const workspaceName = workspace?.name ?? "Studio di Gratia";
+
   const sidebarContent = (
     <>
-      {/* Logo */}
-      <div className="h-14 flex items-center justify-between px-4 border-b border-border flex-shrink-0">
-        <Link
-          href="/"
-          className="flex items-center gap-2 font-bold text-lg text-primary hover:text-primary/80 transition-colors"
-        >
-          <Film className="w-5 h-5" />
-          <span>Studio di Gratia</span>
+      {/* Platform + Workspace Identity */}
+      <div className="h-16 flex items-center justify-between px-4 border-b border-border flex-shrink-0">
+        <Link href="/" className="flex items-center gap-2.5 group min-w-0 flex-1 pr-2">
+          <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+            <Film className="w-4 h-4 text-primary" />
+          </div>
+          <div className="min-w-0">
+            <span className="block text-[9px] font-semibold text-sidebar-foreground/35 uppercase tracking-[0.15em] leading-none mb-0.5">
+              FilmCraft
+            </span>
+            <span className="block text-sm font-semibold text-primary truncate leading-none group-hover:text-primary/80 transition-colors">
+              {workspaceName}
+            </span>
+          </div>
         </Link>
-        {/* Mobile close button */}
         <button
-          className="md:hidden p-1 rounded text-sidebar-foreground/60 hover:text-sidebar-foreground"
+          className="md:hidden p-1 rounded text-sidebar-foreground/60 hover:text-sidebar-foreground flex-shrink-0"
           onClick={() => setSidebarOpen(false)}
           aria-label="Close menu"
         >
@@ -60,6 +67,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </button>
       </div>
 
+      {/* Scrollable nav */}
       <div className="flex-1 overflow-y-auto py-4 min-h-0">
         <nav className="space-y-1 px-2">
           <SidebarLink
@@ -76,7 +84,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <span className="text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest">
                 Current Project
               </span>
-              <p className="font-semibold text-sidebar-foreground mt-1 truncate text-sm leading-snug" title={project.title}>
+              <p
+                className="font-semibold text-sidebar-foreground mt-1 truncate text-sm leading-snug"
+                title={project.title}
+              >
                 {project.title}
               </p>
               <span className="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 leading-none">
@@ -96,17 +107,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
         )}
       </div>
+
+      {/* Fixed footer — workspace settings */}
+      <div className="flex-shrink-0 px-2 pb-3 pt-3 border-t border-border/50">
+        <SidebarLink
+          href="/settings/workspace"
+          icon={<SlidersHorizontal className="w-4 h-4" />}
+          label="Workspace Settings"
+        />
+      </div>
     </>
   );
 
   return (
     <div className="flex h-screen w-full bg-background text-foreground overflow-hidden">
-      {/* ── Desktop sidebar (always visible ≥ md) ───────────────────── */}
+      {/* ── Desktop sidebar ───────────────────────────────────────────── */}
       <aside className="hidden md:flex w-56 lg:w-64 border-r border-border bg-sidebar flex-col flex-shrink-0">
         {sidebarContent}
       </aside>
 
-      {/* ── Mobile sidebar backdrop ──────────────────────────────────── */}
+      {/* ── Mobile backdrop ───────────────────────────────────────────── */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/60 md:hidden"
@@ -114,7 +134,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
       )}
 
-      {/* ── Mobile sidebar drawer ────────────────────────────────────── */}
+      {/* ── Mobile drawer ─────────────────────────────────────────────── */}
       <aside
         className={`
           fixed inset-y-0 left-0 z-50 flex flex-col w-72 max-w-[85vw]
@@ -127,7 +147,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {sidebarContent}
       </aside>
 
-      {/* ── Main content ─────────────────────────────────────────────── */}
+      {/* ── Main content ──────────────────────────────────────────────── */}
       <main className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Mobile top bar */}
         <header className="md:hidden flex items-center gap-3 h-14 px-3 border-b border-border bg-sidebar flex-shrink-0">
@@ -139,13 +159,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
           >
             <Menu className="w-6 h-6" />
           </button>
-          <Link href="/" className="flex items-center gap-2 font-bold text-primary">
-            <Film className="w-4 h-4" />
-            <span className="text-sm">Studio di Gratia</span>
-          </Link>
+          <div className="flex items-center gap-1.5 min-w-0">
+            <Film className="w-4 h-4 text-primary flex-shrink-0" />
+            <span className="text-sm font-semibold text-primary truncate">{workspaceName}</span>
+          </div>
           {project && (
             <>
-              <ChevronLeft className="w-3 h-3 text-sidebar-foreground/30 rotate-180" />
+              <ChevronLeft className="w-3 h-3 text-sidebar-foreground/30 rotate-180 flex-shrink-0" />
               <span className="text-sm text-sidebar-foreground truncate flex-1">{project.title}</span>
             </>
           )}
@@ -155,7 +175,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
 
-        {/* ── Mobile bottom nav (project context only) ──────────────── */}
         {projectId && project && (
           <MobileBottomNav projectId={projectId} />
         )}
@@ -188,23 +207,13 @@ function MobileBottomNav({ projectId }: { projectId: number }) {
   );
 }
 
-function BottomTab({
-  href,
-  icon,
-  label,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-}) {
+function BottomTab({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
   const [isActive] = useRoute(href === `/projects/${href.split("/")[2]}` ? href : href + "/*?");
   return (
     <Link
       href={href}
       className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors ${
-        isActive
-          ? "text-primary"
-          : "text-sidebar-foreground/50 hover:text-sidebar-foreground"
+        isActive ? "text-primary" : "text-sidebar-foreground/50 hover:text-sidebar-foreground"
       }`}
     >
       {icon}
