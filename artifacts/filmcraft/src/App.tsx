@@ -9,6 +9,7 @@ import { Layout } from "@/components/layout";
 import { PodLayout } from "@/components/pod-layout";
 import { PodProjectContext } from "@/context/pod-project";
 
+import Homepage from "@/pages/home";
 import ProjectsList from "@/pages/projects/index";
 import NewProject from "@/pages/projects/new";
 import ProjectDashboard from "@/pages/projects/dashboard";
@@ -117,7 +118,8 @@ function MasterRouter() {
   return (
     <Layout>
       <Switch>
-        <Route path="/" component={ProjectsList} />
+        <Route path="/" component={Homepage} />
+        <Route path="/projects" component={ProjectsList} />
         <Route path="/projects/new" component={NewProject} />
         <Route path="/projects/:id" component={ProjectDashboard} />
         <Route path="/projects/:id/development" component={DevelopmentWorkspace} />

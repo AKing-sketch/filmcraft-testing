@@ -71,7 +71,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <div className="flex-1 overflow-y-auto py-4 min-h-0">
         <nav className="space-y-1 px-2">
           <SidebarLink
-            href="/"
+            href="/projects"
             icon={<LayoutDashboard className="w-4 h-4" />}
             label="All Projects"
             exact
