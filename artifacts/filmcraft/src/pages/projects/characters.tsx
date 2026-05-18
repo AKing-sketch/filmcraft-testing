@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams } from "wouter";
+import { useProjectId } from "@/context/pod-project";
 import { 
   useListCharacters, useCreateCharacter, useUpdateCharacter, useDeleteCharacter,
   getListCharactersQueryKey
@@ -13,8 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function CharactersBible() {
-  const { id } = useParams();
-  const projectId = parseInt(id || "0", 10);
+  const projectId = useProjectId();
   const queryClient = useQueryClient();
   
   const { data: characters, isLoading } = useListCharacters(projectId, { query: { enabled: !!projectId } });

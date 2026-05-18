@@ -23,6 +23,8 @@ export interface Project {
   startDate?: string | null;
   endDate?: string | null;
   totalBudget?: number | null;
+  isPod?: boolean | null;
+  podSlug?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -38,6 +40,8 @@ export interface CreateProjectBody {
   startDate?: string | null;
   endDate?: string | null;
   totalBudget?: number | null;
+  isPod?: boolean | null;
+  podSlug?: string | null;
 }
 
 export interface UpdateProjectBody {
@@ -51,6 +55,8 @@ export interface UpdateProjectBody {
   startDate?: string | null;
   endDate?: string | null;
   totalBudget?: number | null;
+  isPod?: boolean | null;
+  podSlug?: string | null;
 }
 
 export interface ActivityItem {
@@ -681,4 +687,96 @@ export interface CreateToolBody {
   workflowNotes?: string | null;
   assignedUser?: string | null;
   status?: string | null;
+}
+
+export interface PodBoard {
+  id: number;
+  projectId: number;
+  boardType: string;
+  title: string;
+  description?: string | null;
+  items?: string | null;
+  position?: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreatePodBoardBody {
+  boardType: string;
+  title: string;
+  description?: string | null;
+  items?: string | null;
+  position?: number | null;
+}
+
+export interface UpdatePodBoardBody {
+  title?: string;
+  description?: string | null;
+  items?: string | null;
+  position?: number | null;
+}
+
+export interface PodAsset {
+  id: number;
+  projectId: number;
+  name: string;
+  category: string;
+  assetType?: string | null;
+  description?: string | null;
+  status?: string | null;
+  url?: string | null;
+  notes?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreatePodAssetBody {
+  name: string;
+  category: string;
+  assetType?: string | null;
+  description?: string | null;
+  status?: string | null;
+  url?: string | null;
+  notes?: string | null;
+}
+
+export interface UpdatePodAssetBody {
+  name?: string;
+  category?: string;
+  assetType?: string | null;
+  description?: string | null;
+  status?: string | null;
+  url?: string | null;
+  notes?: string | null;
+}
+
+export interface PodDeadline {
+  id: number;
+  projectId: number;
+  title: string;
+  dueDate?: string | null;
+  assignee?: string | null;
+  priority?: string | null;
+  status?: string | null;
+  notes?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreatePodDeadlineBody {
+  title: string;
+  dueDate?: string | null;
+  assignee?: string | null;
+  priority?: string | null;
+  status?: string | null;
+  notes?: string | null;
+}
+
+export interface UpdatePodDeadlineBody {
+  title?: string;
+  dueDate?: string | null;
+  assignee?: string | null;
+  priority?: string | null;
+  status?: string | null;
+  notes?: string | null;
 }

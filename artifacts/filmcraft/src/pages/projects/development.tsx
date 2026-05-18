@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { useParams } from "wouter";
+import { useProjectId } from "@/context/pod-project";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   useListBeats, useCreateBeat, useDeleteBeat,
@@ -15,8 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function DevelopmentWorkspace() {
-  const { id } = useParams();
-  const projectId = parseInt(id || "0", 10);
+  const projectId = useProjectId();
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto h-full flex flex-col">

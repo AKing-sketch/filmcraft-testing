@@ -1,5 +1,6 @@
 import { useGetProjectDashboard, useGetProject } from "@workspace/api-client-react";
 import { useParams, Link } from "wouter";
+import { useProjectId } from "@/context/pod-project";
 import {
   Users, Video, Wallet, FileText, Activity, Lightbulb, Settings,
   UsersRound, FileArchive, Clapperboard, Globe, Film, ChevronRight,
@@ -71,8 +72,7 @@ function PhaseSection({
 // ── Main Dashboard ─────────────────────────────────────────────────────────────
 
 export default function ProjectDashboard() {
-  const { id } = useParams();
-  const projectId = parseInt(id || "0", 10);
+  const projectId = useProjectId();
 
   const { data: project, isLoading: projectLoading } = useGetProject(projectId, {
     query: { enabled: !!projectId },

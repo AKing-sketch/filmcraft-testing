@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams } from "wouter";
+import { useProjectId } from "@/context/pod-project";
 import { 
   useListCrewMembers, useCreateCrewMember, useDeleteCrewMember,
   getListCrewMembersQueryKey
@@ -16,8 +17,7 @@ const DEPARTMENTS = [
 ];
 
 export default function CrewList() {
-  const { id } = useParams();
-  const projectId = parseInt(id || "0", 10);
+  const projectId = useProjectId();
   const queryClient = useQueryClient();
   
   const { data: crew, isLoading } = useListCrewMembers(projectId, { query: { enabled: !!projectId } });

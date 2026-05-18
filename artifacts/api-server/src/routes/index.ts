@@ -1,6 +1,10 @@
 import { Router, type IRouter } from "express";
 import healthRouter from "./health";
 import projectsRouter from "./projects";
+import podsRouter from "./pods";
+import podBoardsRouter from "./pod-boards";
+import podAssetsRouter from "./pod-assets";
+import podDeadlinesRouter from "./pod-deadlines";
 import charactersRouter from "./characters";
 import beatsRouter from "./beats";
 import mindmapRouter from "./mindmap";
@@ -20,6 +24,7 @@ const router: IRouter = Router();
 
 router.use("/healthz", healthRouter);
 router.use("/projects", projectsRouter);
+router.use("/pods", podsRouter);
 
 router.use("/projects/:projectId/characters", charactersRouter);
 router.use("/projects/:projectId/beats", beatsRouter);
@@ -37,5 +42,8 @@ router.use("/projects/:projectId/distribution-strategy", distributionStrategyRou
 router.use("/projects/:projectId/post-milestones", milestonesRouter);
 router.use("/projects/:projectId/deliverables", deliverablesRouter);
 router.use("/projects/:projectId/tools", toolsRouter);
+router.use("/projects/:projectId/pod-boards", podBoardsRouter);
+router.use("/projects/:projectId/pod-assets", podAssetsRouter);
+router.use("/projects/:projectId/pod-deadlines", podDeadlinesRouter);
 
 export default router;

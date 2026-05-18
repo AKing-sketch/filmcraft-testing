@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams } from "wouter";
+import { useProjectId } from "@/context/pod-project";
 import {
   useListScenes, useGetScriptBreakdown, useCreateScene, useDeleteScene,
   getListScenesQueryKey, getGetScriptBreakdownQueryKey
@@ -12,8 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function ScriptBreakdown() {
-  const { id } = useParams();
-  const projectId = parseInt(id || "0", 10);
+  const projectId = useProjectId();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<"reader" | "ad">("reader");
 

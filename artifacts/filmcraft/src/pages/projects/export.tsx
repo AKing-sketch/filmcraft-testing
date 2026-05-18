@@ -1,4 +1,5 @@
 import { useParams } from "wouter";
+import { useProjectId } from "@/context/pod-project";
 import {
   useGetProject,
   useListScenes,
@@ -18,8 +19,7 @@ import {
 import { Printer, Film, Users, UsersRound, Video, Wallet, Wrench, Clapperboard, Globe } from "lucide-react";
 
 export default function ExportPage() {
-  const { id } = useParams();
-  const projectId = parseInt(id || "0", 10);
+  const projectId = useProjectId();
   const q = { query: { enabled: !!projectId } };
 
   const { data: project } = useGetProject(projectId, q);

@@ -42,6 +42,8 @@ tags:
     description: Distribution entries and strategy
   - name: tools
     description: Production tools directory
+  - name: pods
+    description: Project Pod isolation and pod-specific modules
 
 paths:
   /healthz:
@@ -164,6 +166,28 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProjectDashboard"
+
+  # ─── PODS ────────────────────────────────────────────────────────────────────
+  /pods/{slug}:
+    get:
+      operationId: getProjectBySlug
+      tags: [pods]
+      summary: Get a pod project by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Pod project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "404":
+          description: Pod not found
 
   # ─── CHARACTERS ─────────────────────────────────────────────────────────────
   /projects/{projectId}/characters:
@@ -1702,6 +1726,285 @@ paths:
         "204":
           description: Deleted
 
+  # ─── POD BOARDS ──────────────────────────────────────────────────────────────
+  /projects/{projectId}/pod-boards:
+    get:
+      operationId: listPodBoards
+      tags: [pods]
+      summary: List boards for a pod project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of boards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PodBoard"
+    post:
+      operationId: createPodBoard
+      tags: [pods]
+      summary: Create a board
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePodBoardBody"
+      responses:
+        "201":
+          description: Created board
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PodBoard"
+
+  /projects/{projectId}/pod-boards/{id}:
+    patch:
+      operationId: updatePodBoard
+      tags: [pods]
+      summary: Update a board
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePodBoardBody"
+      responses:
+        "200":
+          description: Updated board
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PodBoard"
+    delete:
+      operationId: deletePodBoard
+      tags: [pods]
+      summary: Delete a board
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── POD ASSETS ──────────────────────────────────────────────────────────────
+  /projects/{projectId}/pod-assets:
+    get:
+      operationId: listPodAssets
+      tags: [pods]
+      summary: List assets for a pod project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PodAsset"
+    post:
+      operationId: createPodAsset
+      tags: [pods]
+      summary: Create an asset
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePodAssetBody"
+      responses:
+        "201":
+          description: Created asset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PodAsset"
+
+  /projects/{projectId}/pod-assets/{id}:
+    patch:
+      operationId: updatePodAsset
+      tags: [pods]
+      summary: Update an asset
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePodAssetBody"
+      responses:
+        "200":
+          description: Updated asset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PodAsset"
+    delete:
+      operationId: deletePodAsset
+      tags: [pods]
+      summary: Delete an asset
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── POD DEADLINES ───────────────────────────────────────────────────────────
+  /projects/{projectId}/pod-deadlines:
+    get:
+      operationId: listPodDeadlines
+      tags: [pods]
+      summary: List deadlines for a pod project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of deadlines
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PodDeadline"
+    post:
+      operationId: createPodDeadline
+      tags: [pods]
+      summary: Create a deadline
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePodDeadlineBody"
+      responses:
+        "201":
+          description: Created deadline
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PodDeadline"
+
+  /projects/{projectId}/pod-deadlines/{id}:
+    patch:
+      operationId: updatePodDeadline
+      tags: [pods]
+      summary: Update a deadline
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePodDeadlineBody"
+      responses:
+        "200":
+          description: Updated deadline
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PodDeadline"
+    delete:
+      operationId: deletePodDeadline
+      tags: [pods]
+      summary: Delete a deadline
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
 components:
   schemas:
     HealthStatus:
@@ -1749,6 +2052,12 @@ components:
         totalBudget:
           type: number
           nullable: true
+        isPod:
+          type: boolean
+          nullable: true
+        podSlug:
+          type: string
+          nullable: true
         createdAt:
           type: string
         updatedAt:
@@ -1791,6 +2100,12 @@ components:
         totalBudget:
           type: number
           nullable: true
+        isPod:
+          type: boolean
+          nullable: true
+        podSlug:
+          type: string
+          nullable: true
       required:
         - title
 
@@ -1825,6 +2140,12 @@ components:
           nullable: true
         totalBudget:
           type: number
+          nullable: true
+        isPod:
+          type: boolean
+          nullable: true
+        podSlug:
+          type: string
           nullable: true
 
     ProjectDashboard:
@@ -3482,3 +3803,239 @@ components:
       required:
         - name
         - category
+
+    # ─── POD BOARDS ────────────────────────────────────────────────────────────
+    PodBoard:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        boardType:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        items:
+          type: string
+          nullable: true
+        position:
+          type: integer
+          nullable: true
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - boardType
+        - title
+        - createdAt
+        - updatedAt
+
+    CreatePodBoardBody:
+      type: object
+      properties:
+        boardType:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        items:
+          type: string
+          nullable: true
+        position:
+          type: integer
+          nullable: true
+      required:
+        - boardType
+        - title
+
+    UpdatePodBoardBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        items:
+          type: string
+          nullable: true
+        position:
+          type: integer
+          nullable: true
+
+    # ─── POD ASSETS ────────────────────────────────────────────────────────────
+    PodAsset:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+        assetType:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - name
+        - category
+        - createdAt
+        - updatedAt
+
+    CreatePodAssetBody:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        assetType:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - name
+        - category
+
+    UpdatePodAssetBody:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        assetType:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    # ─── POD DEADLINES ─────────────────────────────────────────────────────────
+    PodDeadline:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        title:
+          type: string
+        dueDate:
+          type: string
+          nullable: true
+        assignee:
+          type: string
+          nullable: true
+        priority:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - title
+        - createdAt
+        - updatedAt
+
+    CreatePodDeadlineBody:
+      type: object
+      properties:
+        title:
+          type: string
+        dueDate:
+          type: string
+          nullable: true
+        assignee:
+          type: string
+          nullable: true
+        priority:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      required:
+        - title
+
+    UpdatePodDeadlineBody:
+      type: object
+      properties:
+        title:
+          type: string
+        dueDate:
+          type: string
+          nullable: true
+        assignee:
+          type: string
+          nullable: true
+        priority:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true

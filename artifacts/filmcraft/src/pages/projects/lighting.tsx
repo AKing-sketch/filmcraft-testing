@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams } from "wouter";
+import { useProjectId } from "@/context/pod-project";
 import { 
   useListLightingDiagrams, useCreateLightingDiagram, useDeleteLightingDiagram, useUpdateLightingDiagram,
   getListLightingDiagramsQueryKey
@@ -136,8 +137,7 @@ function LightingEditor({ diagramId, initialData, onSave, onCancel }: { diagramI
 }
 
 export default function LightingPlanner() {
-  const { id } = useParams();
-  const projectId = parseInt(id || "0", 10);
+  const projectId = useProjectId();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   

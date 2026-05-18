@@ -1,0 +1,62 @@
+Update FilmCraft to support isolated Project Pods.
+
+FilmCraft is already a full-stack filmmaking production suite built by Studio di Gratia. It manages the full lifecycle of a film project through 15 interconnected modules, from development to distribution. The master project currently contains Ghost Theory EP1, which must remain private and protected.
+
+Create a separate FilmCraft Lite / Class Sandbox mode for StarLife and future university projects.
+
+Core requirement:
+Each external/collaborative project must exist inside its own isolated Project Pod.
+
+A Project Pod should allow collaborators to manage one project from beginning to end, but only within that project’s workspace.
+
+Collaborators inside a Project Pod should be able to access:
+- Development
+- Beat Sheet
+- Character Bible
+- Scene Breakdown
+- Casting
+- Crew
+- Shot List
+- Lighting Planner
+- Budget
+- Packets
+- Post-Production
+- Distribution
+- Tools
+- Export
+
+But they must NOT be able to access:
+- Ghost Theory EP1
+- Studio di Gratia master infrastructure
+- other Project Pods
+- private research workflows
+- global admin settings
+- proprietary internal planning systems
+
+For StarLife, create a new isolated Project Pod focused on Interactive Narratives class production.
+
+StarLife Pod should include:
+- project dashboard
+- visual direction board
+- Y2K/media texture reference board
+- branching/interaction map
+- Act 2 media/interview workflow
+- fake celebrity media asset tracker
+- UI mood board
+- shot and insert planning
+- role assignment
+- class deadline checklist
+- export packet for presentation/submission
+
+Important:
+Do not modify Ghost Theory EP1 data.
+Do not expose Ghost Theory modules to collaborators.
+Do not merge class project data into the master workspace.
+
+Design goal:
+FilmCraft Lite should feel like a contained production OS for one project at a time. It should support collaboration without exposing the whole studio system.
+
+Architecture goal:
+Reusable project isolation. Each Project Pod should be duplicable for future projects while keeping assets, collaborators, notes, and exports separate.
+
+The immediate use case is StarLife, but the structure should be reusable for future class, indie, and collaborative film projects.

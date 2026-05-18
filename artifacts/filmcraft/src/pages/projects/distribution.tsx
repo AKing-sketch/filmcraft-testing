@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "wouter";
+import { useProjectId } from "@/context/pod-project";
 import {
   useListDistributionEntries, useCreateDistributionEntry,
   useUpdateDistributionEntry, useDeleteDistributionEntry,
@@ -42,8 +43,7 @@ function statusStyle(status: string) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 export default function DistributionTracker() {
-  const { id } = useParams();
-  const projectId = parseInt(id || "0", 10);
+  const projectId = useProjectId();
   const [tab, setTab] = useState<"tracker" | "presskit">("tracker");
 
   return (

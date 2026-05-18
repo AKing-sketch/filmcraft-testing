@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams } from "wouter";
+import { useProjectId } from "@/context/pod-project";
 import {
   useListTools, useCreateTool, useUpdateTool, useDeleteTool,
   getListToolsQueryKey,
@@ -47,8 +48,7 @@ const BLANK: Omit<ProductionTool, "id" | "projectId" | "createdAt"> = {
 };
 
 export default function ProductionTools() {
-  const { id } = useParams();
-  const projectId = parseInt(id || "0", 10);
+  const projectId = useProjectId();
   const qc = useQueryClient();
 
   const { data: tools = [], isLoading } = useListTools(projectId, {

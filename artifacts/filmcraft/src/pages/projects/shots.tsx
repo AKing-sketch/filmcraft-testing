@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useParams } from "wouter";
+import { useProjectId } from "@/context/pod-project";
 import {
   useListShots, useCreateShot, useUpdateShot, useDeleteShot,
   getListShotsQueryKey,
@@ -600,8 +601,7 @@ function ShotBoardCard({
 // ── Main Component ────────────────────────────────────────────────────────────
 
 export default function ShotList() {
-  const { id } = useParams();
-  const projectId = parseInt(id || "0", 10);
+  const projectId = useProjectId();
   const queryClient = useQueryClient();
 
   const { data: shots, isLoading } = useListShots(projectId, { query: { enabled: !!projectId } });

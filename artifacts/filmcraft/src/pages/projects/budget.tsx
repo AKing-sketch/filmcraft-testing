@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams } from "wouter";
+import { useProjectId } from "@/context/pod-project";
 import { 
   useListBudgetItems, useGetBudgetSummary, useCreateBudgetItem, useDeleteBudgetItem,
   getListBudgetItemsQueryKey, getGetBudgetSummaryQueryKey
@@ -14,8 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 const CATEGORIES = ["above-the-line", "below-the-line", "post-production", "marketing", "contingency", "other"];
 
 export default function BudgetTracker() {
-  const { id } = useParams();
-  const projectId = parseInt(id || "0", 10);
+  const projectId = useProjectId();
   const queryClient = useQueryClient();
   
   const { data: items, isLoading: itemsLoading } = useListBudgetItems(projectId, { query: { enabled: !!projectId } });

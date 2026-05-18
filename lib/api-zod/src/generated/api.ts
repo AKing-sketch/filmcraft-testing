@@ -37,6 +37,8 @@ export const ListProjectsResponseItem = zod.object({
   startDate: zod.string().nullish(),
   endDate: zod.string().nullish(),
   totalBudget: zod.number().nullish(),
+  isPod: zod.boolean().nullish(),
+  podSlug: zod.string().nullish(),
   createdAt: zod.string(),
   updatedAt: zod.string(),
 });
@@ -56,6 +58,8 @@ export const CreateProjectBody = zod.object({
   startDate: zod.string().nullish(),
   endDate: zod.string().nullish(),
   totalBudget: zod.number().nullish(),
+  isPod: zod.boolean().nullish(),
+  podSlug: zod.string().nullish(),
 });
 
 /**
@@ -85,6 +89,8 @@ export const GetProjectResponse = zod.object({
   startDate: zod.string().nullish(),
   endDate: zod.string().nullish(),
   totalBudget: zod.number().nullish(),
+  isPod: zod.boolean().nullish(),
+  podSlug: zod.string().nullish(),
   createdAt: zod.string(),
   updatedAt: zod.string(),
 });
@@ -107,6 +113,8 @@ export const UpdateProjectBody = zod.object({
   startDate: zod.string().nullish(),
   endDate: zod.string().nullish(),
   totalBudget: zod.number().nullish(),
+  isPod: zod.boolean().nullish(),
+  podSlug: zod.string().nullish(),
 });
 
 export const UpdateProjectResponse = zod.object({
@@ -129,6 +137,8 @@ export const UpdateProjectResponse = zod.object({
   startDate: zod.string().nullish(),
   endDate: zod.string().nullish(),
   totalBudget: zod.number().nullish(),
+  isPod: zod.boolean().nullish(),
+  podSlug: zod.string().nullish(),
   createdAt: zod.string(),
   updatedAt: zod.string(),
 });
@@ -171,6 +181,39 @@ export const GetProjectDashboardResponse = zod.object({
       timestamp: zod.string(),
     }),
   ),
+});
+
+/**
+ * @summary Get a pod project by slug
+ */
+export const GetProjectBySlugParams = zod.object({
+  slug: zod.coerce.string(),
+});
+
+export const GetProjectBySlugResponse = zod.object({
+  id: zod.number(),
+  title: zod.string(),
+  logline: zod.string().nullish(),
+  genre: zod.string().nullish(),
+  format: zod
+    .string()
+    .nullish()
+    .describe("feature | short | series | documentary"),
+  status: zod
+    .string()
+    .nullish()
+    .describe(
+      "development | pre-production | production | post-production | distribution",
+    ),
+  director: zod.string().nullish(),
+  producer: zod.string().nullish(),
+  startDate: zod.string().nullish(),
+  endDate: zod.string().nullish(),
+  totalBudget: zod.number().nullish(),
+  isPod: zod.boolean().nullish(),
+  podSlug: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
 });
 
 /**
@@ -1688,6 +1731,230 @@ export const UpdateToolResponse = zod.object({
  * @summary Delete a production tool
  */
 export const DeleteToolParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});
+
+/**
+ * @summary List boards for a pod project
+ */
+export const ListPodBoardsParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const ListPodBoardsResponseItem = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  boardType: zod.string(),
+  title: zod.string(),
+  description: zod.string().nullish(),
+  items: zod.string().nullish(),
+  position: zod.number().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+export const ListPodBoardsResponse = zod.array(ListPodBoardsResponseItem);
+
+/**
+ * @summary Create a board
+ */
+export const CreatePodBoardParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const CreatePodBoardBody = zod.object({
+  boardType: zod.string(),
+  title: zod.string(),
+  description: zod.string().nullish(),
+  items: zod.string().nullish(),
+  position: zod.number().nullish(),
+});
+
+/**
+ * @summary Update a board
+ */
+export const UpdatePodBoardParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});
+
+export const UpdatePodBoardBody = zod.object({
+  title: zod.string().optional(),
+  description: zod.string().nullish(),
+  items: zod.string().nullish(),
+  position: zod.number().nullish(),
+});
+
+export const UpdatePodBoardResponse = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  boardType: zod.string(),
+  title: zod.string(),
+  description: zod.string().nullish(),
+  items: zod.string().nullish(),
+  position: zod.number().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete a board
+ */
+export const DeletePodBoardParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});
+
+/**
+ * @summary List assets for a pod project
+ */
+export const ListPodAssetsParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const ListPodAssetsResponseItem = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  name: zod.string(),
+  category: zod.string(),
+  assetType: zod.string().nullish(),
+  description: zod.string().nullish(),
+  status: zod.string().nullish(),
+  url: zod.string().nullish(),
+  notes: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+export const ListPodAssetsResponse = zod.array(ListPodAssetsResponseItem);
+
+/**
+ * @summary Create an asset
+ */
+export const CreatePodAssetParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const CreatePodAssetBody = zod.object({
+  name: zod.string(),
+  category: zod.string(),
+  assetType: zod.string().nullish(),
+  description: zod.string().nullish(),
+  status: zod.string().nullish(),
+  url: zod.string().nullish(),
+  notes: zod.string().nullish(),
+});
+
+/**
+ * @summary Update an asset
+ */
+export const UpdatePodAssetParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});
+
+export const UpdatePodAssetBody = zod.object({
+  name: zod.string().optional(),
+  category: zod.string().optional(),
+  assetType: zod.string().nullish(),
+  description: zod.string().nullish(),
+  status: zod.string().nullish(),
+  url: zod.string().nullish(),
+  notes: zod.string().nullish(),
+});
+
+export const UpdatePodAssetResponse = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  name: zod.string(),
+  category: zod.string(),
+  assetType: zod.string().nullish(),
+  description: zod.string().nullish(),
+  status: zod.string().nullish(),
+  url: zod.string().nullish(),
+  notes: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete an asset
+ */
+export const DeletePodAssetParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});
+
+/**
+ * @summary List deadlines for a pod project
+ */
+export const ListPodDeadlinesParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const ListPodDeadlinesResponseItem = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  title: zod.string(),
+  dueDate: zod.string().nullish(),
+  assignee: zod.string().nullish(),
+  priority: zod.string().nullish(),
+  status: zod.string().nullish(),
+  notes: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+export const ListPodDeadlinesResponse = zod.array(ListPodDeadlinesResponseItem);
+
+/**
+ * @summary Create a deadline
+ */
+export const CreatePodDeadlineParams = zod.object({
+  projectId: zod.coerce.number(),
+});
+
+export const CreatePodDeadlineBody = zod.object({
+  title: zod.string(),
+  dueDate: zod.string().nullish(),
+  assignee: zod.string().nullish(),
+  priority: zod.string().nullish(),
+  status: zod.string().nullish(),
+  notes: zod.string().nullish(),
+});
+
+/**
+ * @summary Update a deadline
+ */
+export const UpdatePodDeadlineParams = zod.object({
+  projectId: zod.coerce.number(),
+  id: zod.coerce.number(),
+});
+
+export const UpdatePodDeadlineBody = zod.object({
+  title: zod.string().optional(),
+  dueDate: zod.string().nullish(),
+  assignee: zod.string().nullish(),
+  priority: zod.string().nullish(),
+  status: zod.string().nullish(),
+  notes: zod.string().nullish(),
+});
+
+export const UpdatePodDeadlineResponse = zod.object({
+  id: zod.number(),
+  projectId: zod.number(),
+  title: zod.string(),
+  dueDate: zod.string().nullish(),
+  assignee: zod.string().nullish(),
+  priority: zod.string().nullish(),
+  status: zod.string().nullish(),
+  notes: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete a deadline
+ */
+export const DeletePodDeadlineParams = zod.object({
   projectId: zod.coerce.number(),
   id: zod.coerce.number(),
 });

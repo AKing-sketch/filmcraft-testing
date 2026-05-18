@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams } from "wouter";
+import { useProjectId } from "@/context/pod-project";
 import {
   useListProductionPackets, useCreateProductionPacket, useDeleteProductionPacket,
   getListProductionPacketsQueryKey
@@ -23,8 +24,7 @@ const PACKET_TYPES = [
 ];
 
 export default function ProductionPackets() {
-  const { id } = useParams();
-  const projectId = parseInt(id || "0", 10);
+  const projectId = useProjectId();
   const queryClient = useQueryClient();
 
   const { data: packets, isLoading } = useListProductionPackets(projectId, { query: { enabled: !!projectId } });

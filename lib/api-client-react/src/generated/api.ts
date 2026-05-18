@@ -33,6 +33,9 @@ import type {
   CreateDistributionEntryBody,
   CreateLightingDiagramBody,
   CreateMindMapNodeBody,
+  CreatePodAssetBody,
+  CreatePodBoardBody,
+  CreatePodDeadlineBody,
   CreatePostMilestoneBody,
   CreateProductionPacketBody,
   CreateProjectBody,
@@ -46,6 +49,9 @@ import type {
   HealthStatus,
   LightingDiagram,
   MindMapNode,
+  PodAsset,
+  PodBoard,
+  PodDeadline,
   PostMilestone,
   ProductionPacket,
   ProductionTool,
@@ -64,6 +70,9 @@ import type {
   UpdateDistributionEntryBody,
   UpdateLightingDiagramBody,
   UpdateMindMapNodeBody,
+  UpdatePodAssetBody,
+  UpdatePodBoardBody,
+  UpdatePodDeadlineBody,
   UpdatePostMilestoneBody,
   UpdateProjectBody,
   UpdateSceneBody,
@@ -653,6 +662,93 @@ export function useGetProjectDashboard<
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetProjectDashboardQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Get a pod project by slug
+ */
+export const getGetProjectBySlugUrl = (slug: string) => {
+  return `/api/pods/${slug}`;
+};
+
+export const getProjectBySlug = async (
+  slug: string,
+  options?: RequestInit,
+): Promise<Project> => {
+  return customFetch<Project>(getGetProjectBySlugUrl(slug), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetProjectBySlugQueryKey = (slug: string) => {
+  return [`/api/pods/${slug}`] as const;
+};
+
+export const getGetProjectBySlugQueryOptions = <
+  TData = Awaited<ReturnType<typeof getProjectBySlug>>,
+  TError = ErrorType<void>,
+>(
+  slug: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getProjectBySlug>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetProjectBySlugQueryKey(slug);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getProjectBySlug>>
+  > = ({ signal }) => getProjectBySlug(slug, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!slug,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getProjectBySlug>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetProjectBySlugQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getProjectBySlug>>
+>;
+export type GetProjectBySlugQueryError = ErrorType<void>;
+
+/**
+ * @summary Get a pod project by slug
+ */
+
+export function useGetProjectBySlug<
+  TData = Awaited<ReturnType<typeof getProjectBySlug>>,
+  TError = ErrorType<void>,
+>(
+  slug: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getProjectBySlug>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetProjectBySlugQueryOptions(slug, options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
@@ -6593,4 +6689,1049 @@ export const useDeleteTool = <
   TContext
 > => {
   return useMutation(getDeleteToolMutationOptions(options));
+};
+
+/**
+ * @summary List boards for a pod project
+ */
+export const getListPodBoardsUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/pod-boards`;
+};
+
+export const listPodBoards = async (
+  projectId: number,
+  options?: RequestInit,
+): Promise<PodBoard[]> => {
+  return customFetch<PodBoard[]>(getListPodBoardsUrl(projectId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListPodBoardsQueryKey = (projectId: number) => {
+  return [`/api/projects/${projectId}/pod-boards`] as const;
+};
+
+export const getListPodBoardsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listPodBoards>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listPodBoards>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListPodBoardsQueryKey(projectId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listPodBoards>>> = ({
+    signal,
+  }) => listPodBoards(projectId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!projectId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof listPodBoards>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListPodBoardsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listPodBoards>>
+>;
+export type ListPodBoardsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List boards for a pod project
+ */
+
+export function useListPodBoards<
+  TData = Awaited<ReturnType<typeof listPodBoards>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listPodBoards>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListPodBoardsQueryOptions(projectId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create a board
+ */
+export const getCreatePodBoardUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/pod-boards`;
+};
+
+export const createPodBoard = async (
+  projectId: number,
+  createPodBoardBody: CreatePodBoardBody,
+  options?: RequestInit,
+): Promise<PodBoard> => {
+  return customFetch<PodBoard>(getCreatePodBoardUrl(projectId), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createPodBoardBody),
+  });
+};
+
+export const getCreatePodBoardMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createPodBoard>>,
+    TError,
+    { projectId: number; data: BodyType<CreatePodBoardBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createPodBoard>>,
+  TError,
+  { projectId: number; data: BodyType<CreatePodBoardBody> },
+  TContext
+> => {
+  const mutationKey = ["createPodBoard"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createPodBoard>>,
+    { projectId: number; data: BodyType<CreatePodBoardBody> }
+  > = (props) => {
+    const { projectId, data } = props ?? {};
+
+    return createPodBoard(projectId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreatePodBoardMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createPodBoard>>
+>;
+export type CreatePodBoardMutationBody = BodyType<CreatePodBoardBody>;
+export type CreatePodBoardMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create a board
+ */
+export const useCreatePodBoard = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createPodBoard>>,
+    TError,
+    { projectId: number; data: BodyType<CreatePodBoardBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createPodBoard>>,
+  TError,
+  { projectId: number; data: BodyType<CreatePodBoardBody> },
+  TContext
+> => {
+  return useMutation(getCreatePodBoardMutationOptions(options));
+};
+
+/**
+ * @summary Update a board
+ */
+export const getUpdatePodBoardUrl = (projectId: number, id: number) => {
+  return `/api/projects/${projectId}/pod-boards/${id}`;
+};
+
+export const updatePodBoard = async (
+  projectId: number,
+  id: number,
+  updatePodBoardBody: UpdatePodBoardBody,
+  options?: RequestInit,
+): Promise<PodBoard> => {
+  return customFetch<PodBoard>(getUpdatePodBoardUrl(projectId, id), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(updatePodBoardBody),
+  });
+};
+
+export const getUpdatePodBoardMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updatePodBoard>>,
+    TError,
+    { projectId: number; id: number; data: BodyType<UpdatePodBoardBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updatePodBoard>>,
+  TError,
+  { projectId: number; id: number; data: BodyType<UpdatePodBoardBody> },
+  TContext
+> => {
+  const mutationKey = ["updatePodBoard"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updatePodBoard>>,
+    { projectId: number; id: number; data: BodyType<UpdatePodBoardBody> }
+  > = (props) => {
+    const { projectId, id, data } = props ?? {};
+
+    return updatePodBoard(projectId, id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdatePodBoardMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updatePodBoard>>
+>;
+export type UpdatePodBoardMutationBody = BodyType<UpdatePodBoardBody>;
+export type UpdatePodBoardMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update a board
+ */
+export const useUpdatePodBoard = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updatePodBoard>>,
+    TError,
+    { projectId: number; id: number; data: BodyType<UpdatePodBoardBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updatePodBoard>>,
+  TError,
+  { projectId: number; id: number; data: BodyType<UpdatePodBoardBody> },
+  TContext
+> => {
+  return useMutation(getUpdatePodBoardMutationOptions(options));
+};
+
+/**
+ * @summary Delete a board
+ */
+export const getDeletePodBoardUrl = (projectId: number, id: number) => {
+  return `/api/projects/${projectId}/pod-boards/${id}`;
+};
+
+export const deletePodBoard = async (
+  projectId: number,
+  id: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeletePodBoardUrl(projectId, id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeletePodBoardMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deletePodBoard>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deletePodBoard>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  const mutationKey = ["deletePodBoard"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deletePodBoard>>,
+    { projectId: number; id: number }
+  > = (props) => {
+    const { projectId, id } = props ?? {};
+
+    return deletePodBoard(projectId, id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeletePodBoardMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deletePodBoard>>
+>;
+
+export type DeletePodBoardMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Delete a board
+ */
+export const useDeletePodBoard = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deletePodBoard>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deletePodBoard>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  return useMutation(getDeletePodBoardMutationOptions(options));
+};
+
+/**
+ * @summary List assets for a pod project
+ */
+export const getListPodAssetsUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/pod-assets`;
+};
+
+export const listPodAssets = async (
+  projectId: number,
+  options?: RequestInit,
+): Promise<PodAsset[]> => {
+  return customFetch<PodAsset[]>(getListPodAssetsUrl(projectId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListPodAssetsQueryKey = (projectId: number) => {
+  return [`/api/projects/${projectId}/pod-assets`] as const;
+};
+
+export const getListPodAssetsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listPodAssets>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listPodAssets>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListPodAssetsQueryKey(projectId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listPodAssets>>> = ({
+    signal,
+  }) => listPodAssets(projectId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!projectId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof listPodAssets>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListPodAssetsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listPodAssets>>
+>;
+export type ListPodAssetsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List assets for a pod project
+ */
+
+export function useListPodAssets<
+  TData = Awaited<ReturnType<typeof listPodAssets>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listPodAssets>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListPodAssetsQueryOptions(projectId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create an asset
+ */
+export const getCreatePodAssetUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/pod-assets`;
+};
+
+export const createPodAsset = async (
+  projectId: number,
+  createPodAssetBody: CreatePodAssetBody,
+  options?: RequestInit,
+): Promise<PodAsset> => {
+  return customFetch<PodAsset>(getCreatePodAssetUrl(projectId), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createPodAssetBody),
+  });
+};
+
+export const getCreatePodAssetMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createPodAsset>>,
+    TError,
+    { projectId: number; data: BodyType<CreatePodAssetBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createPodAsset>>,
+  TError,
+  { projectId: number; data: BodyType<CreatePodAssetBody> },
+  TContext
+> => {
+  const mutationKey = ["createPodAsset"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createPodAsset>>,
+    { projectId: number; data: BodyType<CreatePodAssetBody> }
+  > = (props) => {
+    const { projectId, data } = props ?? {};
+
+    return createPodAsset(projectId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreatePodAssetMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createPodAsset>>
+>;
+export type CreatePodAssetMutationBody = BodyType<CreatePodAssetBody>;
+export type CreatePodAssetMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create an asset
+ */
+export const useCreatePodAsset = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createPodAsset>>,
+    TError,
+    { projectId: number; data: BodyType<CreatePodAssetBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createPodAsset>>,
+  TError,
+  { projectId: number; data: BodyType<CreatePodAssetBody> },
+  TContext
+> => {
+  return useMutation(getCreatePodAssetMutationOptions(options));
+};
+
+/**
+ * @summary Update an asset
+ */
+export const getUpdatePodAssetUrl = (projectId: number, id: number) => {
+  return `/api/projects/${projectId}/pod-assets/${id}`;
+};
+
+export const updatePodAsset = async (
+  projectId: number,
+  id: number,
+  updatePodAssetBody: UpdatePodAssetBody,
+  options?: RequestInit,
+): Promise<PodAsset> => {
+  return customFetch<PodAsset>(getUpdatePodAssetUrl(projectId, id), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(updatePodAssetBody),
+  });
+};
+
+export const getUpdatePodAssetMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updatePodAsset>>,
+    TError,
+    { projectId: number; id: number; data: BodyType<UpdatePodAssetBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updatePodAsset>>,
+  TError,
+  { projectId: number; id: number; data: BodyType<UpdatePodAssetBody> },
+  TContext
+> => {
+  const mutationKey = ["updatePodAsset"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updatePodAsset>>,
+    { projectId: number; id: number; data: BodyType<UpdatePodAssetBody> }
+  > = (props) => {
+    const { projectId, id, data } = props ?? {};
+
+    return updatePodAsset(projectId, id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdatePodAssetMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updatePodAsset>>
+>;
+export type UpdatePodAssetMutationBody = BodyType<UpdatePodAssetBody>;
+export type UpdatePodAssetMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update an asset
+ */
+export const useUpdatePodAsset = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updatePodAsset>>,
+    TError,
+    { projectId: number; id: number; data: BodyType<UpdatePodAssetBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updatePodAsset>>,
+  TError,
+  { projectId: number; id: number; data: BodyType<UpdatePodAssetBody> },
+  TContext
+> => {
+  return useMutation(getUpdatePodAssetMutationOptions(options));
+};
+
+/**
+ * @summary Delete an asset
+ */
+export const getDeletePodAssetUrl = (projectId: number, id: number) => {
+  return `/api/projects/${projectId}/pod-assets/${id}`;
+};
+
+export const deletePodAsset = async (
+  projectId: number,
+  id: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeletePodAssetUrl(projectId, id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeletePodAssetMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deletePodAsset>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deletePodAsset>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  const mutationKey = ["deletePodAsset"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deletePodAsset>>,
+    { projectId: number; id: number }
+  > = (props) => {
+    const { projectId, id } = props ?? {};
+
+    return deletePodAsset(projectId, id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeletePodAssetMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deletePodAsset>>
+>;
+
+export type DeletePodAssetMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Delete an asset
+ */
+export const useDeletePodAsset = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deletePodAsset>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deletePodAsset>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  return useMutation(getDeletePodAssetMutationOptions(options));
+};
+
+/**
+ * @summary List deadlines for a pod project
+ */
+export const getListPodDeadlinesUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/pod-deadlines`;
+};
+
+export const listPodDeadlines = async (
+  projectId: number,
+  options?: RequestInit,
+): Promise<PodDeadline[]> => {
+  return customFetch<PodDeadline[]>(getListPodDeadlinesUrl(projectId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListPodDeadlinesQueryKey = (projectId: number) => {
+  return [`/api/projects/${projectId}/pod-deadlines`] as const;
+};
+
+export const getListPodDeadlinesQueryOptions = <
+  TData = Awaited<ReturnType<typeof listPodDeadlines>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listPodDeadlines>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListPodDeadlinesQueryKey(projectId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listPodDeadlines>>
+  > = ({ signal }) =>
+    listPodDeadlines(projectId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!projectId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof listPodDeadlines>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListPodDeadlinesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listPodDeadlines>>
+>;
+export type ListPodDeadlinesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List deadlines for a pod project
+ */
+
+export function useListPodDeadlines<
+  TData = Awaited<ReturnType<typeof listPodDeadlines>>,
+  TError = ErrorType<unknown>,
+>(
+  projectId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listPodDeadlines>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListPodDeadlinesQueryOptions(projectId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create a deadline
+ */
+export const getCreatePodDeadlineUrl = (projectId: number) => {
+  return `/api/projects/${projectId}/pod-deadlines`;
+};
+
+export const createPodDeadline = async (
+  projectId: number,
+  createPodDeadlineBody: CreatePodDeadlineBody,
+  options?: RequestInit,
+): Promise<PodDeadline> => {
+  return customFetch<PodDeadline>(getCreatePodDeadlineUrl(projectId), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createPodDeadlineBody),
+  });
+};
+
+export const getCreatePodDeadlineMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createPodDeadline>>,
+    TError,
+    { projectId: number; data: BodyType<CreatePodDeadlineBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createPodDeadline>>,
+  TError,
+  { projectId: number; data: BodyType<CreatePodDeadlineBody> },
+  TContext
+> => {
+  const mutationKey = ["createPodDeadline"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createPodDeadline>>,
+    { projectId: number; data: BodyType<CreatePodDeadlineBody> }
+  > = (props) => {
+    const { projectId, data } = props ?? {};
+
+    return createPodDeadline(projectId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreatePodDeadlineMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createPodDeadline>>
+>;
+export type CreatePodDeadlineMutationBody = BodyType<CreatePodDeadlineBody>;
+export type CreatePodDeadlineMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create a deadline
+ */
+export const useCreatePodDeadline = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createPodDeadline>>,
+    TError,
+    { projectId: number; data: BodyType<CreatePodDeadlineBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createPodDeadline>>,
+  TError,
+  { projectId: number; data: BodyType<CreatePodDeadlineBody> },
+  TContext
+> => {
+  return useMutation(getCreatePodDeadlineMutationOptions(options));
+};
+
+/**
+ * @summary Update a deadline
+ */
+export const getUpdatePodDeadlineUrl = (projectId: number, id: number) => {
+  return `/api/projects/${projectId}/pod-deadlines/${id}`;
+};
+
+export const updatePodDeadline = async (
+  projectId: number,
+  id: number,
+  updatePodDeadlineBody: UpdatePodDeadlineBody,
+  options?: RequestInit,
+): Promise<PodDeadline> => {
+  return customFetch<PodDeadline>(getUpdatePodDeadlineUrl(projectId, id), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(updatePodDeadlineBody),
+  });
+};
+
+export const getUpdatePodDeadlineMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updatePodDeadline>>,
+    TError,
+    { projectId: number; id: number; data: BodyType<UpdatePodDeadlineBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updatePodDeadline>>,
+  TError,
+  { projectId: number; id: number; data: BodyType<UpdatePodDeadlineBody> },
+  TContext
+> => {
+  const mutationKey = ["updatePodDeadline"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updatePodDeadline>>,
+    { projectId: number; id: number; data: BodyType<UpdatePodDeadlineBody> }
+  > = (props) => {
+    const { projectId, id, data } = props ?? {};
+
+    return updatePodDeadline(projectId, id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdatePodDeadlineMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updatePodDeadline>>
+>;
+export type UpdatePodDeadlineMutationBody = BodyType<UpdatePodDeadlineBody>;
+export type UpdatePodDeadlineMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update a deadline
+ */
+export const useUpdatePodDeadline = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updatePodDeadline>>,
+    TError,
+    { projectId: number; id: number; data: BodyType<UpdatePodDeadlineBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updatePodDeadline>>,
+  TError,
+  { projectId: number; id: number; data: BodyType<UpdatePodDeadlineBody> },
+  TContext
+> => {
+  return useMutation(getUpdatePodDeadlineMutationOptions(options));
+};
+
+/**
+ * @summary Delete a deadline
+ */
+export const getDeletePodDeadlineUrl = (projectId: number, id: number) => {
+  return `/api/projects/${projectId}/pod-deadlines/${id}`;
+};
+
+export const deletePodDeadline = async (
+  projectId: number,
+  id: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeletePodDeadlineUrl(projectId, id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeletePodDeadlineMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deletePodDeadline>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deletePodDeadline>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  const mutationKey = ["deletePodDeadline"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deletePodDeadline>>,
+    { projectId: number; id: number }
+  > = (props) => {
+    const { projectId, id } = props ?? {};
+
+    return deletePodDeadline(projectId, id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeletePodDeadlineMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deletePodDeadline>>
+>;
+
+export type DeletePodDeadlineMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Delete a deadline
+ */
+export const useDeletePodDeadline = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deletePodDeadline>>,
+    TError,
+    { projectId: number; id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deletePodDeadline>>,
+  TError,
+  { projectId: number; id: number },
+  TContext
+> => {
+  return useMutation(getDeletePodDeadlineMutationOptions(options));
 };
