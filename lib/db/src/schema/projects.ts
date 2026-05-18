@@ -16,6 +16,7 @@ export const projectsTable = pgTable("projects", {
   totalBudget: numeric("total_budget"),
   isPod: boolean("is_pod").default(false),
   podSlug: text("pod_slug").unique(),
+  isTemplate: boolean("is_template").default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

@@ -15,7 +15,7 @@ import {
   deliverablesTable,
   distributionEntriesTable,
 } from "@workspace/db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, or, isNull } from "drizzle-orm";
 import {
   CreateProjectBody,
   UpdateProjectBody,
@@ -32,6 +32,7 @@ router.get("/", async (req, res) => {
     const projects = await db
       .select()
       .from(projectsTable)
+      .where(or(eq(projectsTable.isTemplate, false), isNull(projectsTable.isTemplate)))
       .orderBy(desc(projectsTable.createdAt));
     res.json(projects.map(serializeProject));
   } catch (err) {
