@@ -106,6 +106,7 @@ export default function NewProject() {
                 <SelectItem value="short">Short Film</SelectItem>
                 <SelectItem value="series">Series</SelectItem>
                 <SelectItem value="documentary">Documentary</SelectItem>
+                <SelectItem value="interactive">Interactive</SelectItem>
               </SelectContent>
             </Select>
           </div>
